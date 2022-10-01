@@ -1,17 +1,14 @@
 {
-  "name": "rtsapp",
+  "name": "nodeeventreplayapp",
   "version": "1.0.0",
   "description": "",
-  "main": "start.js",
+  "main": "replayer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
-  "author": "Zach",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1",
-    "kafkajs": "^2.2.0",
-    "nodemon": "^2.0.19"
+    "kafka-streams": "^5.0.0"
   }
 }
