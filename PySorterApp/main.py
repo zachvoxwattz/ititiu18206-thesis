@@ -1,8 +1,9 @@
 import src.receiver as recv
 import src.notifier as noti
 
+shouldDebug = False
+
 if __name__ == '__main__':
-    sender = noti.KafKaNotifier()
-    runner = recv.DataReceiver(sender)
+    runner = recv.DataReceiver(notifier = noti.KafKaNotifier(), debugEnabled = shouldDebug)
     runner.subscribeTopic('tbSorted')
-    runner.acceptRequests(shouldPrintInfo=True, )
+    runner.acceptRequests()

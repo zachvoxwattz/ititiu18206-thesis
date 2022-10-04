@@ -1,5 +1,6 @@
-from time import sleep, time
 import math
+from copy import deepcopy
+from time import sleep, time
 from threading import Thread
 from src.sorter import Sorter
 
@@ -12,8 +13,13 @@ class SortThread(Thread):
 
     def run(self):
         sleep(0.1)
-        self.sorter.sort(self.givenDatagram['sampleArray'])
+
+        baseArray = deepcopy(self.givenDatagram['sampleArray'])
+        sortedArray = self.sorter.sort(baseArray)   # Sorts the array
+
         self.givenDatagram['sortDoneTime'] = math.floor(time() * 1000)
+        self.givenDatagram['sortedArray'] = sortedArray
+        
         print('\nSorter Thread completed job!\nModified datagram: %s' % (self.givenDatagram))
         self.notifier.emitMessage(self.givenDatagram)
 

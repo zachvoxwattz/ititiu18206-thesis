@@ -15,7 +15,7 @@ class BubbleSorter(Sorter):
             for iy in range(ix + 1, len(arr)):
                 if arr[ix] > arr[iy]:
                     arr[ix], arr[iy] = arr[iy], arr[ix]
-        reportDone()
+        return reportDone(arr)
 
 class InsertionSorter(Sorter):
     def sort(self, arr=[], n = 0):
@@ -33,7 +33,7 @@ class InsertionSorter(Sorter):
                 pix -= 1
             
             arr[pix + 1] = key
-        reportDone()
+        return reportDone()
 
 class SelectionSorter(Sorter):
     def sort(self, arr=[], n = 0):
@@ -54,7 +54,7 @@ class SelectionSorter(Sorter):
         # the first element       
             arr[i], arr[min_idx] = arr[min_idx], arr[i]
 
-        reportDone()
+        return reportDone()
 
 class ShellSorter(Sorter):
     def sort(self, arr = [], n = 0):
@@ -80,7 +80,7 @@ class ShellSorter(Sorter):
                 j += 1
             gap = gap // 2
 
-        reportDone()
+        return reportDone()
 
-def reportDone():
-    return True
+def reportDone(arr):
+    return arr
