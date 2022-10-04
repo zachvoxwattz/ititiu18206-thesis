@@ -1,14 +1,11 @@
 import json
 from kafka import KafkaProducer
 
-broker = ['Iris:9091', 'Iris:9092']
-subbedTopic = 'tbSortedResults'
-
 class KafKaNotifier:
-    def __init__(self, output_topic):
+    def __init__(self, broker_list, output_topic):
         self.outputTopic = output_topic
         self.client = KafkaProducer(
-            bootstrap_servers = broker, 
+            bootstrap_servers = broker_list, 
             value_serializer = lambda data: json.dumps(data).encode('utf-8')
         )
 

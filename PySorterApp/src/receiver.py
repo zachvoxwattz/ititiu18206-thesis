@@ -3,11 +3,9 @@ import json
 import src.sorter as sorter
 import src.threaded_sortcenter as mThrd
 
-broker = ['Iris:9091', 'Iris:9092']
-
 class DataReceiver:
-    def __init__(self, notifier, topic: str = None, debugEnabled = True):
-        self.kafkaClient = KafkaConsumer(bootstrap_servers = broker, client_id = 'PySorterApp Listener')
+    def __init__(self, notifier, broker_list, topic: str = None, debugEnabled = True):
+        self.kafkaClient = KafkaConsumer(bootstrap_servers = broker_list, client_id = 'PySorterApp Listener')
         self.notifier = notifier
         self.shouldPrintInfo = debugEnabled
         self.subbedTopic = None

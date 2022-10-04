@@ -9,5 +9,13 @@ class PythonSortApp:
         self.inputTopic = input_topic
         self.outputTopic = output_topic
 
-        self.messageNotifier = noti.KafKaNotifier(output_topic = self.outputTopic)
-        self.messageReceiver = recv.DataReceiver(notifier = self.messageNotifier, debugEnabled = self.debugMode, topic = input_topic)
+        self.broker_list = []
+        for itor in broker_ports:
+            broker = "%s:%d" % (self.broker_domain, itor)
+            self.broker_list.append(broker)
+
+        self.messageNotifier = noti.KafKaNotifier(broker_list = self.broker_list, output_topic = self.outputTopic)
+        self.messageReceiver = recv.DataReceiver(notifier = self.messageNotifier, broker_list = self.broker_list, debugEnabled = self.debugMode, topic = input_topic)
+
+    def execute(self):
+        self.messageReceiver.acceptRequests()
