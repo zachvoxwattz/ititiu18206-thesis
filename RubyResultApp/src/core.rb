@@ -8,13 +8,13 @@ class RubyResultTaker
     @executiveConsumer
     @infoPrinter
 
-    def initialize(broker_list, consumer_group_id, subbed_topic)
+    def initialize(broker_list, consumer_group_id, subbed_topic, debugMode)
         puts "Creating a new Ruby Receiver..."
 
-        @kafkaCore = Kafka.new(seed_brokers: broker_list, )
+        @kafkaCore = Kafka.new(seed_brokers: broker_list)
         @executiveConsumer = @kafkaCore.consumer(group_id: consumer_group_id)
         @executiveConsumer.subscribe(subbed_topic)
-        @infoPrinter = InfoPrinter.new()
+        @infoPrinter = InfoPrinter.new(debugMode)
 
         puts "Initialization completed."
     end

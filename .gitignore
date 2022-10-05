@@ -1,6 +1,8 @@
 # Dependency folders / files
 node_modules
 .gradle
+vendor
+.bundle
 
 # Build folders / files
 *.kts

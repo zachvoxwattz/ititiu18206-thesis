@@ -33,7 +33,7 @@ class InsertionSorter(Sorter):
                 pix -= 1
             
             arr[pix + 1] = key
-        return reportDone()
+        return reportDone(arr)
 
 class SelectionSorter(Sorter):
     def sort(self, arr=[], n = 0):
@@ -54,7 +54,7 @@ class SelectionSorter(Sorter):
         # the first element       
             arr[i], arr[min_idx] = arr[min_idx], arr[i]
 
-        return reportDone()
+        return reportDone(arr)
 
 class ShellSorter(Sorter):
     def sort(self, arr = [], n = 0):
@@ -80,7 +80,7 @@ class ShellSorter(Sorter):
                 j += 1
             gap = gap // 2
 
-        return reportDone()
+        return reportDone(arr)
 
 def reportDone(arr):
     return arr
