@@ -18,8 +18,9 @@ public class ReplayerTest {
 
         Logger log = LoggerFactory.getLogger(ReplayerTest.class.getName());
 
-        String bootstrapServers = "Charlotte:9092";
-        String topic = "tbSorted";
+//        String bootstrapServers = "Charlotte:9092";
+        String bootstrapServers = "Iris:9092";
+        String topic = "tbSortedResults";
 
         // create consumer configs
         Properties properties = new Properties();
@@ -35,13 +36,13 @@ public class ReplayerTest {
 
         // assign
         TopicPartition partitionToReadFrom = new TopicPartition(topic, 0);
-        long offsetToReadFrom = 90;
+        long offsetToReadFrom = 0;
         consumer.assign(Arrays.asList(partitionToReadFrom));
 
         // seek
-        consumer.seek(partitionToReadFrom, offsetToReadFrom);
+        consumer.seek(partitionToReadFrom, 17);
 
-        int numberOfMessagesToRead = 10;
+        int numberOfMessagesToRead = 5;
         boolean keepOnReading = true;
         int numberOfMessagesReadSoFar = 0;
 
@@ -57,8 +58,10 @@ public class ReplayerTest {
                 log.info("Partition: " + record.partition() + ", Offset:" + record.offset());
                 */
                 
+                System.out.println();
                 System.out.println("Key: " + record.key() + ", Value: " + record.value());
                 System.out.println("Partition: " + record.partition() + ", Offset:" + record.offset());
+                System.out.println();
                 
                 if (numberOfMessagesReadSoFar >= numberOfMessagesToRead){
                     keepOnReading = false; // to exit the while loop
