@@ -1,70 +1,74 @@
 package main;
 
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.utils.Bytes;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Produced;
-import org.apache.kafka.streams.state.KeyValueStore;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.regex.Pattern;
+
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ReplayerTest {
-	
-	private Properties props;
-	private StreamsBuilder sBuilder;
-	private KStream<String, String> kStr;
-	private KTable<String, String> kTbl;
-	private Path stateDir;
-	private Topology tplg;
-	
-	public ReplayerTest(String appID, String svAddress, String subbedTopic) {
-		props = new Properties();
-		props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, "5000");
-		props.put(StreamsConfig.APPLICATION_ID_CONFIG, appID);
-		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, svAddress);
-		props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-		props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-		
-		try {
-			stateDir = Files.createTempDirectory("kafka-streams");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		props.put(StreamsConfig.STATE_DIR_CONFIG, this.stateDir.toAbsolutePath().toString());
-		
-		
-		buildTopology(subbedTopic);
-	}
-	
-	private void buildTopology(String subbedTopic) {
-		sBuilder = new StreamsBuilder();
-		kStr = sBuilder.stream(subbedTopic);
-//		kTbl = sBuilder.table(subbedTopic, Materialized.with(Serdes.String(), Serdes.String()));
-		kStr.foreach((word, val) -> System.out.printf("\n------\nKey: %s\nValue: %s\n------", word, val));
-	}
-	
-	public void startStream() {
-		KafkaStreams streams = null;
-		tplg = this.sBuilder.build();
-		
-		try { 
-			streams = new KafkaStreams(tplg, this.props); 
-			streams.start();
-		}
-		catch (Exception e) {
-			System.out.println(e);
-		}
-	}
+    public static void main(String[] args) {
+
+        Logger log = LoggerFactory.getLogger(ReplayerTest.class.getName());
+
+        String bootstrapServers = "Charlotte:9092";
+        String topic = "tbSorted";
+
+        // create consumer configs
+        Properties properties = new Properties();
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        // create consumer
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
+
+        // assign and seek are mostly used to replay data or fetch a specific message
+
+        // assign
+        TopicPartition partitionToReadFrom = new TopicPartition(topic, 0);
+        long offsetToReadFrom = 90;
+        consumer.assign(Arrays.asList(partitionToReadFrom));
+
+        // seek
+        consumer.seek(partitionToReadFrom, offsetToReadFrom);
+
+        int numberOfMessagesToRead = 10;
+        boolean keepOnReading = true;
+        int numberOfMessagesReadSoFar = 0;
+
+        // poll for new data
+        while(keepOnReading){
+            ConsumerRecords<String, String> records =
+                    consumer.poll(Duration.ofMillis(10000));
+            System.out.println(records.count());
+            for (ConsumerRecord<String, String> record : records){
+                numberOfMessagesReadSoFar += 1;
+                /*
+                log.info("Key: " + record.key() + ", Value: " + record.value());
+                log.info("Partition: " + record.partition() + ", Offset:" + record.offset());
+                */
+                
+                System.out.println("Key: " + record.key() + ", Value: " + record.value());
+                System.out.println("Partition: " + record.partition() + ", Offset:" + record.offset());
+                
+                if (numberOfMessagesReadSoFar >= numberOfMessagesToRead){
+                    keepOnReading = false; // to exit the while loop
+                    break; // to exit the for loop
+                }
+            }
+        }
+        consumer.close();
+
+        log.info("Exiting the application");
+
+    }
 }
