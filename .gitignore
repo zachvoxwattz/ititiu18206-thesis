@@ -7,8 +7,11 @@ vendor
 # Build folders / files
 *.kts
 build
+bin
 
 # IDE settings
 .idea
 .vscode
 __pycache__
+.settings
+.project

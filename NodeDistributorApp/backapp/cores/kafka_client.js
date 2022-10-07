@@ -1,10 +1,11 @@
 import { Kafka, Partitioners } from 'kafkajs'
 
-const brkrs = ['Iris:9091', 'Iris:9092']
+//const brkrs = ['Iris:9091', 'Iris:9092']
+const brkrs = ['Charlotte:9091', 'Charlotte:9092']
 
 const kafka = new Kafka({
     clientId: "Node Data Pusher App",
-    brokers: ['Iris:9092']
+    brokers: brkrs
 })
 
 
