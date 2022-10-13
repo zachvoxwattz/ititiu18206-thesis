@@ -1,42 +1,34 @@
-from kafka import KafkaConsumer
 import json
-import src.sorter as sorter
-import src.threaded_sortcenter as mThrd
+from kafka import KafkaConsumer
+from multiprocessing import Pipe
+from src.sorter import BubbleSorter, InsertionSorter, SelectionSorter, ShellSorter
+from src.sort_thread import SortThread
 
 class DataReceiver:
-    def __init__(self, notifier, broker_list, topic: str = None, debugEnabled = True):
+    def __init__(self, notifier, broker_list: list, input_topic, output_topic, debugEnabled):
+        self.resultNotifier = notifier
+        self.brokerList = broker_list
         self.kafkaClient = KafkaConsumer(bootstrap_servers = broker_list, client_id = 'PySorterApp Listener')
-        self.notifier = notifier
-        self.shouldPrintInfo = debugEnabled
-        self.subbedTopic = None
-
-        if topic is None:
-            pass
-        else:
-            self.subbedTopic = topic
-            self.subscribeTopic(topic)
-
-
-    def subscribeTopic(self, topicName):
-        self.subbedTopic = topicName
-        self.kafkaClient.subscribe(topics = topicName)
+        self.debugMode = debugEnabled
+        self.inputSubbedTopic = input_topic
+        self.outputSubbedTopic = output_topic
+        self.kafkaClient.subscribe(topics = self.inputSubbedTopic)
 
     def acceptRequests(self):
-
-        if self.subbedTopic is None:
-            print("App isn't subscribed to any topic! Exiting...")
-            return
-        else:
-            print("App subscribed topic name '%s'. Running..." % self.subbedTopic)
+        print("App subscribed topic name '%s'. Running..." % self.inputSubbedTopic)
 
         for data in self.kafkaClient:
 
             # This line converts literal bytes to JSON. After that, accessing them normally like many other Python apps
             # -----------------------
             processedData = json.loads(data.value)
-            if self.shouldPrintInfo:
-                print('\n\nNew message! Detailed Datagram: %s' % (processedData))
+            if self.debugMode:
+                print('\n\nNew message! Detailed Datagram: \n%s' % (processedData))
 
             # Gives the SortThread data to execute request right away.
-            mThrd.SortThread(processedData, sorter = sorter.BubbleSorter(), notifier = self.notifier).execute()
-            
+            SortThread(
+                processedData, 
+                sorter = ShellSorter(), 
+                notifier = self.resultNotifier, 
+                debugMode = self.debugMode
+            ).execute()

@@ -1,11 +1,12 @@
 import json
 from kafka import KafkaProducer
 
-class KafKaNotifier:
+class ResultNotifier:
     def __init__(self, broker_list, output_topic):
+
         self.outputTopic = output_topic
         self.client = KafkaProducer(
-            bootstrap_servers = broker_list, 
+            bootstrap_servers = broker_list,
             value_serializer = lambda data: json.dumps(data).encode('utf-8')
         )
 
@@ -14,4 +15,5 @@ class KafKaNotifier:
         datagram['sortedArray'] = sorted_array
         datagram['doneTime'] = done_time
         self.client.send(topic = self.outputTopic, value = datagram)
+        self.client.flush()
         
