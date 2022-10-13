@@ -1,7 +1,7 @@
 import express from 'express'
 import serverRouter from './server_router.js'
 
-const PORT = 3000
+const PORT = process.env.APP_PORT || 3000
 const server = express()
 
 // Define middlewares that the server would use

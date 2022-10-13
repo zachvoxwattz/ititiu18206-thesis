@@ -1,28 +1,13 @@
+import dotenv from 'dotenv'
 import { Kafka, Partitioners } from 'kafkajs'
 
-//const brkrs = ['Iris:9091', 'Iris:9092']
-const brkrs = ['Charlotte:9091', 'Charlotte:9092']
+dotenv.config()
+const brokers = JSON.parse(process.env.BROKER_LIST)
 
 const kafka = new Kafka({
     clientId: "Node Data Pusher App",
-    brokers: brkrs
+    brokers: brokers
 })
-
-
-const executeRegistry = async (data) => {
-    let eventProducer = kafka.producer({createPartitioner: Partitioners.LegacyPartitioner})
-    await eventProducer.connect()
-
-    await eventProducer.send({
-        topic: 'test',
-        messages: [
-          { value: data.courseID }, 
-          { value: data.courseName }
-        ],
-      })
-
-    await eventProducer.disconnect()
-}
 
 const sendMessage = async (datagram, topicName) => {
   let eventProducer = kafka.producer({createPartitioner: Partitioners.LegacyPartitioner})
@@ -30,10 +15,15 @@ const sendMessage = async (datagram, topicName) => {
 
   await eventProducer.send({
     topic: topicName,
-    messages: [ {value: JSON.stringify(datagram)} ]
+    messages: [ 
+      {
+        key: datagram.eventMessageID, 
+        value: JSON.stringify(datagram)
+      } 
+    ]
   })
 
   await eventProducer.disconnect()
 }
 
-export { executeRegistry, sendMessage, kafka }
+export { sendMessage, kafka }

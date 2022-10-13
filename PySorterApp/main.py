@@ -1,36 +1,24 @@
+import re
 import os
 import json
-import src.core as appcore
+from src.env_validator import ENVV
+from src.core import PythonSortApp
 from dotenv import load_dotenv
-
-def checkBrokerInfo(a, b):
-    if a == '' or a == None:
-        print('Missing broker domain information! Exiting app...')
-        quit()
-
-    if b == '' or b == None:
-        print('Missing broker port information! Exiting app...')
-        quit()
-    
-    return
 
 if __name__ == '__main__':
     ### Initializes app's ENVs
     load_dotenv()
-    
-    broker_domain = os.getenv('BROKER_DOMAIN')
-    broker_ports = os.getenv('BROKER_PORTS')
 
-    checkBrokerInfo(broker_domain, broker_ports)
-
-    shouldDebug = False if os.getenv('DEBUG_MODE') == 'False' or os.getenv('DEBUG_MODE') == None or os.getenv('DEBUG_MODE') == '' else True
+    shouldDebug = False if os.getenv('DEBUG_MODE') == 'False' or os.getenv('DEBUG_MODE') == None or os.getenv('DEBUG_MODE') == '' else True    
+    broker_list = os.getenv('BROKER_LIST')
     inputTopic = os.getenv('SUBBED_INPUT_TOPIC')
     outputTopic = os.getenv('SUBBED_OUTPUT_TOPIC')
+
+    ENVV(brokerArray = broker_list, inputSubbedTopic = inputTopic, outputSubbedTopic = outputTopic).dummy()
     
-    program = appcore.PythonSortApp(
+    program = PythonSortApp(
         doDebug = shouldDebug,
-        broker_domain = broker_domain,
-        broker_ports = json.loads(broker_ports),
+        broker_list = json.loads(broker_list),
         input_topic = inputTopic,
         output_topic = outputTopic
     )

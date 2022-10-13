@@ -1,6 +1,8 @@
 import { sendMessage } from '../cores/kafka_client.js'
 import { v4 as uuidv4 } from 'uuid'
 
+const subbedTopic = process.env.SUBBED_TOPIC
+
 const sortHandler = async (request, response, next) => {
     let { sampleArray } = request.body
 
@@ -17,7 +19,8 @@ const sortHandler = async (request, response, next) => {
         sampleArray: sampleArray,
         startedTime: Date.now()
     }
-    await sendMessage(toBeSent, 'tbSorted')
+    
+    await sendMessage(toBeSent, subbedTopic)
             .catch(err => console.err(err))
                 .then(() => console.log(`Message sent successfully, message ID: ${eventMessageID}`))
 
