@@ -18,8 +18,8 @@ public class ReplayerTest {
 
         Logger log = LoggerFactory.getLogger(ReplayerTest.class.getName());
 
-//        String bootstrapServers = "Charlotte:9092";
-        String bootstrapServers = "Iris:9092";
+        String bootstrapServers = "Charlotte:9092";
+//        String bootstrapServers = "Iris:9092";
         String topic = "tbSortedResults";
 
         // create consumer configs
@@ -36,7 +36,6 @@ public class ReplayerTest {
 
         // assign
         TopicPartition partitionToReadFrom = new TopicPartition(topic, 0);
-        long offsetToReadFrom = 0;
         consumer.assign(Arrays.asList(partitionToReadFrom));
 
         // seek
