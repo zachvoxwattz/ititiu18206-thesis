@@ -15,3 +15,4 @@ bin
 __pycache__
 .settings
 .project
+.classpath
