@@ -1,10 +1,12 @@
 import express from 'express'
+import cors from 'cors'
 import serverRouter from './server_router.js'
 
 const PORT = process.env.APP_PORT || 3000
 const server = express()
 
 // Define middlewares that the server would use
+server.use(cors())
 server.use(express.json())
 server.use(express.urlencoded({extended: false}))
 

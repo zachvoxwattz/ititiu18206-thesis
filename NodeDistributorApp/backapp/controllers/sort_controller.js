@@ -23,8 +23,8 @@ const sortHandler = async (request, response, next) => {
     await sendMessage(toBeSent, subbedTopic)
             .catch(err => console.err(err))
                 .then(() => console.log(`Message sent successfully, message ID: ${eventMessageID}`))
-
-    response.sendStatus(200)
+	
+	response.sendStatus(200)
 }
 
 export { sortHandler }
