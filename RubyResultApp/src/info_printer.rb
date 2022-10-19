@@ -28,8 +28,6 @@ class InfoPrinter
         sample = JSON.parse(jsonText)
         puts "\t+ Message ID:\t#{sample['eventMessageID']}"
         puts "\t+ Array ID:\t#{sample['arrayID']}"
-#        puts "\t+ Base Array:\t#{sample['sampleArray']}"
-#        puts "\t+ Sorted Array:\t#{sample['sortedArray']}"
         puts "\t+ Start Time (UNIX timestamp):\t#{sample['startedTime']}"
         puts "\t+ Done Time (UNIX timestamp):\t#{sample['doneTime']}"
         puts "\t+ Time difference:\t#{sample['doneTime'].to_i - sample['startedTime'].to_i}"

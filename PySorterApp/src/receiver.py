@@ -14,6 +14,16 @@ class DataReceiver:
         self.outputSubbedTopic = output_topic
         self.kafkaClient.subscribe(topics = self.inputSubbedTopic)
 
+    def getSorter(self, par):
+        if par == 'bubble':
+            return BubbleSorter()
+        elif par == 'insertion':
+            return InsertionSorter()
+        elif par == 'selection':
+            return SelectionSorter()
+        elif par == 'shell':
+            return ShellSorter()
+
     def acceptRequests(self):
         print("App subscribed topic name '%s'. Running..." % self.inputSubbedTopic)
 
@@ -26,9 +36,12 @@ class DataReceiver:
                 print('\n\nNew message! Detailed Datagram: \n%s' % (processedData))
 
             # Gives the SortThread data to execute request right away.
+
+            selectedSorter = self.getSorter(processedData['sortAlgo'])
+
             SortThread(
                 processedData, 
-                sorter = ShellSorter(), 
+                sorter = selectedSorter, 
                 notifier = self.resultNotifier, 
                 debugMode = self.debugMode
             ).execute()
