@@ -23,15 +23,18 @@ const sortHandler = async (request, response, next) => {
         arrayID: uuidv4(),
         sampleArray: sampleArray,
         sortAlgo: sortAlgo,
-        startedTime: Date.now()
+        startedTime: getTimestamp()
     }
-    
+ 
     await sendMessage(toBeSent, subbedTopic)
-            .catch(err => console.err(err))
-                .then(() => console.log(`Message sent successfully, message ID: ${eventMessageID}`))
+            .then(() => console.log(`Message sent successfully, message ID: ${eventMessageID}`))
+                .catch(err => console.err(err))
 
-    console.log(toBeSent)
 	response.sendStatus(200)
+}
+
+const getTimestamp = () => {
+    return (performance.timeOrigin + performance.now()) / 1000
 }
 
 export { sortHandler }

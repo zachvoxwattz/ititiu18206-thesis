@@ -3,7 +3,7 @@ module.exports = {
         let toBeSent
 
         if (a === '') {
-            toBeSent = {error: true, message: "ERROR: Array size is needed for creation!"}
+            toBeSent = {error: true, message: "ERROR: Array size is required for creation!"}
             return toBeSent
         }
 
@@ -13,7 +13,7 @@ module.exports = {
         }
 
         if (b === '') {
-            toBeSent = {error: true, message: "ERROR: A starting value is required!"}
+            toBeSent = {error: true, message: "ERROR: A starting value is required for creation!"}
             return toBeSent
         }
         
@@ -23,7 +23,7 @@ module.exports = {
         }
 
         if (c === '') {
-            toBeSent = {error: true, message: "ERROR: An ending value is required!"}
+            toBeSent = {error: true, message: "ERROR: An ending value is required for creation!"}
             return toBeSent
         }        
 

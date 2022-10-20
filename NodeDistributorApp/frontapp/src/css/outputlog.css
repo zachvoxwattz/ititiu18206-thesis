@@ -1,27 +1,29 @@
 #appOutputLog {
     border: 1px solid;
-    border-radius: 8px;
-    border-width: 1px;
     border-color: white;
     text-align: center;
     overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    border-radius: 8px;
+    border-width: 1px;
     margin: 10vh 18.5vw 0 18.5vw;
-    padding: 2vh 0 2vh 0;
 }
 
-#outputLogInitial, #outputLogError, #outputLogCompleted, #outputLogSuccess {
+
+#appOutputLog::-webkit-scrollbar {
+    display: none;
+}
+
+#outputLogInitial, #outputLogError, #outputLogCompleted, #outputLogSuccess, #outputLogPending {
     text-align: justify;
-    margin: 0 auto 0 auto;
     color: white;
     font-family: 'SF Mono', 'Consolas';
     word-break: break-all;
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -o-pre-wrap; /* Opera */
-    white-space: pre-wrap; /* Chrome */
-    word-wrap: break-word; /* IE */
     word-wrap: break-word;
     hyphens: none;
-    width: 960px;
+    scrollbar-width: none;
+    padding: 2vh 1vw 2vh 1vw;
     height: 320px;
 }
 
@@ -35,4 +37,8 @@
 
 #outputLogSuccess {
     color: rgb(40, 210, 190)
+}
+
+#outputLogPending {
+    color: rgb(255, 255, 0)
 }

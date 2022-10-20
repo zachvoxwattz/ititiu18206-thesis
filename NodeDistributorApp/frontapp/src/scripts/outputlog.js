@@ -22,8 +22,15 @@ const OutputLog = (props) => {
             }
 
             {
+                outputStatus.status === 'pending' ?
+                    <p id = 'outputLogPending'>Working on it...</p>
+                    :
+                    null
+            }
+
+            {
                 outputStatus.status === 'success'?
-                    <p id = 'outpuLogSuccess'>{outputStatus.message}</p>
+                    <p id = 'outputLogSuccess'>Operation Success</p>
                     :
                     null
             }

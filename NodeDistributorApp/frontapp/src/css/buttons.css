@@ -36,3 +36,9 @@
     background-color: rgb(33, 139, 33);
     color: white
 }
+
+#sendButton:disabled {
+    
+    background-color: #3a3a3a;
+    color: #9a9a9a;
+}
