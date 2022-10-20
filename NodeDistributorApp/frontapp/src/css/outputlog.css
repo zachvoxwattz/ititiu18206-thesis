@@ -9,15 +9,18 @@
     padding: 2vh 0 2vh 0;
 }
 
-#outputLog, #outputLogError, #outputLogSuccess1, #outputLogSuccess2 {
+#outputLogInitial, #outputLogError, #outputLogCompleted, #outputLogSuccess {
     text-align: justify;
     margin: 0 auto 0 auto;
     color: white;
     font-family: 'SF Mono', 'Consolas';
     word-break: break-all;
-    overflow-wrap: normal;
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -o-pre-wrap; /* Opera */
+    white-space: pre-wrap; /* Chrome */
+    word-wrap: break-word; /* IE */
+    word-wrap: break-word;
     hyphens: none;
-    word-wrap: normal;
     width: 960px;
     height: 320px;
 }
@@ -26,9 +29,10 @@
     color: red;
 }
 
-#outputLogSuccess1 {
+#outputLogCompleted {
     color: rgb(40, 210, 99)
 }
-#outputLogSuccess2 {
+
+#outputLogSuccess {
     color: rgb(40, 210, 190)
 }

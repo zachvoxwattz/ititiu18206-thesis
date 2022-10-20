@@ -2,18 +2,28 @@ import { useState } from "react"
 import AppTitle from "./scripts/title"
 import AppBody from "./scripts/body"
 
+const INI_STATUS = {
+    status: "none",
+    message: ""
+}
+
 const App = () => {
     
-    const [feedback, setFeedback] = useState("")
+    const [status, setStatus] = useState(INI_STATUS)
+    const [data, setData] = useState({})
+
+    const updateStatus = data => {
+        setStatus(data)
+    }
 
     const updateData = data => {
-        setFeedback(data)
+        setData(data)
     }
 
     return(
         <div>
             <AppTitle />
-            <AppBody appData={feedback} updateData={updateData}/>
+            <AppBody appStatus = {status} appData = {data} updateStatus = {updateStatus} updateData = {updateData}/>
         </div>
     )
 }

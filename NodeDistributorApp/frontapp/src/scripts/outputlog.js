@@ -2,24 +2,40 @@ import '../css/outputlog.css'
 
 const OutputLog = (props) => {
 
-    let rawData = props.bodyData
+    let outputData = props.bodyData
+    let outputStatus = props.bodyStatus
 
-    return(
-        <div id='appOutputLog'>
+    return (
+        <div id = 'appOutputLog'>
             {
-                rawData.length !== 0 ?
-                    rawData.error ? 
-                        <p id='outputLogError'>{rawData.message}</p>
-                        :
-                        rawData.sampleArray ?
-                            <p id='outputLogSuccess1'>Here you go!<br/><br/>[{rawData.sampleArray.toString()}]</p>
-                            :
-                            <p id='outputLogSuccess2'>Successfully made a REST call to back end!</p>
+                outputStatus.status === 'none' ?
+                    <p id = 'outputLogInitial'>Fill out the field and click the Generate button!</p>
                     :
-                    <p id='outputLog'>Fill out the field and click the Generate button!</p>
+                    null
+            }
+
+            {
+                outputStatus.status === 'error' ?
+                    <p id = 'outputLogError'>{outputStatus.message}</p>
+                    :
+                    null
+            }
+
+            {
+                outputStatus.status === 'success'?
+                    <p id = 'outpuLogSuccess'>{outputStatus.message}</p>
+                    :
+                    null
+            }
+
+            {
+                outputStatus.status === 'completed' ?
+                    <p id = 'outputLogCompleted'>Here you go!<br/><br/>[{outputData.sampleArray.toString()}]</p>
+                    :
+                    null
             }
         </div>
-    )
+   )
 }
 
 export default OutputLog

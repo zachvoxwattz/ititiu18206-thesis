@@ -10,18 +10,26 @@ var refreshTimer = null
 const ControlInterface = (props) => {
 
     let currentData = props.bodyData
+
     const [size, setSize] = useState('')
     const [startValue, setStartValue] = useState('')
     const [endValue, setEndValue] = useState('')
 
-    const update = data => {
+    const updateCurrentData = data => {
         props.updateData(data)
+    }
+
+    const updateCurrentStatus = status => {
+        props.updateStatus(status)
     }
 
     const processData = () => {
         let validateResults = propsAreValid(size, startValue, endValue)
         if (validateResults.error) {
-            update(validateResults)
+            updateCurrentStatus({
+                status: 'error',
+                message: validateResults.message
+            })
             return
         }
 
@@ -29,18 +37,33 @@ const ControlInterface = (props) => {
             sampleArray: generateArray(size, startValue, endValue),
             sortAlgo: 'bubble'
         }
-        update(toBeSent)
+        updateCurrentStatus({status: "completed"})
+        updateCurrentData(toBeSent)
     }
 
     const sendData = async () => {
+        if (!currentData.sampleArray) {
+            updateCurrentStatus({
+                status: 'error',
+                message: 'ERROR: Can not send to back end as one or more required fields are invalid!'
+            })
+            return
+        }
+
         await 
             axios.post(DESTINATION, currentData)
-                    .catch(err => console.log(err))
-                        .then(res => {
-                            update({finished: true})
-                            clearInterval(refreshTimer)
-                            refreshTimer = setTimeout(() => update(''), 2000)
+                    .then(() => {
+                        updateCurrentStatus({finished: true})
+                        clearInterval(refreshTimer)
+                        refreshTimer = setTimeout(() => updateCurrentStatus({status: 'none'}), 2000)
+                    })
+                    .catch(() => {
+                        updateCurrentStatus({
+                            status: 'error',
+                            message: "ERROR: Can not make a REST call to back end service. This is most likely due to the back end is offline"
                         })
+                        return
+                    })
     }
 
     return(
