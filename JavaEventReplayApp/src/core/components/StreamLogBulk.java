@@ -18,6 +18,7 @@ import core.ProgramCore;
 
 public class StreamLogBulk {
 
+	private KafkaStreams kstreams;
 	private StreamsBuilder StrBuilder;
 	private Topology tplg;
 	private KStream<String, String> KStr;
@@ -58,12 +59,11 @@ public class StreamLogBulk {
 	}
 	
 	public void startStream() {
-		KafkaStreams streams = null;
 		tplg = this.StrBuilder.build();
 		
 		try { 
-			streams = new KafkaStreams(tplg, this.clientProps); 
-			streams.start();
+			kstreams = new KafkaStreams(tplg, this.clientProps); 
+			kstreams.start();
 		}
 		catch (Exception e) {
 			System.out.println(e);

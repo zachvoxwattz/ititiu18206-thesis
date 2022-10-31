@@ -23,8 +23,7 @@
 }
 
 #generateButton:active {
-    background-color: rgb(180, 117, 0);
-    
+    background-color: rgb(180, 117, 0);  
 }
 
 #sendButton:hover {
@@ -41,4 +40,18 @@
     
     background-color: #3a3a3a;
     color: #9a9a9a;
+}
+
+
+#gensenButton:hover #gensenButton:disabled:not() {
+    background-color: #6F4E37;
+    color: white;
+}
+
+#gensenButton:active {
+    background-color: #493425;
+}
+
+#gensenButton:disabled{
+    background-color: #3a3a3a;
 }

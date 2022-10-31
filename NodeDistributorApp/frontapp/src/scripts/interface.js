@@ -86,6 +86,7 @@ const ControlInterface = (props) => {
             <div id = 'actionButtons'>
                 <button className = 'actionButton' onClick={() => processData()} id = 'generateButton'>Generate</button>
                 <button className = 'actionButton' onClick={() => sendData()} id = 'sendButton'>Send it</button>
+                <button disabled className = 'actionButton' onClick={() => {}} id = 'gensenButton'>Do Both</button>
             </div>
         </div>
     )

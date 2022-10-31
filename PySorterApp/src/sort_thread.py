@@ -1,6 +1,6 @@
 import math
 from copy import deepcopy
-from time import sleep, time
+from time import time
 from threading import Thread
 from src.sorter import Sorter
 from src.notifier import ResultNotifier
@@ -16,7 +16,7 @@ class SortThread(Thread):
     def run(self):
         baseArray = deepcopy(self.givenDatagram['sampleArray'])
         sortedArray = self.sorter.sort(baseArray)   # Sorts the array
-        doneTime = math.floor(time() * 1000)
+        doneTime = time()
                 
         if self.debugMode:
              print('\nSorter Thread completed job!')

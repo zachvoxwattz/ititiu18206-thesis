@@ -31,7 +31,7 @@ class InfoPrinter
         showAlgoUsed(sample['sortAlgo'])
         puts "\t+ Start Time (UNIX timestamp):\t#{sample['startedTime']}"
         puts "\t+ Done Time (UNIX timestamp):\t#{sample['doneTime']}"
-        puts "\t+ Time difference:\t#{sample['doneTime'].to_i - sample['startedTime'].to_i}"
+        puts "\t+ Time difference:\t%.3fms" % ((sample['doneTime'].to_f - sample['startedTime'].to_f) * 1000)
     end
 
     def showAlgoUsed(par)

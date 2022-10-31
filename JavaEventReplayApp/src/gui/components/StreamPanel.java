@@ -47,6 +47,10 @@ public class StreamPanel extends JPanel {
 		return this.pane1;
 	}
 	
+	public StreamPanel getStreamPanel() {
+		return this;
+	}
+	
 	public StreamLogPane getStreamListPane() {
 		return this.pane2;
 	}

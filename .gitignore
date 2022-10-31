@@ -36,5 +36,3 @@ yarn-error.log*
 .vscode
 __pycache__
 .settings
-.project
-.classpath
