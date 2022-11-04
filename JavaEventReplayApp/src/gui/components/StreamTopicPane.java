@@ -30,7 +30,6 @@ public class StreamTopicPane extends JPanel {
 	public StreamTopicPane(StreamPanel a) {
 		super();
 		this.parent = a;
-		this.partnerPane = this.parent.getStreamListPane();
 		this.pw = this.parent.getPanelWidth();
 		this.ph = this.parent.getPanelHeight() * 1 / 7;
 		
@@ -38,7 +37,6 @@ public class StreamTopicPane extends JPanel {
 		setPreferredSize(new Dimension(this.pw, this.ph));
 		
 		initializeComboBox();
-		initializeButtons();
 	}
 	
 	private void initializeComboBox() {
@@ -78,17 +76,17 @@ public class StreamTopicPane extends JPanel {
 		
 		startStream = new JButton("Start Stream");
 			startStream.setFocusable(false);
-			startStream.addActionListener(new StreamStartListener(this, this.partnerPane, this.parent));
+			startStream.addActionListener(new StreamStartListener(this, this.partnerPane));
 			
 		pauseStream = new JButton("Pause Stream");
 			pauseStream.setFocusable(false);
 			pauseStream.setEnabled(false);
-			pauseStream.addActionListener(new StreamPauseListener(this, this.partnerPane, this.parent));
+			pauseStream.addActionListener(new StreamPauseListener(this, this.partnerPane));
 			
 		deleteStream = new JButton("Delete Stream");
 			deleteStream.setFocusable(false);
 			deleteStream.setEnabled(false);
-			deleteStream.addActionListener(new StreamDeletionListener(this, this.partnerPane, this.parent));
+			deleteStream.addActionListener(new StreamDeletionListener(this, this.partnerPane));
 			
 		buttonBox.add(startStream);
 		buttonBox.add(pauseStream);
@@ -96,6 +94,11 @@ public class StreamTopicPane extends JPanel {
 		buttonBox.setBorder(new EmptyBorder(this.ph * 1 / 10, (int) (this.pw * 0.25375), 0, 0));
 		
 		add(buttonBox);
+	}
+	
+	public void getPartnerPane(StreamLogPane s) {
+		this.partnerPane = s;
+		initializeButtons();
 	}
 	
 	public String getSelectedTopic() {
@@ -112,6 +115,10 @@ public class StreamTopicPane extends JPanel {
 	
 	public JButton getDeleteStreamBtn() {
 		return this.deleteStream;
+	}
+	
+	public StreamPanel getParentPanel() {
+		return this.parent;
 	}
 	
 	public StreamLogPane getStreamListPane() {

@@ -4,19 +4,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import gui.components.StreamLogPane;
-import gui.components.StreamPanel;
 import gui.components.StreamTopicPane;
 
 public class StreamPauseListener implements ActionListener {
 	
 	private StreamTopicPane stp;
 	private StreamLogPane slp;
-	private StreamPanel sp;
 	
-	public StreamPauseListener(StreamTopicPane a, StreamLogPane b, StreamPanel c) {
+	public StreamPauseListener(StreamTopicPane a, StreamLogPane b) {
 		this.stp = a;
 		this.slp = b;
-		this.sp = c;
 	}
 	
 	@Override
@@ -28,9 +25,5 @@ public class StreamPauseListener implements ActionListener {
 
 	public StreamLogPane getStreamLogPane() {
 		return slp;
-	}
-
-	public StreamPanel getStreamPanel() {
-		return sp;
 	}
 }

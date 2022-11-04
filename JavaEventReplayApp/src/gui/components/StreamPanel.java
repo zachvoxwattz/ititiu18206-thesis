@@ -30,6 +30,8 @@ public class StreamPanel extends JPanel {
 		
 		pane1 = new StreamTopicPane(this);
 		pane2 = new StreamLogPane(this);
+		pane1.getPartnerPane(pane2);
+		pane2.getPartnerPane(pane1);
 		
 		add(pane1);
 		add(pane2);

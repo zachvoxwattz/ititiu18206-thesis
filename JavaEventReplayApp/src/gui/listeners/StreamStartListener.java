@@ -6,26 +6,24 @@ import java.util.Objects;
 
 import core.ProgramCore;
 import core.components.StreamLogBulk;
+
 import gui.components.StreamLogPane;
-import gui.components.StreamPanel;
 import gui.components.StreamTopicPane;
 
 public class StreamStartListener implements ActionListener {
 	
 	private StreamTopicPane stp;
 	private StreamLogPane slp;
-	private StreamPanel sp;
 	
-	public StreamStartListener(StreamTopicPane a, StreamLogPane b, StreamPanel c) {
+	public StreamStartListener(StreamTopicPane a, StreamLogPane b) {
 		this.stp = a;
 		this.slp = b;
-		this.sp = c;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		ProgramCore pCore = sp.getParentCore();
+		this.slp.removeInitialLabel();
+		ProgramCore pCore = this.slp.getParentPanel().getParentCore();
 		String selectedTopic = stp.getSelectedTopic();
 		
 		if (Objects.isNull(pCore.getBulkByTopic(selectedTopic))) {
