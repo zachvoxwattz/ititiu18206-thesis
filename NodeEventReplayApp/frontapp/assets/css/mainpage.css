@@ -1,0 +1,13 @@
+#streamLogPane {
+	margin: 0 auto 0 auto;
+	border-style: solid;
+	border-color: white;
+	overflow-y: scroll;
+	border-width: 1px;
+	width: 75%;
+	height: 50%
+}
+
+#streamLog {
+	background-color: #161b22;
+}

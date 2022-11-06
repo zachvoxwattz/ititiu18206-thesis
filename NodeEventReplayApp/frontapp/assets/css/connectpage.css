@@ -1,0 +1,70 @@
+#connectDialogMain {
+    padding: 10vh 0 0 0;
+}
+
+#inputs {
+    vertical-align: middle;
+    margin: auto;
+    text-align: center;
+    border-style: solid;
+    border-color: #161b22;
+    background-color: #161b22;
+    padding: 25px 0 25px 0;
+    border-width: 1px;
+    border-radius: 16px;
+    width: 320px;
+}
+
+#buttons {
+    margin: 10px 0 0 0;
+    text-align: center;
+}
+
+.inputField {
+    margin: auto auto auto auto;
+    background-color: #21262d;
+    display: block;
+    border-color: #21262d;
+    color: white;
+    padding: 0 10px 0 10px;
+    border-width: 1px;
+    border-radius: 8px;
+    width: 250px;
+    height: 35px;
+    font-size: 1.25em;
+}
+
+.inputField::placeholder {
+    color: white
+}
+
+#brokerDomainField {
+    margin-bottom: 10px;
+}
+
+#brokerPortField {
+    margin-top: 10px;
+}
+
+.connectActionButton {
+    margin: 5px auto 0 auto;
+    display: inline-block;
+    border-width: 1px;
+    width: 155px;
+    height: 30px;
+    font-size: 1.2em;
+}
+
+#pingButton {
+    margin-left: 0;
+    margin-right: 5px;
+    border-radius: 8px 0px 0px 8px;
+    background-color: #faa356
+}
+
+#connectButton {
+    margin-left: 5px;
+    margin-right: 0;
+    border-radius: 0px 8px 8px 0px;
+    background-color: #7ce38b
+}
