@@ -15,6 +15,13 @@
 
 		<div id = 'streamLogPane'>
 			<div id = 'streamLog'>
+				<DataPaneFields />
+				<DataPane />
+				<DataPane />
+				<DataPane />
+				<DataPane />
+				<DataPane />
+				<DataPane />
 				<DataPane />
 				<DataPane />
 				<DataPane />
