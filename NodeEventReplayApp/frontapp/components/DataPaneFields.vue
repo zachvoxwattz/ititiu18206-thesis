@@ -9,4 +9,4 @@
 	</div>
 </template>
 
-<style scoped src = '@/assets/css/datapane.css'/></style>
+<style scoped src = '@/assets/css/datapanefields.css'/></style>

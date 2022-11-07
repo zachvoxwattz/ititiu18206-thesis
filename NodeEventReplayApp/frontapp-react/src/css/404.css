@@ -1,0 +1,19 @@
+#emptyPage {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+}
+
+#emptyNoticeLabel, .redirectLink {
+    color: white;
+    text-align: center;
+}
+
+#linkHolder {
+    margin: auto;
+    text-align: center;
+}
+
+.redirectLink {
+    font-size: 3em;
+}

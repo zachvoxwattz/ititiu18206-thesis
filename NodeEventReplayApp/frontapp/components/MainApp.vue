@@ -13,9 +13,10 @@
 			<button>Start Stream</button>
 		</div>
 
+		<DataPaneFields />
 		<div id = 'streamLogPane'>
 			<div id = 'streamLog'>
-				<DataPaneFields />
+				<DataPane />
 				<DataPane />
 				<DataPane />
 				<DataPane />
