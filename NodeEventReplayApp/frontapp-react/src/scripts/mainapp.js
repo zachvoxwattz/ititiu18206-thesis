@@ -27,11 +27,6 @@ const MainApp = () => {
                     <DataPane />
                     <DataPane />
                     <DataPane />
-                    <DataPane />
-                    <DataPane />
-                    <DataPane />
-                    <DataPane />
-                    <DataPane />
                 </div>
 		    </div>
         </div>
