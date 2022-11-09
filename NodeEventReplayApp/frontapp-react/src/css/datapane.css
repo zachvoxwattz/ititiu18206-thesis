@@ -16,43 +16,38 @@
 }
 
 #dpSelectBoxDiv {
-    -ms-transform: scale(1.5); /* IE */
-    -moz-transform: scale(1.5); /* FF */
-    -webkit-transform: scale(1.5); /* Safari and Chrome */
-    -o-transform: scale(1.5); /* Opera */
-    transform: scale(1.5);
     text-align: center;
-    width: 5.2%
-}
-
-#dpSelectBoxDiv {
-    width: 5.35%
+	width: 3.67%;
+	border-right: 0;
 }
 
 #dpKeyDiv {
-    text-align: center;
-    width: 24.5%
+	width: 31.565%;
+	border-right: 0;
 }
 
 #dpOffsetDiv {
-    text-align: center;
-    width: 3.75%
+    width: 4.925%
 }
 
 #dpPartitionDiv {
-    text-align: center;
-    width: 4.55%
+	width: 5.4375%;
+	border-right: 0;
 }
 
 #dpTopicDiv {
+	width: 13.589%;
+	border-right: 0;
+}
+
+#dpKeyValue, #dpOffsetValue, #dpPartitionValue, #dpTopicValue {
     text-align: center;
-    width: 14.75%
 }
 
 #dpMessageDiv {
-    width: 48%
+    width: 45.07%;
 }
 
 #dpMessageValue {
-    overflow-wrap: break-word; 
+    overflow-wrap: break-word;
 }

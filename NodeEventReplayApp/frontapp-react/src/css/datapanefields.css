@@ -4,7 +4,7 @@
 	position: relative;
 	background-color: #161b22;
 	margin: 0 auto 0 auto;
-	width: 75%
+	width: 75vw
 }
 
 .dataPaneField {
@@ -16,17 +16,29 @@
 	border-style: solid;
 	color: white;
 	border-width: 1px;
-	padding-top: 1.5vh;
-	padding-bottom: 1.5vh;
-	font-size: 1.25em;
+	padding-top: 1.25vh;
+	padding-bottom: 1.25vh;
+	font-size: 20px;
+}
+
+#selectField {
+	width: 3.75%;
+	border-right: 0;
 }
 
 #keyField {
-	width: 25%
+	width: 32.5%;
+	border-right: 0;
+}
+
+#offsetField, #partitionField {
+	width: 5%;
+	border-right: 0;
 }
 
 #topicField {
-	width: 15%
+	width: 13.75%;
+	border-right: 0;
 }
 
 #valueField {

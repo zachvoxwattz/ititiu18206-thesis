@@ -11,8 +11,11 @@
   "author": "Zach",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "kafka-streams": "^5.0.0",
+    "kafkajs": "^2.2.2",
     "node-rdkafka": "^2.14.0"
   }
 }

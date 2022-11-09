@@ -1,9 +1,29 @@
 #streamLogPane {
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
 	margin: 0 auto 0 auto;
+	overflow-y: scroll;
 	border-style: solid;
 	border-color: white;
-	overflow-y: scroll;
 	border-width: 1px;
-	width: 74.85%;
-	height: 50%
+	border-top: 1px;
+	width: 75vw;
+	height: 50vh
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#streamLogPane::-webkit-scrollbar {
+   display: none;
+}
+
+#streamLog {
+	border-style: solid;
+	border-color: white;
+	overflow: hidden;
+	border-width: 1px;
+	border-left: 1px;
+	border-right: 1px;
+	border-bottom: 0px;
+	border-top: 0px;
+	padding-top: 2.5vh
 }
