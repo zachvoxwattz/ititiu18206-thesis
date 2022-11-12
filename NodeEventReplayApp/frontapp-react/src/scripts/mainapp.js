@@ -2,11 +2,15 @@ import DataPane from './datapane'
 import DataPaneFields from './datapanefields'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import '../css/mainpage.css'
 import '../css/dropdownmenu.css'
 
 const ENDPOINT = 'http://localhost:3005/eventreplay/topics'
-const MainApp = () => {
+const MainApp = (props) => {
+    const location = useLocation()
+
+    console.log(location.state)
 
     const [topics, setTopics] = useState([])
 
