@@ -1,18 +1,48 @@
 import axios from 'axios'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import '../css/connectpage.css'
+import { useState, useEffect, useCallback } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import '../../assets/css/connectpage.css'
 
 const ENDPOINT = 'http://localhost:3005/'
 var timeoutVar = null
 
-const ConnectDialog = (props) => {
+const ConnectPage = () => {
     const nav = useNavigate()
+    const location = useLocation()
     const [domain, setDomain] = useState('')
     const [port, setPort] = useState('')
     const [statusData, setStatusData] = useState({code: "none"})
     const [pingEnable, setPingDisabled] = useState(false)
     const [connectEnable, setConnectDisabled] = useState(false)
+
+    const unshowStatus = useCallback((delay) => {
+        timeoutVar = setTimeout(() => {
+            setStatusData({
+                code: 'none'
+            })
+            toggleDisableButtons(false)
+        }, delay)
+    }, [])
+
+    const toggleDisableButtons = (bool) => {
+        setPingDisabled(bool)
+        setConnectDisabled(bool)
+    }
+
+    useEffect(() => {
+        let contempData = location.state
+
+        if (contempData?.code) {
+            if (contempData.code === 'error') {
+                clearTimeout(timeoutVar)
+                setStatusData({
+                    code: 'error',
+                    message: contempData.message
+                })
+                unshowStatus(2500)
+            }
+        }
+    }, [location.state, unshowStatus])
 
     const pingServer = async () => {
         clearTimeout(timeoutVar)
@@ -84,20 +114,6 @@ const ConnectDialog = (props) => {
         }, 1250)
     }
 
-    const unshowStatus = (delay) => {
-        timeoutVar = setTimeout(() => {
-            setStatusData({
-                code: 'none'
-            })
-            toggleDisableButtons(false)
-        }, delay)
-    }
-
-    const toggleDisableButtons = (bool) => {
-        setPingDisabled(bool)
-        setConnectDisabled(bool)
-    }
-
     return(
         <div id = 'connectDialogMain'>
             <div id = 'inputs'>
@@ -111,7 +127,7 @@ const ConnectDialog = (props) => {
                 <button className = 'connectDialogButtons' onClick={() => connectService()} id = 'connectButton' disabled = {connectEnable}>Connect</button>
             </div>
 
-            { statusData.code === 'none' ? null : null}
+            { statusData.code === 'none' ? null : null }
 
             { 
                 statusData.code === 'error' ? 
@@ -160,4 +176,4 @@ const StatusMessage = (props) => {
     )
 }
 
-export default ConnectDialog
+export default ConnectPage

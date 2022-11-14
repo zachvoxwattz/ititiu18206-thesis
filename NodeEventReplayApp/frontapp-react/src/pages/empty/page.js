@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import '../css/404.css'
+import '../../assets/css/emptypage.css'
 
-const FourOFour = () => {
+const EmptyPage = () => {
     return(
         <div id = 'emptyPage'>
             <h1 id = 'emptyNoticeLabel'>There is nothing here...<br/>Try 2 links below</h1>
@@ -14,4 +14,4 @@ const FourOFour = () => {
     )
 }
 
-export default FourOFour
+export default EmptyPage

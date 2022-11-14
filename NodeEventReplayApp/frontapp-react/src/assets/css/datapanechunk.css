@@ -16,6 +16,7 @@
 }
 
 #dpSelectBoxDiv {
+    transform: scale(1.75);
     text-align: center;
 	width: 3.67%;
 	border-right: 0;

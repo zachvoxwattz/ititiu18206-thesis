@@ -1,3 +1,7 @@
+#mainApp {
+	opacity: 50%;
+}
+
 #streamLogPane {
 	-ms-overflow-style: none;  /* IE and Edge */
 	scrollbar-width: none;  /* Firefox */
