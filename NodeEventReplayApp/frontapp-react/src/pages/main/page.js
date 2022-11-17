@@ -1,17 +1,16 @@
 // import axios from 'axios'
-import { DataPaneChunk, DataPaneFields } from '../../components/datapane'
-import { /*useState,*/ useEffect } from 'react'
+import TopicMenu from '../../components/topicmenu/index'
+import StreamControlPane from '../../components/streamcontrolpane'
+import { DataPaneChunk, DataPaneFields } from '../../components/datapane/index'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import '../../assets/css/mainpage.css'
-import '../../assets/css/dropdownmenu.css'
 
 //const ENDPOINT = 'http://localhost:3005/eventreplay/topics'
 const MainPage = () => {
     const nav = useNavigate()
     const location = useLocation()
     var appData = location.state
-
-    // const [topics, setTopics] = useState([])
 
     useEffect(() => {
         if (!appData?.brokerDomain || !appData?.brokerPort) {
@@ -23,31 +22,27 @@ const MainPage = () => {
         // axios.get(ENDPOINT).then(response => { setTopics(response.data) })
     }, [appData?.brokerDomain, appData?.brokerPort, nav])
 
+    const [topic, setTopic] = useState('None')
+
     return(
         <div id = 'mainApp'>
-            {/* <div id = 'controlPane'>
-                <div id = 'topicSelector'>
-                    <button id = 'topicMenuButton'>Select a topic</button>
-                    <div id = 'dropdownMenu'>
-                        {
-                            topics.map((itor, index) => (<h4 key = {index}>{itor}</h4>))
-                        }
+            <div id = 'controlPane'>
+                <TopicMenu topic = {topic} setTopic = {setTopic} />
+                <StreamControlPane />
+            </div>
+
+            <div id = 'mainAppBody'>
+                <DataPaneFields />
+                <div id = 'streamLogPane'>
+                    <div id = 'streamLog'>
+                        <DataPaneChunk />
+                        <DataPaneChunk />
+                        <DataPaneChunk />
+                        <DataPaneChunk />
+                        <DataPaneChunk />
                     </div>
                 </div>
-
-                <button>Start Stream</button>
-            </div> */}
-
-            <DataPaneFields />
-            <div id = 'streamLogPane'>
-                <div id = 'streamLog'>
-                    <DataPaneChunk />
-                    <DataPaneChunk />
-                    <DataPaneChunk />
-                    <DataPaneChunk />
-                    <DataPaneChunk />
-                </div>
-		    </div>
+            </div>
         </div>
     )
 }

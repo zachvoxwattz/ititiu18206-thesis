@@ -9,7 +9,7 @@ const EventReplayApplication = () => {
       <Route path = '/connect' element = {<ConnectPage />} />
       <Route path = '/app' element = {<MainPage />} />
       <Route path = '/void' element = {<EmptyPage />} />
-      <Route path = "*" element = {<Navigate to = '/connect' />} />
+      <Route path = "*" element = {<Navigate to = '/app' />} />
     </Routes>
   )
 }

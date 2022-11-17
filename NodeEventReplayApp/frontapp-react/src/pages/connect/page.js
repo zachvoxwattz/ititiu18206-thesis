@@ -95,11 +95,13 @@ const ConnectPage = () => {
                         message: "Connection successful!"
                     })
                     
-                    let datagram = {
-                        brokerDomain: domain,
-                        brokerPort: port
-                    }
-                    nav('/app', { state: datagram })
+                    setTimeout(() => {
+                        let datagram = {
+                            brokerDomain: domain,
+                            brokerPort: port
+                        }
+                        nav('/app', { state: datagram })
+                    }, 1000)
                 })
                 .catch(err => {
                     console.log(err)
@@ -116,36 +118,38 @@ const ConnectPage = () => {
 
     return(
         <div id = 'connectDialogMain'>
-            <div id = 'inputs'>
-                <input className = 'inputField' onChange = {event => setDomain(event.target.value)} id = 'brokerDomainField' placeholder = 'Broker Domain'></input>
+            <div id = 'connectDialogBody'>
+                <div id = 'inputs'>
+                    <input className = 'inputField' onChange = {event => setDomain(event.target.value)} id = 'brokerDomainField' placeholder = 'Broker Domain'></input>
 
-                <input className = 'inputField' onChange = {event => setPort(event.target.value)} id = 'brokerPortField' placeholder = 'Broker Port'></input>
+                    <input className = 'inputField' onChange = {event => setPort(event.target.value)} id = 'brokerPortField' placeholder = 'Broker Port'></input>
+                </div>
+
+                <div id = 'buttons'>
+                    <button className = 'connectDialogButtons' onClick={() => pingServer()} id = 'pingButton' disabled = {pingEnable}>Ping</button>
+                    <button className = 'connectDialogButtons' onClick={() => connectService()} id = 'connectButton' disabled = {connectEnable}>Connect</button>
+                </div>
+
+                { statusData.code === 'none' ? null : null }
+
+                { 
+                    statusData.code === 'error' ? 
+                        <StatusMessage statusMessage = {statusData.message} cssStyle = {statusMessageStyle.error} />
+                        : null 
+                }
+                
+                { 
+                    statusData.code === 'success' ? 
+                        <StatusMessage statusMessage = {statusData.message} cssStyle = {statusMessageStyle.success}/>
+                        : null 
+                }
+                
+                { 
+                    statusData.code === 'progress' ?
+                        <StatusMessage statusMessage = {statusData.message} cssStyle = {statusMessageStyle.progress} />
+                        : null 
+                }
             </div>
-
-            <div id = 'buttons'>
-                <button className = 'connectDialogButtons' onClick={() => pingServer()} id = 'pingButton' disabled = {pingEnable}>Ping</button>
-                <button className = 'connectDialogButtons' onClick={() => connectService()} id = 'connectButton' disabled = {connectEnable}>Connect</button>
-            </div>
-
-            { statusData.code === 'none' ? null : null }
-
-            { 
-                statusData.code === 'error' ? 
-                    <StatusMessage statusMessage = {statusData.message} cssStyle = {statusMessageStyle.error} />
-                    : null 
-            }
-            
-            { 
-                statusData.code === 'success' ? 
-                    <StatusMessage statusMessage = {statusData.message} cssStyle = {statusMessageStyle.success}/>
-                    : null 
-            }
-            
-            { 
-                statusData.code === 'progress' ?
-                    <StatusMessage statusMessage = {statusData.message} cssStyle = {statusMessageStyle.progress} />
-                    : null 
-            }
         </div>
     )
 }

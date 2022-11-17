@@ -1,5 +1,17 @@
-#connectDialogMain {
+#connectDialogBody {
     padding: 10vh 0 0 0;
+	animation: fadeIn 0.75s linear forwards;
+	-webkit-animation: fadeIn 0.75s linear forwards;
+}
+
+@-webkit-keyframes fadeIn {
+	0% { opacity: 0 }
+	100% { opacity: 1 }
+}
+
+@keyframes fadeIn {
+	0% { opacity: 0 }
+	100% { opacity: 1 }
 }
 
 #inputs {
