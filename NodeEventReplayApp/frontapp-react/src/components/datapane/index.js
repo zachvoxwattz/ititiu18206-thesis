@@ -1,7 +1,8 @@
 import '../../assets/css/datapanechunk.css'
 import '../../assets/css/datapanefields.css'
 
-const DataPaneChunk = () => {
+const DataPaneChunk = (props) => {
+    let data = props.data
     return(
         <div className = 'dataPane'>
             <div className = 'dpDisplaySlot' id = 'dpSelectBoxDiv'>
@@ -9,23 +10,23 @@ const DataPaneChunk = () => {
             </div>
 
             <div className = 'dpDisplaySlot' id = 'dpKeyDiv'>
-                <p id = 'dpKeyValue'>fa10296e-4ad2-4b99-a4f6-a7f0e4b2d930</p>
+                <p id = 'dpKeyValue'>{data.key}</p>
             </div>
             
             <div className = 'dpDisplaySlot' id = 'dpOffsetDiv'>
-                <p id = 'dpOffsetValue'>1765</p>
+                <p id = 'dpOffsetValue'>{data.offset}</p>
             </div>
             
             <div className = 'dpDisplaySlot' id = 'dpPartitionDiv'>
-                <p id = 'dpPartitionValue'>0</p>
+                <p id = 'dpPartitionValue'>{data.partition}</p>
             </div>
             
             <div className = 'dpDisplaySlot' id = 'dpTopicDiv'>
-                <p id = 'dpTopicValue'>tbSorted</p>
+                <p id = 'dpTopicValue'>{data.topic}</p>
             </div>
             
             <div className = 'dpDisplaySlot' id = 'dpMessageDiv'>
-                <p id = 'dpMessageValue'>Loremipsumdolorsitametahihidochothisissorandomthatidontknowwhetherwhatisrealityhaihashdhasja9euhfiusdhfuilasdfkjshdfjashdkjf</p>
+                <p id = 'dpMessageValue'>{data.value}</p>
             </div>
 	    </div>
     )
@@ -34,12 +35,12 @@ const DataPaneChunk = () => {
 const DataPaneFields = () => {
     return(
         <div id = 'dataPaneFields'>
-            <h3 className = 'dataPaneField' id = 'selectField'>Sel</h3>
-            <h3 className = 'dataPaneField' id = 'keyField'>Key</h3>
-            <h3 className = 'dataPaneField' id = 'offsetField'>Off.</h3>
-            <h3 className = 'dataPaneField' id = 'partitionField'>Part.</h3>
-            <h3 className = 'dataPaneField' id = 'topicField'>Topic</h3>
-            <h3 className = 'dataPaneField' id = 'valueField'>Value</h3>
+            <h3 className = 'dataPaneField' id = 'DPselectField'>✅</h3>
+            <h3 className = 'dataPaneField' id = 'DPkeyField'>Key</h3>
+            <h3 className = 'dataPaneField' id = 'DPoffsetField'>Off.</h3>
+            <h3 className = 'dataPaneField' id = 'DPpartitionField'>Part</h3>
+            <h3 className = 'dataPaneField' id = 'DPtopicField'>Topic</h3>
+            <h3 className = 'dataPaneField' id = 'DPvalueField'>Value</h3>
         </div>
     )
 }
