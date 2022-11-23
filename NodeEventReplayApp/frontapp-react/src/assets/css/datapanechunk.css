@@ -3,7 +3,8 @@
     position: relative;
     justify-content: space-between;
     background-color: #21262d;
-    padding: 1vh 0 1vh 0;
+    padding: 1.5vh 0 1.5vh 0;
+    margin: 1.5vh 0 1.5vh 0;
     width: 100%;
 }
 
@@ -20,7 +21,7 @@
 }
 
 #dpSelectBoxValue {
-    transform: scale(1.75);
+    transform: scale(1.25);
 }
 
 #dpKeyDiv{
@@ -32,20 +33,30 @@
 }
 
 #dpOffsetDiv {
-    width: 6%
+    padding: 0 0.25% 0 0.25%;
+    width: 5.5%
 }
 
 #dpPartitionDiv {
-    width: 6%
+    padding: 0 0.25% 0 0.25%;
+    width: 5.5%
+}
+
+#dpOffsetValue, #dpPartitionValue {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #dpTopicDiv {
-    width: 12%
+    padding: 0 0.25% 0 0.25%;
+    width: 11.5%
 }
 
 #dpTopicValue {
+    overflow-wrap: break-word;
     font-style: italic;
-    font-size: 0.9em;
+    font-size: 0.95em;
 }
 
 #dpMessageDiv {
@@ -56,4 +67,5 @@
 #dpMessageValue {
     overflow-wrap: break-word;
     text-align: left;
+    font-size: 0.85em;
 }

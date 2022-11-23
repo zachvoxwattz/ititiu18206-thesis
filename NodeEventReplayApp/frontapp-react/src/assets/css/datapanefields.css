@@ -5,6 +5,7 @@
     background-color: #0d1117;
     border-color: white;
     border-style: solid;
+    z-index: 1;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border-width: 1px;
@@ -31,7 +32,7 @@
     border-right: 1;
     border-top: 0;
     border-bottom: 0;
-    font-size: 1.2em;
+    font-size: 1.125em;
 }
 
 #DPselectField {

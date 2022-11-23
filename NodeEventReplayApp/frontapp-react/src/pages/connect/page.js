@@ -1,9 +1,8 @@
-import axios from 'axios'
+import axios from '../../api/axios'
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import '../../assets/css/connectpage.css'
 
-const ENDPOINT = 'http://localhost:3005/'
 var timeoutVar = null
 
 const ConnectPage = () => {
@@ -54,7 +53,7 @@ const ConnectPage = () => {
         })
 
         setTimeout(() => {
-            axios.get(ENDPOINT)
+            axios.get('/isavailable')
                 .then(() => {
                     setStatusData({
                         code: 'success',
@@ -88,7 +87,7 @@ const ConnectPage = () => {
         }
 
         setTimeout(() => {
-            axios.post(ENDPOINT + 'eventreplay/isavailable', datagram)
+            axios.post('/isavailable', datagram)
                 .then(() => {
                     setStatusData({
                         code: 'success',

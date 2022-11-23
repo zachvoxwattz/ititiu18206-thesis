@@ -1,37 +1,26 @@
 import { useState } from 'react'
+import {toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, clearRefreshTimer, changeSelectionCSS} from './functions'
 import axios from '../../api/axios'
+import loadingIcon from '../../assets/images/loading.gif'
 import '../../assets/css/topicmenu.css'
 
-var topicListHideTimer = null
-var topicRefreshHideTimer = null
-
 const TopicMenu = (props) => {
+    let currentTopic = props.topicUtils.topic
+    let updateTopic = (topic) => {
+            props.topicUtils.setTopic(topic)
+    }
+
     const [ffl, setFFL] = useState(false)
     const [topicData, setTopicData] = useState({code: 'none'})
 
-    const setTopic = (topic) => {
-        clearTimeout(topicListHideTimer)
-
-        if (topic === false) {
-            props.setTopic(false)
-            document.getElementById('topicClearer').style.display = 'none'
-            return
-        }
-
-        props.setTopic(topic)
-        document.getElementById('topicClearer').style.display = 'inline-block'
-
-        topicListHideTimer = setTimeout(() => {
-            document.getElementById('topicList').style.display = 'none'
-        }, 3000)
-    }
-
     const getTopics = async () => {
+        let returnData
+        setTopicData({code: "pending"})
+    
         axios.get('/topics')
                 .then(response => {
                     let fetchedArr = response.data
-                    let returnData
-
+    
                     if (fetchedArr.size === 0) {
                         returnData = {
                             code: 'error',
@@ -44,119 +33,86 @@ const TopicMenu = (props) => {
                             data: fetchedArr
                         }
                     }
-
-                    setTopicData(returnData)
                 })
                 .catch((err) => {
-                    setTopicData({
+                    returnData = {
                         code: 'error',
                         message: err.response.data.message
-                    })
-                    clearRefreshTimer()
+                    }
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        setTopicData(returnData)
+                        clearRefreshTimer()
+                    }, 1000)
+    
+                    setTimeout(() => {
+                        highlightSelected()
+                    }, 1025)
                 })
     }
 
-    const toggleVisibility = () => {
-        let comp = document.getElementById('topicList')
-        let displayStyle = document.getElementById('topicList').style.display
-
-        if (displayStyle === 'flex') {
-            comp.style.display = 'none'
-        }
-
-        else if (displayStyle === '' || displayStyle === 'none') {
-            comp.style.display = 'flex'
-        }
-    }
-
-    const revertSelectionsCSS = () => {
-        let topicElements = document.getElementsByClassName('topicButton')
-        for (let i = 0; i < topicElements.length; i++) {
-            let itor = topicElements[i]
-            if (itor.classList.contains('topicButtonSelected')) {
-                itor.classList.remove('topicButtonSelected')
-            }
-        }
-    }
-
-    const changeSelectionCSS = (selectedTopic) => {
-        let topicElements = document.getElementsByClassName('topicButton')
-        for (let i = 0; i < topicElements.length; i++) {
-            let itor = topicElements[i]
-            if (itor === selectedTopic) {
-                itor.classList.add('topicButtonSelected')
-                break
+    const highlightSelected = () => {
+        if (currentTopic !== '' || currentTopic !== false) {
+            let fetchedTopics = document.getElementsByClassName('topicButton')
+    
+            for (let i = 0; i < fetchedTopics.length; i++) {
+                let itor = fetchedTopics[i].innerText || fetchedTopics[i].textContent
+                if (itor === currentTopic) {
+                    fetchedTopics[i].classList.add('topicButtonSelected')
+                    break;
+                }
             }
         }
     }
 
     const clearSelection = () => {
-        clearTimeout(topicListHideTimer)
-        setTopic(false)
-
+        updateTopic(false)
         if (topicData?.code === 'error') {
             setTopicData({
                 code: 'none'
             })
         }
-
         revertSelectionsCSS()
-
-        topicListHideTimer = setTimeout(() => {
-            document.getElementById('topicList').style.display = 'none'
-        }, 3000)
     }
-
-    const displayTopics = () => {
+    
+    const displayTopics = (ffl) => {
         if (!ffl) {
+            setFFL(true)
             getTopics()
         }
-        toggleVisibility()
-        setFFL(true)
-    }
-
-    const clearRefreshTimer = () => {
-        clearTimeout(topicRefreshHideTimer)
-        document.getElementById('topicRefresher').style.display = 'inline-block'
-    }
-
-    const refreshTopics = async () => {
-        clearTimeout(topicRefreshHideTimer)
-        setTopicData({code: 'none'})
-        getTopics()
-        document.getElementById('topicRefresher').style.display = 'none'
-        
-        let selections = document.getElementsByClassName('topicButton')
-
-        for (let i = 0; i < selections; i++) {
-            let itor = selections[i]
-            itor.classList.remove('topicButtonSelected')
-        }
-
-        topicRefreshHideTimer = setTimeout(() => {
-            document.getElementById('topicRefresher').style.display = 'inline-block'
-        }, 15000)
+        toggleTopicListVisibility()
     }
 
     return(
         <div id = 'topicMenuSection'>
-            <button className = 'topicInteractionButtons' id = 'topicDisplayer' onClick={() => { displayTopics() }}>Display topics</button>
-            <button className = 'topicInteractionButtons' id = 'topicRefresher' onClick={() => { revertSelectionsCSS(); refreshTopics() }}>Refresh Topics</button>
-            <button className = 'topicInteractionButtons' id = 'topicClearer' onClick={() => { clearSelection() }}>Clear selection</button>
+            <div id = 'topicMenuButtons'>
+                <button className = 'topicInteractionButtons' id = 'topicDisplayer' onClick={() => { displayTopics(ffl) }}>Display topics</button>
+                <button className = 'topicInteractionButtons' id = 'topicRefresher' onClick={() => { revertSelectionsCSS(); forceShowList(); getTopics() }}>Refresh Topics</button>
+                <button className = 'topicInteractionButtons' id = 'topicClearer' onClick={() => { clearSelection(); showTopicClearer(false) }}>Clear selection</button>
+            </div>
+            
             <div id = 'topicList'>
                 {
                     topicData.code === 'none' ? null : null
                 }
+
+                {
+                    topicData.code === 'pending' ? 
+                        <img className = 'loadingIcon' src = {loadingIcon} alt = 'Loading indicator'/>
+                        : null
+                }
+
                 {
                     topicData.code === 'success' ?
                         topicData.data.map((item, index) => (
-                            <button className = 'topicButton' onClick={(event) => { revertSelectionsCSS(); changeSelectionCSS(event.target); setTopic(item) }} key = {index}>{item}</button>
+                            <button className = 'topicButton' onClick={(event) => { revertSelectionsCSS(); changeSelectionCSS(event.target); updateTopic(item); showTopicClearer(true) }} key = {index}>{item}</button>
                         ))
                         : null
                 }
                 {
                     topicData.code === 'error' ?
-                        <button disabled className = 'topicButton' id = 'topicErrorButton'>{topicData.message}</button>
+                        <button disabled className = 'topicButton' id = 'topicErrorStatus'>{topicData.message}</button>
                         : null
                 }
             </div>

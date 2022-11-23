@@ -1,15 +1,19 @@
-//import { useEffect } from 'react'
 import '../../assets/css/streamcontrolpane.css'
 
 const StreamControlPane = (props) => {
-
-    let topic = props.topic
+    let currentTopic = props.topicUtils.topic
+    let nav = props.appNavigation
+    
+    const exitApp = () => {
+        // Handle various stuffs here!
+        nav('/connect', {state: {code: 'error', message: 'You have disconnected'}})
+    }
 
     const getSelectedTopic = () => {
-        if (topic === '' || topic === false || topic === null) 
+        if (currentTopic === '' || currentTopic === false || currentTopic === null) 
             return 'None selected'
         else 
-            return topic
+            return currentTopic
     }
 
     return(
@@ -28,6 +32,7 @@ const StreamControlPane = (props) => {
                 <button className = 'streamControlButton'>Start</button>
                 <button className = 'streamControlButton'>Pause</button>
                 <button className = 'streamControlButton'>Stop</button>
+                <button className = 'streamControlButton' id = 'appExitButton' onClick = {() => { exitApp() }}>Exit</button>
             </div>
         </div>
     )

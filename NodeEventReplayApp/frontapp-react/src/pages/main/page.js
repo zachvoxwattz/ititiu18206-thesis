@@ -25,26 +25,40 @@ const MainPage = () => {
     return(
         <div id = 'mainApp'>
             <div id = 'controlPane'>
-                <TopicMenu topic = {topic} setTopic = {setTopic} />
-                <StreamControlPane topic = {topic} setTopic = {setTopic}/>
+                <StreamControlPane topicUtils = {{topic, setTopic}} appNavigation = {nav}/>
+                <TopicMenu topicUtils = {{topic, setTopic}} />
             </div>
             
             <div id = 'streamTable'>
                 <DataPaneFields />
                 <div id = 'streamLogger'>
-                    <DataPaneChunk data = {sample}/>
+                    <DataPaneChunk data = {samples[0]}/>
+                    <DataPaneChunk data = {samples[1]}/>
+                    <DataPaneChunk data = {samples[1]}/>
+                    <DataPaneChunk data = {samples[0]}/>
+                    <DataPaneChunk data = {samples[1]}/>
+                    <DataPaneChunk data = {samples[1]}/>
                 </div>
             </div>
         </div>
     )
 }
 
-const sample = {
-    key: '8d70657c-d40f-43f6-9a54-b75071bf48c4',
-    offset: 1765,
-    partition: 3,
-    topic: 'tbSorted',
-    value: '{"eventMessageKey": "key", "topic":"tbSorted"}132894892317894701238704873218974089781320471823748917023479'
-}
+const samples = [
+    {
+        key: '8d70657c-d40f-43f6-9a54-b75071bf48c4',
+        offset: 1765,
+        partition: 3,
+        topic: 'tbSorted',
+        value: '{"eventMessageKey": "key", "topic":"tbSorted"}132894892317894701238704873218974089781320471823748917023479'
+    },
+    {
+        key: '8d70657c-d40f-43f6-9a54-b75071bf48c4',
+        offset: 17653984092384,
+        partition: 3,
+        topic: 'vip-netflix-movie-request-AWOL-2319213@9906011',
+        value: '{"eventMessageKey": "key", "topic":"tbSorted"}132894892317894701238704873218974089781320471823748917023479'
+    },
+]
 
 export default MainPage

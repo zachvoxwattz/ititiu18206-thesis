@@ -2,13 +2,16 @@
     position: relative;
     display: block;
     justify-content: space-between;
-    margin: 2.5vh 2.25vw 0 2.25vw
+    margin: 0 2.25vw 0 2.25vw
 }
 
 .streamControlButton {
     font-family: 'SF Mono', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;
+    border-width: 1px;
+    border-radius: 8px;
     font-size: 1.175em;
+    margin-right: 0.5vw;
     padding: 7px;
     width: 75px;
 }
@@ -34,4 +37,17 @@
 
 #streamStatusValue {
     color: red
+}
+
+#appExitButton {
+    color: white;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: 8px;
+    background-color: rgb(148, 10, 10);
+}
+
+#appExitButton:active {
+    background-color: rgb(103, 7, 7);
 }
