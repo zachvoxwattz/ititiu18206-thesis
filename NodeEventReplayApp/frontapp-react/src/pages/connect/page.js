@@ -8,6 +8,7 @@ var timeoutVar = null
 const ConnectPage = () => {
     const nav = useNavigate()
     const location = useLocation()
+
     const [domain, setDomain] = useState('')
     const [port, setPort] = useState('')
     const [statusData, setStatusData] = useState({code: "none"})
@@ -63,7 +64,7 @@ const ConnectPage = () => {
                 .catch(err => {
                     setStatusData({
                         code: 'error',
-                        message: 'An error occurred while pinging. This is most likely due to the service being offline!'
+                        message: 'An error occurred while pinging.\nMost likely the service is offline!'
                     })
                 })
                 .finally(() => {
@@ -103,11 +104,21 @@ const ConnectPage = () => {
                     }, 1000)
                 })
                 .catch(err => {
-                    console.log(err)
-                    setStatusData({
-                        code: 'error',
-                        message: `An error occurred.\nReply from server: ${err.response.data.message}`
-                    })
+                    let statData
+                    if (err.code === 'ERR_NETWORK') {
+                        statData = {
+                            code: 'error',
+                            message: 'An error occurred while connecting.\nMost likely the service is offline!'
+                        }
+                    }
+
+                    else {
+                        statData = {
+                            code: 'error',
+                            message: `An error occurred while connecting.\nResponse from server: ${err.response.data.message}`
+                        }
+                    }
+                    setStatusData(statData)
                 })
                 .finally(() => {
                     unshowStatus(4000)

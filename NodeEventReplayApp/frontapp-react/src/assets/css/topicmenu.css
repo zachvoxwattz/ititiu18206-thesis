@@ -1,8 +1,8 @@
-#topicMenuButtons {
+#topicMenuBtns {
     margin: 2.5vh 0 0 0
 }
 
-.topicInteractionButtons {
+.topicInteractionBtn {
     background-color: #161b22;
     color: white;
     font-weight: bolder;
@@ -15,27 +15,27 @@
     transition: 125ms linear;
 }
 
-#topicDisplayer {
+#topicDisplayBtn {
     width: 17.5%
 }
 
-#topicDisplayer:hover {
+#topicDisplayBtn:hover {
     color: #faa356;
 }
 
-#topicRefresher {
+#topicRefreshBtn {
     display: none
 }
 
-#topicRefresher:hover {
+#topicRefreshBtn:hover {
     color:rgb(0, 110, 255);
 }
 
-#topicClearer {
+#topicClearBtn {
     display: none;
 }
 
-#topicClearer:hover {
+#topicClearBtn:hover {
     color: #fa7790
 }
 
@@ -49,7 +49,7 @@
     width: 70%;
 }
 
-.topicButton {
+.topicBtn {
     background-color: #161b22;
     color: #ecf2f8;
     border-color: #484b50;
@@ -60,6 +60,15 @@
     transition: 125ms linear;
 }
 
+.topicBtn:hover, .topicBtnSelected {
+    background-color: #cea5fb;
+    color: #161b22;
+}
+
+.topicBtn:active {
+    background-color: #6e5985;
+}
+
 #topicPendingStatus, #topicPendingStatus {
     background-color: #ae703a;
 }
@@ -67,13 +76,4 @@
 #topicErrorStatus, #topicErrorStatus:hover {
     background-color: #4B2F36;
     color: white;
-}
-
-.topicButton:hover, .topicButtonSelected {
-    background-color: #cea5fb;
-    color: #161b22;
-}
-
-.topicButton:active {
-    background-color: #6e5985;
 }

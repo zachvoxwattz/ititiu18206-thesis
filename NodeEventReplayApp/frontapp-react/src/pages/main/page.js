@@ -20,13 +20,14 @@ const MainPage = () => {
         }
     }, [appData?.brokerDomain, appData?.brokerPort, nav])
 
-    const [topic, setTopic] = useState('')
+    const [topic, setTopic] = useState(false)
+    const [streamStatus, setStreamStatus] = useState({status: 'idle', label: 'Idling'})
 
     return(
         <div id = 'mainApp'>
             <div id = 'controlPane'>
-                <StreamControlPane topicUtils = {{topic, setTopic}} appNavigation = {nav}/>
-                <TopicMenu topicUtils = {{topic, setTopic}} />
+                <StreamControlPane topicUtils = {{topic, setTopic}} streamUtils = {{streamStatus, setStreamStatus}} appNavigation = {nav}/>
+                <TopicMenu topicUtils = {{topic, setTopic}}/>
             </div>
             
             <div id = 'streamTable'>

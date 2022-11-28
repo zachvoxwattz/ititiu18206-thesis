@@ -82,7 +82,7 @@
     color: white;
 }
 
-#pingButton:hover {
+#pingButton:hover:not(#pingButton:disabled) {
     background-color: #e29110;
     color: black
 }
@@ -101,7 +101,7 @@
     color: white;
 }
 
-#connectButton:hover {
+#connectButton:hover:not(#connectButton:disabled) {
     background-color: #7ce38b;
     color: black;
 }

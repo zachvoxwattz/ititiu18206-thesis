@@ -5,15 +5,68 @@
     margin: 0 2.25vw 0 2.25vw
 }
 
-.streamControlButton {
+.streamControlBtn {
     font-family: 'SF Mono', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;
+    border-style: solid;
+    border-color: transparent;
+    color: #21262d;
     border-width: 1px;
     border-radius: 8px;
     font-size: 1.175em;
     margin-right: 0.5vw;
     padding: 7px;
-    width: 75px;
+    width: 6.5%;
+}
+
+.streamControlBtn:disabled, #streamStartBtn:disabled, #streamPauseBtn:disabled, #streamStopBtn:disabled {
+    background-color: #161b22;
+}
+
+#streamStartBtn {
+    background-color: #7ce38b;
+}
+
+#streamStartBtn:active:not(#streamStartBtn:disabled) {
+    background-color: #51975c;
+}
+
+#streamPauseBtn {
+    background-color: #77bdfb;
+}
+
+#streamPauseBtn:active:not(#streamPauseBtn:disabled) {
+    background-color: #436d91;
+}
+
+#streamStopBtn {
+    background-color: #fa7970;
+}
+
+#streamStopBtn:active:not(#streamStopBtn:disabled) {
+    background-color: #8b413c;
+}
+
+#appExitBtn {
+    margin: 0;
+    float: right;
+    color: white;
+    background-color: rgb(148, 10, 10);
+}
+
+#appExitBtn:active {
+    background-color: rgb(103, 7, 7);
+}
+
+#appCloseBtn {
+    float: right;
+    color: white;
+    background-color: rgb(107, 8, 8);
+    width: 15%
+}
+
+#appCloseBtn:active {
+    background-color: rgb(69, 4, 4);
 }
 
 .streamReportDiv {
@@ -25,6 +78,8 @@
 .streamReportLabel {
     display: inline-block;
     color: white;
+    font-weight: normal;
+    font-size: 1.5em;
 }
 
 #topicCurrentValue, #streamStatusValue {
@@ -32,22 +87,11 @@
 }
 
 #topicCurrentValue {
-    color: limegreen
+    color: limegreen;
+    font-weight: bolder;
 }
 
 #streamStatusValue {
-    color: red
-}
-
-#appExitButton {
-    color: white;
-    border-style: solid;
-    border-color: transparent;
-    border-width: 1px;
-    border-radius: 8px;
-    background-color: rgb(148, 10, 10);
-}
-
-#appExitButton:active {
-    background-color: rgb(103, 7, 7);
+    color: red;
+    font-weight: bolder;
 }

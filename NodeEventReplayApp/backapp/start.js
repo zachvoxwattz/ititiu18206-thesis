@@ -1,2 +1,2 @@
-import { startExpress } from './cores/express_server.js'
-startExpress()
+import { startService } from './cores/servers/express_server.js'
+startService()
