@@ -1,4 +1,4 @@
-import {Server} from 'socket.io'
+import { Server } from 'socket.io'
 
 var socketIOServer
 
@@ -16,6 +16,10 @@ const handleSocketIOConnections = () => {
             socket.disconnect()
         })
     })
+}
+
+const emitDataWithTopic = async (recvSocketID, topic) => {
+    socketIOServer.to(recvSocketID).emit(topic, {})
 }
 
 export { prepareSocketIOServer, handleSocketIOConnections }

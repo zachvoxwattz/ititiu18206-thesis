@@ -1,3 +1,8 @@
+#connectDialogMain {
+    margin: 2.5vh 0 0 0;
+    width: 100%;
+}
+
 #connectDialogBody {
     padding: 10vh 0 0 0;
 	animation: fadeIn 0.75s linear forwards;
@@ -49,6 +54,15 @@
 
 .inputField::placeholder {
     color: white
+}
+
+#inputFieldGuide {
+    margin: 2vh auto auto auto;
+    text-align: left;
+    font-style: italic;
+    font-size: 1.2em;
+    width: 250px;
+    color: #c6cdd5
 }
 
 #brokerDomainField {

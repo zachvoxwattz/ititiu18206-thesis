@@ -1,7 +1,7 @@
 import axios from '../../api/axios'
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import '../../assets/css/connectpage.css'
+import '../../assets/css/pages/connect.css'
 
 var timeoutVar = null
 
@@ -133,6 +133,8 @@ const ConnectPage = () => {
                     <input className = 'inputField' onChange = {event => setDomain(event.target.value)} id = 'brokerDomainField' placeholder = 'Broker Domain'></input>
 
                     <input className = 'inputField' onChange = {event => setPort(event.target.value)} id = 'brokerPortField' placeholder = 'Broker Port'></input>
+
+                    <p id = 'inputFieldGuide'>TIP: Broker domain does not have to be case-sensitive!</p>
                 </div>
 
                 <div id = 'buttons'>

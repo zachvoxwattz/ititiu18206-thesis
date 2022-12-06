@@ -19,7 +19,7 @@
     width: 6.5%;
 }
 
-.streamControlBtn:disabled, #streamStartBtn:disabled, #streamPauseBtn:disabled, #streamStopBtn:disabled {
+.streamControlBtn:disabled, #streamStartBtn:disabled, #streamStopBtn:disabled {
     background-color: #161b22;
 }
 
@@ -31,42 +31,12 @@
     background-color: #51975c;
 }
 
-#streamPauseBtn {
-    background-color: #77bdfb;
-}
-
-#streamPauseBtn:active:not(#streamPauseBtn:disabled) {
-    background-color: #436d91;
-}
-
 #streamStopBtn {
     background-color: #fa7970;
 }
 
 #streamStopBtn:active:not(#streamStopBtn:disabled) {
     background-color: #8b413c;
-}
-
-#appExitBtn {
-    margin: 0;
-    float: right;
-    color: white;
-    background-color: rgb(148, 10, 10);
-}
-
-#appExitBtn:active {
-    background-color: rgb(103, 7, 7);
-}
-
-#appCloseBtn {
-    float: right;
-    color: white;
-    background-color: rgb(107, 8, 8);
-    width: 15%
-}
-
-#appCloseBtn:active {
-    background-color: rgb(69, 4, 4);
 }
 
 .streamReportDiv {

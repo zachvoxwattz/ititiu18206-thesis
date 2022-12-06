@@ -1,4 +1,4 @@
-import { checkBrokerExistence } from "../cores/kafka/api.js"
+import { checkBrokerExistence } from "../cores/kafka/admin_api.js"
 
 const serviceCheckerProvider = async (req, res, next) => {
     let { brokerDomain, brokerPort } = req.body

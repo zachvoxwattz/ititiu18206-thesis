@@ -19,16 +19,7 @@ const alterButtonsState = (component, updateState) => {
     switch (btnLabel) {
         case 'Start':
             updateState({
-                start: true, 
-                pause: false, 
-                stop: false
-            })
-            break
-
-        case 'Pause':
-            updateState({
-                start: false, 
-                pause: true, 
+                start: true,
                 stop: false
             })
             break
@@ -36,7 +27,6 @@ const alterButtonsState = (component, updateState) => {
         case 'Stop':
             updateState({
                 start: false, 
-                pause: true, 
                 stop: true
             })
             break
@@ -47,10 +37,8 @@ const alterButtonsState = (component, updateState) => {
 }
 
 const getSelectedTopic = (currentTopic) => {
-    if (currentTopic === '' || currentTopic === false || currentTopic === null) 
-        return 'None selected'
-    else 
-        return currentTopic
+    if (!currentTopic) return 'None selected'
+    else return currentTopic
 }
 
 export { statusLabelStyles, alterButtonsState, getSelectedTopic }

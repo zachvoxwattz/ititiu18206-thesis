@@ -6,6 +6,17 @@
     padding: 1.5vh 0 1.5vh 0;
     margin: 1.5vh 0 1.5vh 0;
     width: 100%;
+    animation: appear 2s;
+}
+
+@keyframes appear {
+    from { background-color: #faa356;}
+    to { background-color: #21262d;}
+}
+
+@-webkit-keyframes appear {
+    from { background-color: #faa356;}
+    to { background-color: #21262d;}
 }
 
 .dpDisplaySlot {

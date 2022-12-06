@@ -1,4 +1,4 @@
-import { getTopics } from '../cores/kafka/api.js'
+import { getTopics } from '../cores/kafka/admin_api.js'
 
 const topicsProvider = async (req, res, next) => {
     let recvData = await getTopics()

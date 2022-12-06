@@ -1,20 +1,4 @@
-#mainApp {
-	margin: 2.5vh auto 0 auto
-}
-
-#controlPane {
-	position: relative;
-	margin: 0 auto 2.5vh auto;
-	border-style: solid;
-	border-color: white;
-	padding: 2vh 0 2vh 0;
-	width: 75vw;
-	border-width: 1px;
-	border-radius: 8px;
-}
-
-#streamTable, #controlPane {
-	position: relative;
+#eventProcessor {
 	animation: fadeIn 1s linear forwards;
 	-webkit-animation: fadeIn 1s linear forwards;
 	-moz-animation: fadeIn 1s linear forwards;
@@ -29,4 +13,10 @@
 @keyframes fadeIn {
 	0% { opacity: 0 }
 	100% { opacity: 1 }
+}
+
+#test {
+    margin: 0 15vw 0 15vw;
+    color: white;
+    font-size: 1.25em;
 }

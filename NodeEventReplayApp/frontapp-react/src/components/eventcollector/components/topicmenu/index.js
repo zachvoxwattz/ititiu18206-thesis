@@ -1,13 +1,22 @@
 import { useState } from 'react'
 import {toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS} from './functions'
-import axios from '../../api/axios'
-import loadingIcon from '../../assets/images/loading.gif'
-import '../../assets/css/topicmenu.css'
+import axios from '../../../../api/axios'
+import loadingIcon from '../../../../assets/images/loading.gif'
+import '../../../../assets/css/eventcollector/topicmenu.css'
 
 const TopicMenu = (props) => {
-    let currentTopic = props.topicUtils.topic
+    let passedData = props.appUtils
+        let topic = passedData.topic
+        let setTopic = passedData.setTopic
+        let eventLog = passedData.eventLog
+        let setEventLog = passedData.setEventLog
+
     let updateTopic = (topic) => {
-            props.topicUtils.setTopic(topic)
+        setTopic(topic)
+    }
+
+    let clearLog = () => {
+        setEventLog([])
     }
 
     const [ffl, setFFL] = useState(false)
@@ -53,12 +62,12 @@ const TopicMenu = (props) => {
     }
 
     const highlightSelected = () => {
-        if (currentTopic !== '' || currentTopic !== false) {
+        if (topic !== '' || topic !== false) {
             let fetchedTopics = document.getElementsByClassName('topicBtn')
     
             for (let i = 0; i < fetchedTopics.length; i++) {
                 let itor = fetchedTopics[i].innerText || fetchedTopics[i].textContent
-                if (itor === currentTopic) {
+                if (itor === topic) {
                     fetchedTopics[i].classList.add('topicBtnSelected')
                     break;
                 }
@@ -90,6 +99,13 @@ const TopicMenu = (props) => {
                 <button className = 'topicInteractionBtn' id = 'topicDisplayBtn' onClick={() => { displayTopics(ffl) }}>Display topics</button>
                 <button className = 'topicInteractionBtn' id = 'topicRefreshBtn' onClick={() => { revertSelectionsCSS(); forceShowList(); getTopics() }}>Refresh Topics</button>
                 <button className = 'topicInteractionBtn' id = 'topicClearBtn' onClick={() => { clearSelection(); showTopicClearer(false) }}>Clear selection</button>
+                
+                {
+                    eventLog.length !== 0 ?
+                        <button className = 'topicInteractionBtn' id = 'clearLogBtn' onClick={() => { clearLog() }}>Clear Event Log</button>
+                        : null
+                }
+                
             </div>
             
             <div id = 'topicList'>

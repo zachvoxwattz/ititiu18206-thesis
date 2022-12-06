@@ -1,10 +1,12 @@
 #dataPaneFields {
-    position: fixed;
+    position: -webkit-sticky;
+    position: sticky;
     display: flex;
     justify-content: space-between;
     background-color: #0d1117;
     border-color: white;
     border-style: solid;
+    top: 0;
     z-index: 1;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -13,7 +15,7 @@
     border-right: 0;
     border-left: 0;
     border-bottom: 1;
-    width: 75%;
+    width: 100%;
 }
 
 .dataPaneField {

@@ -1,0 +1,78 @@
+#appNavigator {
+    margin: auto auto 2.5vh auto
+}
+
+#appNavChoices {
+    display: flex;
+    justify-content: space-between;
+    background-color: #06080b;
+    margin: auto auto auto auto;
+    text-align: center;
+}
+
+#appNavBtnHolder {
+    margin: 2.5vh 0 2.5vh 5vw
+}
+
+#appExitBtnHolder {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    margin: 2.5vh 5vw 2.5vh 0;
+}
+
+.appNavBtn {
+    background-color: #89929b;
+    display: inline-block;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 8px;
+    font-weight: bolder;
+    color: white;
+    transition: 120ms ease-in-out linear;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
+    font-size: 2em;
+}
+
+#appNavCollectorBtn {
+    margin: auto 3vw auto auto;
+}
+
+#appNavProcessorBtn {
+    margin: auto auto auto 3vw;
+}
+
+#appNavCollectorBtn:disabled, #appNavProcessorBtn:disabled {
+    background-color: #77bdfb;
+}
+
+.appExitBtn {
+    font-weight: bold;
+    color: white;
+    border-color: transparent;
+    border-style: solid;
+    border-radius: 8px;
+    border-width: 1px;
+    font-size: 1.5em;
+    width: 5vw;
+}
+
+#appExitOnlyBtn {
+    margin: 0 0.5vw 0 0;
+    background-color: rgb(149, 2, 2);
+}
+
+#appExitOnlyBtn:active {
+    background-color: rgb(103, 7, 7);
+}
+
+#appExitCloseBtn {
+    margin: 0 0 0 0.5vw;
+    background-color: rgb(113, 1, 1);
+}
+
+#appExitCloseBtn:active {
+    background-color: rgb(69, 4, 4);
+}
