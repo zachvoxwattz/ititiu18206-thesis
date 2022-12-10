@@ -16,6 +16,8 @@ const EventCollector = (props) => {
         let setStreamStatus = contempData.setStreamStatus
         let eventLog = contempData.eventLog
         let setEventLog = contempData.setEventLog
+        let socketIO = contempData.socketIO
+        let setSocketIO = contempData.setSocketIO
         let nav = contempData.nav
 
     const updateLog = (newData) => {
@@ -37,7 +39,7 @@ const EventCollector = (props) => {
     return(
         <div id = 'eventCollector'>
             <div id = 'controlPane'>
-                <StreamControlPane appUtils = {{topic, setTopic, streamStatus, setStreamStatus, nav}}/>
+                <StreamControlPane appUtils = {{topic, setTopic, streamStatus, setStreamStatus, socketIO, setSocketIO, nav}}/>
                 <TopicMenu appUtils = {{topic, setTopic, eventLog, setEventLog}}/>
             </div>
             

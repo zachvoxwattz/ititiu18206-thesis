@@ -21,8 +21,8 @@ expressInstance.use(cors())
 expressInstance.use('/', rootRouter)
 
 const startService = () => {
-    prepareSocketIOServer(expressServer)
-    handleSocketIOConnections()
+    // prepareSocketIOServer(expressServer)
+    // handleSocketIOConnections()
 
     expressVariable = expressServer.listen(APP_PORT, () => {
         console.log(`Server is operating on port ${APP_PORT}`)

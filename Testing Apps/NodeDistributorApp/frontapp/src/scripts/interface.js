@@ -5,7 +5,7 @@ import '../css/buttons.css'
 import axios from 'axios'
 import SortAlgorithmToggleButton from './toggle_button'
 
-const DESTINATION = 'http://localhost:3001/backapp/sorttester'
+const DESTINATION = 'http://localhost:3002/backapp/sorttester'
 //const DESTINATION = 'https://yourremotehostlink/path/to/service'
 
 const ControlInterface = (props) => {

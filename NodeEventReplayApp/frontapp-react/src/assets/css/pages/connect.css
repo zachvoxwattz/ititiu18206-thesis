@@ -101,7 +101,7 @@
     color: black
 }
 
-#pingButton:active {
+#pingButton:active:not(#pingButton:disabled) {
     background-color: #9f680e;
     color: white;
 }
@@ -120,7 +120,7 @@
     color: black;
 }
 
-#connectButton:active {
+#connectButton:active:not(#connectButton:disabled) {
     background-color: #36613d;
     color: white;
 }
@@ -133,7 +133,6 @@
     border-radius: 8px;
     margin: 20px auto 0 auto;
     padding: 20px;
-    font-size: 14px;
     width: 276px;
 }
 
@@ -142,4 +141,6 @@
     color: white;
     font-weight: normal;
     white-space: break-spaces;
+    font-size: 1em;
+    font-weight: bold;
 }

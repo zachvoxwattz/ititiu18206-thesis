@@ -9,17 +9,11 @@ const prepareSocketIOServer = (server) => {
 const handleSocketIOConnections = () => {
     socketIOServer.on('connection', socket => {
         console.log(`Client at socket ${socket.id} has connected`)
+
         socket.on('disconnect', () => {
             console.log(`Client at socket ${socket.id} has exited`)
         })
-        socket.on('leaveapp', () => {
-            socket.disconnect()
-        })
     })
-}
-
-const emitDataWithTopic = async (recvSocketID, topic) => {
-    socketIOServer.to(recvSocketID).emit(topic, {})
 }
 
 export { prepareSocketIOServer, handleSocketIOConnections }

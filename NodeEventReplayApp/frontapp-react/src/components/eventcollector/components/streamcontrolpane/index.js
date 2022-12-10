@@ -1,38 +1,59 @@
-import { useState } from 'react'
+import { connectSocketIO } from '../../../../api/socketio'
+import { useState, useEffect } from 'react'
 import { alterButtonsState, getSelectedTopic, statusLabelStyles } from './functions'
-import axios from '../../../../api/axios'
 import '../../../../assets/css/eventcollector/streamcontrolpane.css'
 
 const StreamControlPane = (props) => {
     let passedData = props.appUtils
         let topic = passedData.topic
-        //let setTopic = passedData.setTopic
         let streamStatus = passedData.streamStatus
         let setStreamStatus = passedData.setStreamStatus
+        let socketIO = passedData.socketIO
+        let setSocketIO = passedData.setSocketIO
 
     const [btnStatus, setStatus] = useState({ start: false, stop: true })
 
-    const funcStreamStart = (startBtn) => {
+    useEffect(() => {
+        if (socketIO) {
+            socketIO.on("connect", (response) => {
+                console.log('Huh, i connected')
+                console.log(response)
+                // axios.post('/getstream', { streamTopic: topic, socketID: socketIO.id})
+                //     .then(() => {
+                //         // Handle various stuffs here
+                //         let startBtn = document.getElementById('streamStartBtn')
+                //         alterButtonsState(startBtn, setStatus)
+                //         setStreamStatus({status: 'active', label: 'Stream active'})
+                //     })
+                //     .catch(err => {
+                //         let errStatus = err.response
+                //         setStreamStatus({status: 'error', label: errStatus.statusText})
+                //     })
+            })
+
+            // socketIO.on(topic, (data) => {
+            //     console.log(data)
+            // })
+        }
+    })
+
+    const funcStreamStart = () => {
         if (topic === false) {
             setStreamStatus({status: 'error', label: 'Can not start a stream without selected topic!'})
             return
         }
-
-        axios.post('/getstream', { streamTopic: topic })
-                .then(() => {
-                    // Handle here
-                    alterButtonsState(startBtn, setStatus)
-                    setStreamStatus({status: 'active', label: 'Stream active'})
-                })
-                .catch(err => {
-                    let errStatus = err.response
-                    setStreamStatus({status: 'error', label: errStatus.statusText})
-                })
+        
+        setSocketIO(connectSocketIO(true))
     }
 
     const funcStreamStop = (stopBtn) => {
-        alterButtonsState(stopBtn, setStatus)
-        setStreamStatus({status: 'suspended', label: 'Stream suspended'})
+        if (socketIO) {
+            console.log(socketIO.id)
+            socketIO.disconnect()
+            setSocketIO(null)
+            alterButtonsState(stopBtn, setStatus)
+            setStreamStatus({status: 'suspended', label: 'Stream suspended'})
+        }
     }
 
     return(
@@ -67,7 +88,7 @@ const StreamControlPane = (props) => {
             </div>
             
             <div id = 'streamActionButtons'>
-                <button className = 'streamControlBtn' disabled = {btnStatus.start} onClick = {(event) => { funcStreamStart(event.target) }} id = 'streamStartBtn'>Start</button>
+                <button className = 'streamControlBtn' disabled = {btnStatus.start} onClick = {(event) => { funcStreamStart() }} id = 'streamStartBtn'>Start</button>
                 
                 <button className = 'streamControlBtn' disabled = {btnStatus.stop} onClick = {(event) => { funcStreamStop(event.target) }} id = 'streamStopBtn'>Stop</button>
             </div>

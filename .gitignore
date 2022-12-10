@@ -12,6 +12,7 @@ vendor
 
 # Build folders / files
 *.kts
+target
 build
 /build
 bin
