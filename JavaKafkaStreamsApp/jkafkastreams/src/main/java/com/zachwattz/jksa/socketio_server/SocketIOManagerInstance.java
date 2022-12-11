@@ -1,16 +1,13 @@
 package com.zachwattz.jksa.socketio_server;
 
-//import com.zachwattz.jksa.models.MessageDatagram;
-
-//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.corundumstudio.socketio.listener.ConnectListener;
-//import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import com.zachwattz.jksa.kafka_streams.KafkaStreamsManagerInstance;
-//import com.corundumstudio.socketio.AckRequest;
+import com.zachwattz.jksa.kafka_streams.KafkaStreamsObject;
+
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -26,6 +23,7 @@ public class SocketIOManagerInstance {
     private KafkaStreamsManagerInstance kafkaStreamsManagerInstance;
 
     private List<SocketIOClient> connectedClients;
+    private List<String> eventsList;
     
     public SocketIOManagerInstance(String host, int port, KafkaStreamsManagerInstance instance, boolean debugEnabled) {
         this.instanceHost = host;
@@ -38,9 +36,9 @@ public class SocketIOManagerInstance {
         // Core server and elements initialization
         this.mainServer = new SocketIOServer(configuration);
         this.connectedClients = new ArrayList<>();
+        this.eventsList = new ArrayList<>();
 
         attachCoreHooks();
-        attachTopicHooks();
     }
 
     private void initConfigs() {
@@ -71,12 +69,24 @@ public class SocketIOManagerInstance {
         });
     }
 
+    private void attachTopicHookToServer(String eventName, String assignedTopic) {
+        KafkaStreamsObject kSObj = this.kafkaStreamsManagerInstance.createNewKafkaStreamInstance(assignedTopic);
+
+        kSObj.bindSocketIO(mainServer, eventName);
+        kSObj.initializeStream();
+        kSObj.startStream();
+
+        System.out.printf("\n[WOO HOO] Stream topic '%s' binded with Socket.IO event '%s' started!\n", assignedTopic, eventName);
+    }
+
     private void attachTopicHooks() {
         List<String> topics = this.kafkaStreamsManagerInstance.getTopicList();
 
-        System.out.println("------------------------------");
-        topics.forEach((item) -> System.out.println(item));
-        System.out.println("------------------------------");
+        topics.forEach((itor) -> {
+            String interactTopicEvent = "recv_" + itor;
+            this.eventsList.add(interactTopicEvent);
+            attachTopicHookToServer(interactTopicEvent, itor);
+        });
     }
 
     public void terminateService() {
@@ -90,9 +100,7 @@ public class SocketIOManagerInstance {
 
     public void startService() {
         this.mainServer.start();
-    }
-
-    public void stopService() {
-        System.exit(0);
+        attachTopicHooks();
+        System.out.println("[FINISHED] Done initializing SocketIO Server");
     }
 }

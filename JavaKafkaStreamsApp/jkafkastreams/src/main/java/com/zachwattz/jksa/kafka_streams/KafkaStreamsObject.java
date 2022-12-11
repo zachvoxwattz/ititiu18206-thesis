@@ -5,14 +5,15 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 
+import com.corundumstudio.socketio.SocketIOServer;
 import com.zachwattz.jksa.models.DataOperation;
-import java.util.concurrent.CountDownLatch;
+import com.zachwattz.jksa.models.MessageDatagram;
 
 public class KafkaStreamsObject implements DataOperation {
 
-    private String topic;
-    private CountDownLatch CDL;
+    private String topic, socketIOEventName;
 
+    private SocketIOServer socketIOServerInstance;
     private StreamsBuilder streamsBuilder;
     private KafkaStreamsManagerInstance parent;
     private KStream<String, String> kStream;
@@ -22,6 +23,11 @@ public class KafkaStreamsObject implements DataOperation {
         this.parent = parent;
         this.topic = assignedTopic;
         this.streamsBuilder = new StreamsBuilder();
+    }
+
+    public void bindSocketIO(SocketIOServer server, String eventName) {
+        this.socketIOEventName = eventName;
+        this.socketIOServerInstance = server;
     }
 
     public void initializeStream() {
@@ -35,21 +41,17 @@ public class KafkaStreamsObject implements DataOperation {
     }
 
     public void startStream() {
-        this.CDL = new CountDownLatch(1);
-        try {
-            this.kafkaStreams.start();
-            this.CDL.await();
-        } catch (final Throwable e) {
-            System.exit(1);
-        }
+        this.kafkaStreams.start();
+        System.out.printf("\n\n[TEST] %s started", this.socketIOEventName);
     }
 
     public void stopStream() {
         this.kafkaStreams.close();
-        this.CDL.countDown();
     }
 
     public void execute(String key, String value) {
-        // TODO
+        this.socketIOServerInstance
+                .getBroadcastOperations()
+                    .sendEvent(this.socketIOEventName, new MessageDatagram(key, value));
     }
 }

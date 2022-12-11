@@ -25,15 +25,19 @@ public class JKafkaStreamsEventReplayApp
 
         kafkaStreamManager = new KafkaStreamsManagerInstance(kafkaHostTarget, debugEnabled);
         socketIOManager = new SocketIOManagerInstance(socketIOHost, Integer.parseInt(socketIOPort), kafkaStreamManager, debugEnabled);
+
         socketIOManager.startService();
+        
+        // System.out.println("Adding shutdown hook...");
+        // shutdownHook = new Thread(() -> {
+        //     System.out.printf("\n\n[INFO] Termination command detected. Starting shutdown hook...\n");
+        //     kafkaStreamManager.terminateService();
+        //     socketIOManager.terminateService();
+        //     System.out.printf("\n[INFO] Shutdown hook finished. Exiting JVM.");
+        // });
+        // System.out.println("Added shutdown hook...");
+        // Runtime.getRuntime().addShutdownHook(shutdownHook);
 
-        shutdownHook = new Thread(() -> {
-            System.out.printf("\n\n[INFO] Termination command detected. Starting shutdown hook...\n");
-            kafkaStreamManager.terminateService();
-            socketIOManager.terminateService();
-            System.out.printf("\n[INFO] Shutdown hook finished. Exiting JVM.");
-        });
-
-        Runtime.getRuntime().addShutdownHook(shutdownHook);
+        // socketIOManager.startService();
     }
 }

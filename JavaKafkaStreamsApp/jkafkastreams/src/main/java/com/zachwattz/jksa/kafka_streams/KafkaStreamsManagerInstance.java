@@ -73,6 +73,7 @@ public class KafkaStreamsManagerInstance {
             this.receivedTopics.remove("__consumer_offsets");
         }
 
+        this.receivedTopics.forEach((item) -> System.out.println(item));
     }
 
     public KafkaStreamsObject createNewKafkaStreamInstance(String topic) {
@@ -82,8 +83,10 @@ public class KafkaStreamsManagerInstance {
     }
 
     public void terminateService() {
-        if (this.activeKafkaStreamObjectList.size() != 0) 
+        if (this.activeKafkaStreamObjectList.size() != 0) {
             this.activeKafkaStreamObjectList.forEach((item) -> item.stopStream());
+            this.activeKafkaStreamObjectList.clear();
+        }   
     }
 
     public boolean isDebugEnabled() { return this.debugEnabled; }
