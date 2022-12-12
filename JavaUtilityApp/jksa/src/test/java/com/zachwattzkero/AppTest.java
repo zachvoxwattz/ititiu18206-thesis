@@ -1,4 +1,4 @@
-package com.zachwattz.jksa;
+package com.zachwattzkero;
 
 import static org.junit.Assert.assertTrue;
 

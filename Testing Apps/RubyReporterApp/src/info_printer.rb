@@ -10,7 +10,7 @@ class InfoPrinter
         if @debugMode
             puts "\n--------------------"
             puts "New message!"
-            puts " - Key:#{datagram.key}"
+            puts " - Key: #{datagram.key}"
             puts " - Offset: #{datagram.offset}"
             puts " - Partition: #{datagram.partition}"
             puts " - Topic: #{datagram.topic}"

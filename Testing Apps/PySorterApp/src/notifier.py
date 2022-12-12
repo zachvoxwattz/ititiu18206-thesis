@@ -7,13 +7,16 @@ class ResultNotifier:
         self.outputTopic = output_topic
         self.client = KafkaProducer(
             bootstrap_servers = broker_list,
-            value_serializer = lambda data: json.dumps(data).encode('utf-8')
+            key_serializer = lambda key: json.dumps(key).encode('utf-8'),
+            value_serializer = lambda value: json.dumps(value).encode('utf-8')
         )
 
     def emitMessage(self, datagram, sorted_array, done_time):
         # No need to serialize data here as we have defined it on the __init__ method
         datagram['sortedArray'] = sorted_array
         datagram['doneTime'] = done_time
-        self.client.send(topic = self.outputTopic, value = datagram)
+        eventKey = datagram['eventMessageID']
+
+        self.client.send(topic = self.outputTopic, key = eventKey, value = datagram)
         self.client.flush()
         
