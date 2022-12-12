@@ -14,6 +14,7 @@ import com.zachwattzkero.models.DataOperation;
 public class KafkaStreamInstance implements DataOperation {
     
     private String assignedTopic, streamID;
+    private boolean debugEnabled;
 
     private StreamsBuilder streamsBuilder;
     private KafkaStreams kafkaStream;
@@ -25,12 +26,28 @@ public class KafkaStreamInstance implements DataOperation {
     public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic) {
         this.managerParent = parent;
         this.assignedTopic = givenTopic;
+        this.debugEnabled = false;
+        this.streamID = "KafkaStreamCL_" + "0";
+    }
+
+    public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic, boolean enableDebug) {
+        this.managerParent = parent;
+        this.assignedTopic = givenTopic;
+        this.debugEnabled = enableDebug;
         this.streamID = "KafkaStreamCL_" + "0";
     }
 
     public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic, String assignedStreamID) {
         this.managerParent = parent;
         this.assignedTopic = givenTopic;
+        this.debugEnabled = false;
+        this.streamID = "KafkaStreamCL_" + assignedStreamID;
+    }
+
+    public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic, String assignedStreamID, boolean enableDebug) {
+        this.managerParent = parent;
+        this.assignedTopic = givenTopic;
+        this.debugEnabled = enableDebug;
         this.streamID = "KafkaStreamCL_" + assignedStreamID;
     }
 
@@ -61,5 +78,6 @@ public class KafkaStreamInstance implements DataOperation {
 
     public void stopStream() {
         this.kafkaStream.close();
+        if (this.debugEnabled) System.out.println("[KafkaStreamInstance ");
     }
 }

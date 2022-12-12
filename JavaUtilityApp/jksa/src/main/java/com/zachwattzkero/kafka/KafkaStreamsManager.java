@@ -28,7 +28,7 @@ public class KafkaStreamsManager {
         this.brokerAddress = brokerAddress;
         this.dataSerde = Serdes.String();
         this.streamsList = new ArrayList<>();
-        this.kAdminClient = new KafkaAdminClient(brokerAddress);
+        this.kAdminClient = new KafkaAdminClient(brokerAddress, this.debugEnabled);
     }
 
     public KafkaStreamInstance createNewStream(String assignedTopic) {
@@ -52,6 +52,7 @@ public class KafkaStreamsManager {
         this.kAdminClient.closeClient();
         this.streamsList.forEach((stream) -> stream.stopStream());
         this.streamsList.clear();
+        if (this.debugEnabled) System.out.println("[KafkaStreamsManager] Shutdown procedure completed.");
     }
 
     public int getStreamCount() { return this.STREAM_COUNT; }

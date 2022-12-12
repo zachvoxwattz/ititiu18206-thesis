@@ -11,10 +11,13 @@ import org.apache.kafka.clients.admin.ListTopicsOptions;
 
 public class KafkaAdminClient {
     
+    private boolean debugEnabled;
+
     private Properties adminProps;
     private AdminClient adminClient;
 
-    public KafkaAdminClient(String brokerAddress) {
+    public KafkaAdminClient(String brokerAddress, boolean enableDebug) {
+        this.debugEnabled = enableDebug;
         this.adminProps = new Properties();
             this.adminProps.putIfAbsent(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress);
 
@@ -40,5 +43,6 @@ public class KafkaAdminClient {
 
     public void closeClient() {
         this.adminClient.close();
+        if (this.debugEnabled) System.out.println("[KafkaAdminClient] Client closed!");
     }
 }
