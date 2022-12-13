@@ -17,14 +17,14 @@ public class JProgramRunner
         String socketIOHost = args[2];
         String socketIOPort = args[3];
 
-        KafkaStreamsManager kManager = new KafkaStreamsManager(brokerAddress, enableDebug);
-        SocketIOBroadcaster sIoBroadcaster = new SocketIOBroadcaster(socketIOHost, socketIOPort);
+        KafkaStreamsManager kafkaStreamsManager = new KafkaStreamsManager(brokerAddress, enableDebug);
+        SocketIOBroadcaster sIoBroadcaster = new SocketIOBroadcaster(socketIOHost, socketIOPort, enableDebug);
+            kafkaStreamsManager.bindSocketIOServer(sIoBroadcaster);
 
-        Thread shutdownHook = new Thread(new ShutdownHook(kManager, sIoBroadcaster));
+        Thread shutdownHook = new Thread(new ShutdownHook(kafkaStreamsManager, sIoBroadcaster));
         Runtime.getRuntime().addShutdownHook(shutdownHook);
 
         sIoBroadcaster.startService();
-        kManager.createAndStartNewStream("tbSorted");
-        kManager.createAndStartNewStream("tbSortedResults");
+        kafkaStreamsManager.createAndStartTopicStreams();
     }
 }

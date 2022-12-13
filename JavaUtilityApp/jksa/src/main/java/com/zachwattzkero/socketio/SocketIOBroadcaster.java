@@ -62,9 +62,13 @@ public class SocketIOBroadcaster {
         });
     }
 
+    public void broadcastEvent(String eventName, String key, String value) {
+        System.out.printf("\n\n[SocketIOBroadcaster]\n - Event name: %s\n - Key: %s\n - Value: %s\n", eventName, key, value);
+    }
+
     public void startService() {
         this.serverInstance.start();
-        if (this.debugEnabled) System.out.println("[SocketIOBroadcaster] Service reports. OPERATIONAL");
+        if (this.debugEnabled) System.out.printf("[SocketIOBroadcaster] Service reports. OPERATIONAL @ Port %s\n", this.hostPort);
     }
 
     public void terminateService() {

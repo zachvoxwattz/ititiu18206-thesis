@@ -22,6 +22,7 @@ public class KafkaAdminClient {
             this.adminProps.putIfAbsent(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress);
 
         this.adminClient = AdminClient.create(this.adminProps);
+        if (this.debugEnabled) System.out.println("\n[KafkaAdminClient] Client initialized");
     }
 
     public List<String> getTopicList() {

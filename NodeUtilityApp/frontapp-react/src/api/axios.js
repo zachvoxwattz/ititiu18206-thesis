@@ -1,2 +1,2 @@
 import axios from 'axios'
-export default axios.create({ baseURL: 'http://localhost:3005/eventreplay' })
+export default axios.create({ baseURL: 'http://localhost:3001/eventreplay' })

@@ -18,10 +18,10 @@ public class ShutdownHook implements Runnable {
         System.out.printf("\n\n-----EXECUTING SHUTDOWN HOOK-----\n\n");
 
         // Handle service termination here
-        sIOBroadcaster.terminateService();
-        kManager.terminateService();
+        this.sIOBroadcaster.terminateService();
+        this.kManager.terminateService();
         
-        System.out.printf("\n\n-----SHUTDOWN HOOK EXECUTED!-----\n");
+        System.out.printf("\n-----SHUTDOWN HOOK EXECUTED!-----\n");
     }
     
 }

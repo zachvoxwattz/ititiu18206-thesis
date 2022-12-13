@@ -16,7 +16,7 @@ class ResultNotifier:
         datagram['sortedArray'] = sorted_array
         datagram['doneTime'] = done_time
         eventKey = datagram['eventMessageID']
-
+        
         self.client.send(topic = self.outputTopic, key = eventKey, value = datagram)
         self.client.flush()
         
