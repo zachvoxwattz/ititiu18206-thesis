@@ -1,4 +1,4 @@
-import { connectSocketIO } from '../../../../api/socketio'
+import { newSocketIOInstance } from '../../../../api/socketio'
 import { useState, useEffect } from 'react'
 import { alterButtonsState, getSelectedTopic, statusLabelStyles } from './functions'
 import '../../../../assets/css/eventcollector/streamcontrolpane.css'
@@ -8,52 +8,47 @@ const StreamControlPane = (props) => {
         let topic = passedData.topic
         let streamStatus = passedData.streamStatus
         let setStreamStatus = passedData.setStreamStatus
-        let socketIO = passedData.socketIO
-        let setSocketIO = passedData.setSocketIO
+        let socketIOInstance = passedData.socketIOInstance
+        let setSocketIOInstance = passedData.setSocketIOInstance
 
     const [btnStatus, setStatus] = useState({ start: false, stop: true })
 
     useEffect(() => {
-        if (socketIO) {
-            socketIO.on("connect", (response) => {
-                console.log('Huh, i connected')
-                console.log(response)
-                // axios.post('/getstream', { streamTopic: topic, socketID: socketIO.id})
-                //     .then(() => {
-                //         // Handle various stuffs here
-                //         let startBtn = document.getElementById('streamStartBtn')
-                //         alterButtonsState(startBtn, setStatus)
-                //         setStreamStatus({status: 'active', label: 'Stream active'})
-                //     })
-                //     .catch(err => {
-                //         let errStatus = err.response
-                //         setStreamStatus({status: 'error', label: errStatus.statusText})
-                //     })
-            })
+        // const socketInstance = newSocketIOInstance(true)
 
-            // socketIO.on(topic, (data) => {
-            //     console.log(data)
-            // })
-        }
+        // socketInstance.on("connect", () => {
+        //     console.log("Connected")
+        //     setStreamStatus({status: 'active', label: 'Stream active'})
+        //     setSocketIOInstance(socketInstance)
+        // })
     })
 
-    const funcStreamStart = () => {
+    const funcStreamStart = async (startBtn) => {
         if (topic === false) {
             setStreamStatus({status: 'error', label: 'Can not start a stream without selected topic!'})
             return
         }
         
-        setSocketIO(connectSocketIO(true))
+        var socketInstance = newSocketIOInstance(true)
+
+        socketInstance.on('connect', () => {
+            console.log("Client connected")
+        })
+
+        socketInstance.on('disconnect', () => {
+            console.log("Client disconnected")
+        })
+
+        alterButtonsState(startBtn, setStatus)
+        setStreamStatus({status: 'active', label: 'Stream active'})
+        setSocketIOInstance(socketInstance)
     }
 
     const funcStreamStop = (stopBtn) => {
-        if (socketIO) {
-            console.log(socketIO.id)
-            socketIO.disconnect()
-            setSocketIO(null)
-            alterButtonsState(stopBtn, setStatus)
-            setStreamStatus({status: 'suspended', label: 'Stream suspended'})
-        }
+        socketIOInstance.off('connect')
+        socketIOInstance.disconnect()
+        alterButtonsState(stopBtn, setStatus)
+        setStreamStatus({status: 'suspended', label: 'Stream suspended'})
     }
 
     return(
@@ -88,7 +83,7 @@ const StreamControlPane = (props) => {
             </div>
             
             <div id = 'streamActionButtons'>
-                <button className = 'streamControlBtn' disabled = {btnStatus.start} onClick = {(event) => { funcStreamStart() }} id = 'streamStartBtn'>Start</button>
+                <button className = 'streamControlBtn' disabled = {btnStatus.start} onClick = {(event) => { funcStreamStart(event.target) }} id = 'streamStartBtn'>Start</button>
                 
                 <button className = 'streamControlBtn' disabled = {btnStatus.stop} onClick = {(event) => { funcStreamStop(event.target) }} id = 'streamStopBtn'>Stop</button>
             </div>

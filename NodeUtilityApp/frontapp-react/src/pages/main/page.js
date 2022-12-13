@@ -10,7 +10,6 @@ const MainPage = () => {
     const nav = useNavigate()
     var appData = useLocation().state
 
-
     useEffect(() => {
         if (!appData?.brokerDomain || !appData?.brokerPort) {
             nav('/connect', { state: {
@@ -21,15 +20,15 @@ const MainPage = () => {
         document.getElementById('eventProcessor').style.display = 'none'
     }, [appData?.brokerDomain, appData?.brokerPort, nav])
 
-    const [socketIO, setSocketIO] = useState(null)
     const [topic, setTopic] = useState(false)
     const [eventLog, setEventLog] = useState([])
+    const [socketIOInstance, setSocketIOInstance] = useState(null)
     const [streamStatus, setStreamStatus] = useState({status: 'idle', label: 'Idling'})
 
     return(
         <div id = 'mainApp'>
-            <Navigator appUtils = {{setStreamStatus, nav}}/>
-            <EventCollector appUtils = {{topic, setTopic, streamStatus, setStreamStatus, eventLog, setEventLog, socketIO, setSocketIO}}/>
+            <Navigator appUtils = {{setStreamStatus, nav, socketIOInstance, setSocketIOInstance}}/>
+            <EventCollector appUtils = {{topic, setTopic, streamStatus, setStreamStatus, eventLog, setEventLog, socketIOInstance, setSocketIOInstance}}/>
             <EventProcessor />
         </div>
     )

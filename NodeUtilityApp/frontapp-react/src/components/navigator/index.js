@@ -4,8 +4,11 @@ import axios from '../../api/axios'
 import '../../assets/css/navigator/main.css'
 
 const Navigator = (props) => {
-    let nav = props.appUtils.nav
-    let setStreamStatus = props.appUtils.setStreamStatus
+    let passedData = props.appUtils
+        let nav = passedData.nav
+        let setStreamStatus = passedData.setStreamStatus
+        let socketIOInstance = passedData.socketIOInstance
+        let setSocketIOInstance = passedData.setSocketIOInstance
 
     const [viewState, setViewState] = useState({collector: true, processor: false})
 
@@ -21,6 +24,8 @@ const Navigator = (props) => {
 
     const exitApp = () => {
         // To handle various stuffs post using app, please use 'useEffect' hook!
+        socketIOInstance.disconnect()
+        setSocketIOInstance(null)
         nav('/connect', {state: {code: 'error', message: 'You have disconnected'}})
     }
 

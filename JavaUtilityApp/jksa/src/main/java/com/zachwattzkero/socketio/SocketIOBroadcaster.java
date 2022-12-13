@@ -1,10 +1,14 @@
 package com.zachwattzkero.socketio;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+import com.zachwattzkero.models.MessageDatagram;
 
 public class SocketIOBroadcaster {
 
@@ -47,7 +51,7 @@ public class SocketIOBroadcaster {
                 String address = client.getRemoteAddress().toString();
                 String socketID = client.getSessionId().toString();
 
-                if (debugEnabled) System.out.printf("\n[SocketIOBroadcaster] Client ID '%s' at '%s' connected!", socketID, address);
+                if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Client ID '%s' at '%s' connected!\n", socketID, address);
             }
         });
 
@@ -57,13 +61,14 @@ public class SocketIOBroadcaster {
                 String address = client.getRemoteAddress().toString();
                 String socketID = client.getSessionId().toString();
                 
-                if (debugEnabled) System.out.printf("\n[SocketIOBroadcaster] Client ID '%s' at '%s' exited!", socketID, address);
+                if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Client ID '%s' at '%s' exited!\n", socketID, address);
             }
         });
     }
 
     public void broadcastEvent(String eventName, String key, String value) {
-        System.out.printf("\n\n[SocketIOBroadcaster]\n - Event name: %s\n - Key: %s\n - Value: %s\n", eventName, key, value);
+        this.serverInstance.getBroadcastOperations().sendEvent(eventName, new MessageDatagram(key, value));
+        if (this.debugEnabled) System.out.printf("\n\n[SocketIOBroadcaster]\n - Event name: %s\n - Key: %s\n - Value: %s\n", eventName, key, value);
     }
 
     public void startService() {
@@ -72,7 +77,8 @@ public class SocketIOBroadcaster {
     }
 
     public void terminateService() {
-        if (this.serverInstance.getAllClients().size() != 0) this.serverInstance.getAllClients().forEach((client) -> client.disconnect());
+        List<SocketIOClient> clients = new ArrayList<>(this.serverInstance.getAllClients());
+        if (clients.size() != 0) clients.forEach((client) -> client.disconnect());
         
         this.serverInstance.stop();
         if (this.debugEnabled) System.out.println("[SocketIOBroadcaster] Service reports. TERMINATED");

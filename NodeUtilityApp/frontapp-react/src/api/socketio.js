@@ -1,9 +1,9 @@
-import { io } from 'socket.io-client'
+import io from 'socket.io-client'
 
-const localURL = 'http://localhost:3004'
-const connectSocketIO = (endpointPath) => {
+const localURL = 'ws://localhost:3004'
+const newSocketIOInstance = (endpointPath) => {
     if (endpointPath === true) return io(localURL)
     else return io(endpointPath)
 }
 
-export { connectSocketIO }
+export { newSocketIOInstance }
