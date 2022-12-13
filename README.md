@@ -31,12 +31,12 @@ Sub-components for testings:
 #### Kafka Cluster
 This is an Apache Kafka application. So make sure [it is](https://kafka.apache.org/downloads) downloaded first (The version of which recommended by themselves is preferred). Also, it is recommended to run Kafka in Linux as many experienced users have proven the app utilizes better resources and possesses better performance than that of Windows. After that, follow these steps:
 <br/>
-1. Extract the contents of the downloaded Kafka application. **Make sure the Directory path of to it DOES NOT contain any spaces!**. For example, the path `C:/ProgramData/Broker Server/kafka` is ineligible as it contains a single white space.<br/>
+1. Extract the contents of the downloaded Kafka application. **Make sure the Directory path of to it DOES NOT contain any spaces!** For example, the path `C:/ProgramData/Broker Server/kafka` is ineligible as it contains a single white space.<br/>
 2. Extract the configuration and launch scripts in `Kafka Configs` of my repository into the installation directory of the downloaded Kafka app.<br/>
 3. `cd` to the Kafka application root and run `./start-ZK.sh` to start the Zookeeper server first (The syntax is the same regardless of using either WSL or Linux, if you use Linux, make sure that Java is installed beforehand!).<br/>
 4. Run `./start-BKx.sh` to start Broker #x (1 -> 2) with x as the broker ID. Currently there are `2` brokers, more might be added later.
 5. Perform your testings.
-6. To stop all operations, stop the Kafka brokers first by running `./stop-BKs.sh`. Then run `./stop-ZK.sh` to stop the Zookeeper server. **DO NOT STOP THE ZOOKEEPER FIRST!**.
+6. To stop all operations, stop the Kafka brokers first by running `./stop-BKs.sh`. Then run `./stop-ZK.sh` to stop the Zookeeper server. **DO NOT STOP THE ZOOKEEPER FIRST!**
 <hr/>
 
 #### JavaUtilityApp
