@@ -25,7 +25,7 @@ public class KafkaStreamsManager {
 
     public KafkaStreamsManager(String brokerAddress, boolean enableDebug) {
         BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.INFO);
+        Logger.getRootLogger().setLevel(Level.OFF);
 
         this.debugEnabled = enableDebug;
         this.brokerAddress = brokerAddress;

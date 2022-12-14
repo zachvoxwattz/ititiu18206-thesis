@@ -6,11 +6,11 @@ import { sortHandler } from '../controllers/sort_controller.js'
 const rootRouter = express.Router()
 const router = express.Router()
 
-router.get('/pingcheckservice', pingHandler)
-router.post('/sorttester', sortHandler)
+router.get('/pingcheck', pingHandler)
+router.post('/senddata', sortHandler)
 
 
 rootRouter.get('/', rootRouteCtrl)
-rootRouter.use('/backapp', router)
+rootRouter.use('/sorttester', router)
 
 export default rootRouter

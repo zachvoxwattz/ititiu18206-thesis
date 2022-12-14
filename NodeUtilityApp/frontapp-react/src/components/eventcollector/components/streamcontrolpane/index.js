@@ -1,27 +1,24 @@
 import { newSocketIOInstance } from '../../../../api/socketio'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { alterButtonsState, getSelectedTopic, statusLabelStyles } from './functions'
 import '../../../../assets/css/eventcollector/streamcontrolpane.css'
 
 const StreamControlPane = (props) => {
-    let passedData = props.appUtils
-        let topic = passedData.topic
-        let streamStatus = passedData.streamStatus
-        let setStreamStatus = passedData.setStreamStatus
-        let socketIOInstance = passedData.socketIOInstance
-        let setSocketIOInstance = passedData.setSocketIOInstance
+    let contempData = props.appUtils
+        let topic = contempData.topic
+        let streamStatus = contempData.streamStatus
+        let setStreamStatus = contempData.setStreamStatus
+        // let eventLog = contempData.eventLog
+        let updateLog = contempData.updateLog
+        let socketIOInstance = contempData.socketIOInstance
+        let setSocketIOInstance = contempData.setSocketIOInstance
+        let broadcastEventName = contempData.broadcastEventName
 
     const [btnStatus, setStatus] = useState({ start: false, stop: true })
 
-    useEffect(() => {
-        // const socketInstance = newSocketIOInstance(true)
-
-        // socketInstance.on("connect", () => {
-        //     console.log("Connected")
-        //     setStreamStatus({status: 'active', label: 'Stream active'})
-        //     setSocketIOInstance(socketInstance)
-        // })
-    })
+    // const updateLog = (newData) => {
+    //     setEventLog([...eventLog, newData])
+    // }
 
     const funcStreamStart = async (startBtn) => {
         if (topic === false) {
@@ -32,21 +29,34 @@ const StreamControlPane = (props) => {
         var socketInstance = newSocketIOInstance(true)
 
         socketInstance.on('connect', () => {
-            console.log("Client connected")
+            // do sth here rather than logging console
+            // console.log("Client connected")
+        })
+
+        socketInstance.on(broadcastEventName, (newData) => {
+            let processedNewData = {
+                key: newData.key,
+                value: JSON.stringify(newData.value)
+            }
+            updateLog(processedNewData)
         })
 
         socketInstance.on('disconnect', () => {
-            console.log("Client disconnected")
+            // do sth here rather than logging console
+            // console.log("Client disconnected")
         })
 
+        setSocketIOInstance(socketInstance)
         alterButtonsState(startBtn, setStatus)
         setStreamStatus({status: 'active', label: 'Stream active'})
-        setSocketIOInstance(socketInstance)
     }
 
     const funcStreamStop = (stopBtn) => {
-        socketIOInstance.off('connect')
         socketIOInstance.disconnect()
+            socketIOInstance.off('connect')
+            socketIOInstance.off('disconnect')
+            socketIOInstance.off(broadcastEventName)
+        setSocketIOInstance(null)
         alterButtonsState(stopBtn, setStatus)
         setStreamStatus({status: 'suspended', label: 'Stream suspended'})
     }

@@ -83,8 +83,8 @@ const ConnectPage = () => {
         })
 
         let datagram = {
-            brokerDomain: domain,
-            brokerPort: port
+            brokerDomain: domain.trim(),
+            brokerPort: port.trim()
         }
 
         setTimeout(() => {

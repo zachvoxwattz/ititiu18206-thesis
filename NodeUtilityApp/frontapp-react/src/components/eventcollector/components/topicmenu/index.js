@@ -10,16 +10,18 @@ const TopicMenu = (props) => {
         let setTopic = passedData.setTopic
         let eventLog = passedData.eventLog
         let setEventLog = passedData.setEventLog
+        let setBroadcastEventName = passedData.setBroadcastEventName
 
     let updateTopic = (topic) => {
         setTopic(topic)
+        setBroadcastEventName('sv_broadcast_' + topic)
     }
 
     let clearLog = () => {
         setEventLog([])
     }
 
-    const [ffl, setFFL] = useState(false)
+    const [firstFetch, setFirstFetch] = useState(false)
     const [topicData, setTopicData] = useState({code: 'none'})
 
     const getTopics = async () => {
@@ -85,9 +87,9 @@ const TopicMenu = (props) => {
         revertSelectionsCSS()
     }
     
-    const displayTopics = (ffl) => {
-        if (!ffl) {
-            setFFL(true)
+    const displayTopics = (firstFetch) => {
+        if (!firstFetch) {
+            setFirstFetch(true)
             getTopics()
         }
         toggleTopicListVisibility()
@@ -96,8 +98,10 @@ const TopicMenu = (props) => {
     return(
         <div id = 'topicMenuSection'>
             <div id = 'topicMenuBtns'>
-                <button className = 'topicInteractionBtn' id = 'topicDisplayBtn' onClick={() => { displayTopics(ffl) }}>Display topics</button>
+                <button className = 'topicInteractionBtn' id = 'topicDisplayBtn' onClick={() => { displayTopics(firstFetch) }}>Display topics</button>
+
                 <button className = 'topicInteractionBtn' id = 'topicRefreshBtn' onClick={() => { revertSelectionsCSS(); forceShowList(); getTopics() }}>Refresh Topics</button>
+
                 <button className = 'topicInteractionBtn' id = 'topicClearBtn' onClick={() => { clearSelection(); showTopicClearer(false) }}>Clear selection</button>
                 
                 {

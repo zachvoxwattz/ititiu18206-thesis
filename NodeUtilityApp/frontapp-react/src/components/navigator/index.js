@@ -9,28 +9,37 @@ const Navigator = (props) => {
         let setStreamStatus = passedData.setStreamStatus
         let socketIOInstance = passedData.socketIOInstance
         let setSocketIOInstance = passedData.setSocketIOInstance
+        let broadcastEventName = passedData.broadcastEventName
+        let setBroadcastEventName = passedData.setBroadcastEventName
 
     const [viewState, setViewState] = useState({collector: true, processor: false})
 
     const alterViewState = (targetView) => {
-        if (targetView === 'collector') {
-            setViewState({ collector: true, processor: false})
-        }
-
-        else {
+        targetView === 'collector' ? 
+            setViewState({ collector: true, processor: false}) 
+            : 
             setViewState({ collector: false, processor: true})
-        }
     }
 
     const exitApp = () => {
         // To handle various stuffs post using app, please use 'useEffect' hook!
-        socketIOInstance.disconnect()
+        // UPDATE: 'useEffect' is unreliable. I take the comment above back
+        
+        if (socketIOInstance && socketIOInstance.connected) {
+            socketIOInstance.disconnect()
+            socketIOInstance.off('connect')
+            socketIOInstance.off('disconnect')
+            socketIOInstance.off(broadcastEventName)
+        }
+
+        setBroadcastEventName(null)
         setSocketIOInstance(null)
         nav('/connect', {state: {code: 'error', message: 'You have disconnected'}})
     }
 
     const closeService = () => {
         // To handle various stuffs post using app, please use 'useEffect' hook!
+        // UPDATE: 'useEffect' is unreliable. I take the comment above back
         axios.post('/shutdown', { password: 'goodbye4now' })
                 .then(response => {
                     setStreamStatus({status: 'error', label: 'Service shut down'})

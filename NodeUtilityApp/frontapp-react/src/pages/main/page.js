@@ -22,13 +22,16 @@ const MainPage = () => {
 
     const [topic, setTopic] = useState(false)
     const [eventLog, setEventLog] = useState([])
-    const [socketIOInstance, setSocketIOInstance] = useState(null)
     const [streamStatus, setStreamStatus] = useState({status: 'idle', label: 'Idling'})
+    const [socketIOInstance, setSocketIOInstance] = useState(null)
+    const [broadcastEventName, setBroadcastEventName] = useState(null)
 
     return(
         <div id = 'mainApp'>
-            <Navigator appUtils = {{setStreamStatus, nav, socketIOInstance, setSocketIOInstance}}/>
-            <EventCollector appUtils = {{topic, setTopic, streamStatus, setStreamStatus, eventLog, setEventLog, socketIOInstance, setSocketIOInstance}}/>
+            <Navigator appUtils = {{setStreamStatus, nav, socketIOInstance, setSocketIOInstance, broadcastEventName, setBroadcastEventName}}/>
+
+            <EventCollector appUtils = {{topic, setTopic, streamStatus, setStreamStatus, eventLog, setEventLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setBroadcastEventName}}/>
+            
             <EventProcessor />
         </div>
     )
