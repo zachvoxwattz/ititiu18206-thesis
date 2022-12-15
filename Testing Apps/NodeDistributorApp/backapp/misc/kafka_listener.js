@@ -1,10 +1,10 @@
 import { Kafka } from 'kafkajs'
 
-const brkr1 = 'Iris:9091'
+const brkrs = process.env.BROKER_LIST
 
 const kafka = new Kafka({
     clientId: "Sorter Listener",
-    brokers: [brkr1]
+    brokers: brkrs
 })
 
 const shouldPrintInfo = false
@@ -16,11 +16,8 @@ const run = async () => {
     await consumer.subscribe({ topic, fromBeginning: false })
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
-
             let receivedData = JSON.parse(message.value)
             shouldPrintInfo ? printInfo(receivedData, topic, partition) : {}
-
-            
         },
     })
 }

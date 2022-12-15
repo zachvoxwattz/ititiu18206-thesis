@@ -28,13 +28,13 @@
     font-weight: bold;
     border-style: solid;
     border-color: white;
-    margin: 1.25vh 0 1.25vh 0;
+    padding: 1vh 0 1vh 0;
     border-width: 1px;
     border-left: 0;
     border-right: 1;
     border-top: 0;
     border-bottom: 0;
-    font-size: 1.125em;
+    font-size: 1.5em;
 }
 
 #DPselectField {
@@ -43,22 +43,10 @@
 }
 
 #DPkeyField {
-    width: 25%
-}
-
-#DPoffsetField {
-    width: 6%
-}
-
-#DPpartitionField {
-    width: 6%
-}
-
-#DPtopicField {
-    width: 12%
+    width: 30%
 }
 
 #DPvalueField {
-    width: 48%;
+    width: 67%;
     border-right: 0;
 }

@@ -69,12 +69,12 @@
     transition: 125ms linear;
 }
 
-.topicBtn:hover, .topicBtnSelected {
+.topicBtn:hover:not(.topicBtn:disabled), .topicBtnSelected {
     background-color: #cea5fb;
     color: #161b22;
 }
 
-.topicBtn:active {
+.topicBtn:active:not(.topicBtn:disabled) {
     background-color: #6e5985;
 }
 

@@ -41,7 +41,7 @@ const Navigator = (props) => {
         // To handle various stuffs post using app, please use 'useEffect' hook!
         // UPDATE: 'useEffect' is unreliable. I take the comment above back
         axios.post('/shutdown', { password: 'goodbye4now' })
-                .then(response => {
+                .then(() => {
                     setStreamStatus({status: 'error', label: 'Service shut down'})
                     setTimeout(() => { exitApp() }, 2000)
                 })

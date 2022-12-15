@@ -19,6 +19,85 @@ const toggleTopicListVisibility = () => {
     }
 }
 
+const handleTopicChanges = (centralDataLog, fetchedArr, setCentralDataLog) => {
+    let latterCentralDataLog
+    let addCount = 0
+    let removeCount = 0
+    let sortedFetchArray = fetchedArr.sort()
+    let removeIndexArray = []
+
+    if (centralDataLog.length < sortedFetchArray.length) {
+        let existingTopics = []
+        let auxArray = []
+        centralDataLog.forEach((datagram) => { existingTopics.push(datagram.topic) })
+
+        sortedFetchArray.forEach((topic) => {
+            let foundIndex = existingTopics.indexOf(topic)
+
+            if (foundIndex < 0) {
+                let toBeAdded = {
+                    topic: topic,
+                    topicData: []
+                }
+                auxArray.push(toBeAdded)
+                console.log(`Added '${topic}'`)
+                addCount++
+            }
+        })
+        latterCentralDataLog = centralDataLog.concat(auxArray)
+        latterCentralDataLog.forEach((datagram) => {
+            let hasObject = sortedFetchArray.indexOf(datagram.topic)
+
+            if (hasObject < 0) {
+                removeIndexArray.push(latterCentralDataLog.indexOf(datagram))
+                console.log(`Added topic ${datagram.topic} for removal`)
+            }
+        })
+        for (let i = removeIndexArray.length - 1; i >= 0; i--) {
+            latterCentralDataLog.splice(removeIndexArray[i], 1)
+            removeCount++
+        }
+    }
+    else if (centralDataLog.length > sortedFetchArray.length) {
+        let currentCentralDataLog = [...centralDataLog]
+        currentCentralDataLog.forEach((datagram) => {
+            let hasObject = sortedFetchArray.indexOf(datagram.topic)
+
+            if (hasObject < 0) {
+                removeIndexArray.push(currentCentralDataLog.indexOf(datagram))
+                console.log(`Added topic ${datagram.topic} for removal`)
+            }
+        })
+        for (let i = removeIndexArray.length - 1; i >= 0; i--) {
+            currentCentralDataLog.splice(removeIndexArray[i], 1)
+            removeCount++
+        }
+        latterCentralDataLog = currentCentralDataLog
+
+        let existingTopics = []
+        let auxArray = []
+        latterCentralDataLog.forEach((datagram) => { existingTopics.push(datagram.topic) })
+
+        sortedFetchArray.forEach((topic) => {
+            let foundIndex = existingTopics.indexOf(topic)
+
+            if (foundIndex < 0) {
+                let toBeAdded = {
+                    topic: topic,
+                    topicData: []
+                }
+                auxArray.push(toBeAdded)
+                console.log(`Added '${topic}'`)
+                addCount++
+            }
+        })
+        latterCentralDataLog = latterCentralDataLog.concat(auxArray)
+    }
+    console.log(`Added: ${addCount}`)
+    console.log(`Removed: ${removeCount}`)
+    setCentralDataLog(latterCentralDataLog)
+}
+
 const revertSelectionsCSS = () => {
     let topicElements = document.getElementsByClassName('topicBtn')
     for (let i = 0; i < topicElements.length; i++) {
@@ -60,4 +139,15 @@ const showRefreshButton = () => {
     document.getElementById('topicRefreshBtn').style.display = 'inline-block'
 }
 
-export { toggleTopicListVisibility, showRefreshButton, revertSelectionsCSS, changeSelectionCSS, showTopicClearer, forceShowList}
+const autoScrollDown = () => {
+    setTimeout(() => {
+        let streamTable = document.getElementById('streamTable')
+        
+        streamTable.scrollTo({
+            top: streamTable.scrollHeight + streamTable.scrollTop,
+            behavior: 'smooth'
+        })
+    }, 5)
+}
+
+export { toggleTopicListVisibility, showRefreshButton, revertSelectionsCSS, changeSelectionCSS, showTopicClearer, forceShowList, autoScrollDown, handleTopicChanges }

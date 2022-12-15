@@ -2,6 +2,7 @@ import axios from '../../api/axios'
 import TopicMenu from './components/topicmenu/index'
 import StreamControlPane from './components/streamcontrolpane/index'
 import loadingIcon from '../../assets/images/loading.gif'
+import { useState } from 'react'
 import { autoScrollDown } from './functions'
 import { DataPaneChunk, DataPaneFields, EmptyDataPane } from './components/datapane/index'
 import '../../assets/css/eventcollector/streamtable.css'
@@ -10,20 +11,24 @@ import '../../assets/css/eventcollector/main.css'
 const EventCollector = (props) => {
     
     let contempData = props.appUtils
-        let topic = contempData.topic
+        let currentTopic = contempData.currentTopic
         let streamStatus = contempData.streamStatus
-        let setTopic = contempData.setTopic
+        let setCurrentTopic = contempData.setCurrentTopic
         let setStreamStatus = contempData.setStreamStatus
-        let eventLog = contempData.eventLog
-        let setEventLog = contempData.setEventLog
+        let eventDataLog = contempData.eventDataLog
+        let setEventDataLog = contempData.setEventDataLog
+        let centralDataLog = contempData.centralDataLog
+        let setCentralDataLog = contempData.setCentralDataLog
         let socketIOInstance = contempData.socketIOInstance
         let setSocketIOInstance = contempData.setSocketIOInstance
         let broadcastEventName = contempData.broadcastEventName
         let setBroadcastEventName = contempData.setBroadcastEventName
         let nav = contempData.nav
 
+    const [disableTopicButtons, setDisableTopicButtons] = useState(false)
+    
     const updateLog = (newData) => {
-        setEventLog([...eventLog, newData])
+        setEventDataLog([...eventDataLog, newData])
     }
 
     const fetchSampleData = async () => {
@@ -40,17 +45,19 @@ const EventCollector = (props) => {
 
     return(
         <div id = 'eventCollector'>
+            <button id = 'sampleDataBtn' onClick={() => { fetchSampleData() }}>Sample</button>
             <div id = 'controlPane'>
-                <StreamControlPane appUtils = {{topic, setTopic, streamStatus, setStreamStatus, eventLog, updateLog, socketIOInstance, setSocketIOInstance, broadcastEventName, nav}}/>
-                <TopicMenu appUtils = {{topic, setTopic, eventLog, setEventLog, broadcastEventName, setBroadcastEventName}}/>
+                <StreamControlPane appUtils = {{currentTopic, streamStatus, setStreamStatus, setEventDataLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setDisableTopicButtons, nav}}/>
+
+                <TopicMenu appUtils = {{currentTopic, setCurrentTopic, eventDataLog, setEventDataLog, centralDataLog, setCentralDataLog, setBroadcastEventName, disableTopicButtons, setDisableTopicButtons}}/>
             </div>
             
             <div id = 'streamTable'>
                 <DataPaneFields />
                 <div id = 'streamLogger'>
                     {
-                        eventLog.length !== 0 ?
-                            eventLog.map((value, index) => (
+                        eventDataLog.length !== 0 ?
+                            eventDataLog.map((value, index) => (
                                 <DataPaneChunk key = {index} data = {value}/>
                             )) 
                             : 
@@ -66,8 +73,6 @@ const EventCollector = (props) => {
                     }
                 </div>
             </div>
-
-            <button onClick={() => { fetchSampleData() }}>CLICK TO ADD NEW DATA</button>
         </div>
     )
 }

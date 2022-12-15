@@ -33,3 +33,7 @@
 #pollingLabel {
 	color: white
 }
+
+#sampleDataBtn {
+	opacity: 0;
+}

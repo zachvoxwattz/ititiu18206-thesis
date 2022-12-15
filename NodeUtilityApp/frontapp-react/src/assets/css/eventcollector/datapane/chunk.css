@@ -32,51 +32,25 @@
 }
 
 #dpSelectBoxValue {
-    transform: scale(1.25);
+    transform: scale(1.5);
 }
 
 #dpKeyDiv{
-    width: 25%
+    width: 30%
 }
 
 #dpKeyValue {
-    font-size: 0.9em;
-}
-
-#dpOffsetDiv {
-    padding: 0 0.25% 0 0.25%;
-    width: 5.5%
-}
-
-#dpPartitionDiv {
-    padding: 0 0.25% 0 0.25%;
-    width: 5.5%
-}
-
-#dpOffsetValue, #dpPartitionValue {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-#dpTopicDiv {
-    padding: 0 0.25% 0 0.25%;
-    width: 11.5%
-}
-
-#dpTopicValue {
+    font-size: 1.05em;
     overflow-wrap: break-word;
-    font-style: italic;
-    font-size: 0.95em;
 }
 
-#dpMessageDiv {
+#dpValueDiv {
     padding: 0 0.25% 0 0.25%;
-    width: 47.5%;
+    width: 66.5%;
 }
 
-#dpMessageValue {
+#dpValueValue {
     overflow-wrap: break-word;
     text-align: left;
-    font-size: 0.85em;
+    font-size: 1em;
 }

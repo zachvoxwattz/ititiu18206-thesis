@@ -7,9 +7,6 @@ const DataPaneFields = () => {
         <div id = 'dataPaneFields'>
             <h3 className = 'dataPaneField' id = 'DPselectField'>✅</h3>
             <h3 className = 'dataPaneField' id = 'DPkeyField'>Key</h3>
-            <h3 className = 'dataPaneField' id = 'DPoffsetField'>Off.</h3>
-            <h3 className = 'dataPaneField' id = 'DPpartitionField'>Part</h3>
-            <h3 className = 'dataPaneField' id = 'DPtopicField'>Topic</h3>
             <h3 className = 'dataPaneField' id = 'DPvalueField'>Value</h3>
         </div>
     )
@@ -35,20 +32,8 @@ const DataPaneChunk = (props) => {
                 <p id = 'dpKeyValue'>{data.key ? data.key : 'N/A'}</p>
             </div>
             
-            <div className = 'dpDisplaySlot' id = 'dpOffsetDiv'>
-                <p id = 'dpOffsetValue'>{data.offset ? data.offset : 'N/A'}</p>
-            </div>
-            
-            <div className = 'dpDisplaySlot' id = 'dpPartitionDiv'>
-                <p id = 'dpPartitionValue'>{data.partition ? data.partition : 'N/A'}</p>
-            </div>
-            
-            <div className = 'dpDisplaySlot' id = 'dpTopicDiv'>
-                <p id = 'dpTopicValue'>{data.topic ? data.topic : 'N/A'}</p>
-            </div>
-            
-            <div className = 'dpDisplaySlot' id = 'dpMessageDiv'>
-                <p id = 'dpMessageValue'>{data.value ? data.value : 'N/A'}</p>
+            <div className = 'dpDisplaySlot' id = 'dpValueDiv'>
+                <p id = 'dpValueValue'>{data.value ? data.value : 'N/A'}</p>
             </div>
 	    </div>
     )
