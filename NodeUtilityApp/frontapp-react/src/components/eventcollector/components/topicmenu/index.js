@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useEffectOnce } from '../../../../hooks/useEffectOnce'
 import { toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS, handleTopicChanges, autoScrollDown } from './functions'
 import axios from '../../../../api/axios'
+import { newSocketIOInstance } from '../../../../api/socketio'
 import loadingIcon from '../../../../assets/images/loading.gif'
 import '../../../../assets/css/eventcollector/topicmenu.css'
 
@@ -16,21 +18,71 @@ const TopicMenu = (props) => {
         let disableTopicButtons = passedData.disableTopicButtons
         let setDisableTopicButtons = passedData.setDisableTopicButtons
 
+        const [updateInformer, setUpdateInformer] = useState(null)
+        const [firstFetch, setFirstFetch] = useState(false)
+        const [topicStatus, setTopicStatus] = useState({code: 'none'})
+        const [currentTopicData, setCurrentTopicData] = useState([])
+
+    useEffectOnce(() => {
+        if (!updateInformer) {
+            var updateInformerInstance = newSocketIOInstance(true)
+
+            updateInformerInstance.on('connect_error', () => {
+                setStreamStatus({ status: 'error', label: 'Unable to connect to JavaUtilityApp!'})
+            })
+
+            setUpdateInformer(updateInformerInstance)
+        }
+
+        if (!currentTopic) return
+        else {
+            for (let i = 0; i < eventDataLog.length; i++) {
+                if (eventDataLog[i].topic === currentTopic) {
+                    setCurrentTopicData(eventDataLog[i].topicData)
+                    break
+                }
+            }
+        }
+
+        return () => {
+            if (updateInformer) {
+                updateInformer.disconnect()
+                updateInformer.off('connect_error')
+                setUpdateInformer(null)
+            }
+        }   
+    }, [updateInformer, currentTopic, eventDataLog])
+
     let updateTopic = (topic) => {
-        setCurrentTopic(topic)
-        setBroadcastEventName('sv_broadcast_' + topic)
-        
+        if (!topic) {
+            setCurrentTopic(false)
+            setBroadcastEventName(null)
+        }
+        else {
+            setCurrentTopic(topic)
+            setBroadcastEventName('sv_broadcast_' + topic)
+        }
+
         if (streamStatus.status === 'error') {
             setStreamStatus({status:'idle', label: 'Idling'})
         }
     }
 
     let clearLog = () => {
-        setEventDataLog([])
-    }
+        let clearedLog = []
+        if (!currentTopic) return
 
-    const [firstFetch, setFirstFetch] = useState(false)
-    const [topicStatus, setTopicStatus] = useState({code: 'none'})
+        setCurrentTopicData(clearedLog)
+
+        let currentDataLog = eventDataLog
+        for (let i = 0; i < currentDataLog.length; i++) {
+            if (currentDataLog[i].topic === currentTopic) {
+                currentDataLog[i].topicData = currentTopicData
+                break
+            }
+        }
+        setEventDataLog(currentDataLog)
+    }
 
     const getTopics = async () => {
         let returnData
@@ -63,6 +115,10 @@ const TopicMenu = (props) => {
                     }
                     else if (eventDataLog.length !== fetchedArr.length) {
                         handleTopicChanges(eventDataLog, fetchedArr, setEventDataLog)
+                        let toBeSent = {
+                            requestUpdateTopics: true
+                        }
+                        updateInformer.emit('cl_request_update', toBeSent)
                     }
                 }
             })

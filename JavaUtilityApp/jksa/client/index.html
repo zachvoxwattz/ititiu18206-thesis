@@ -32,10 +32,11 @@
 
 			const sendMessage = () => {
                 let toBeSent = {
-                	requestUpdateTopics: true
+                	requestUpdateTopics: true,
+					luckyNumber: Math.floor(Math.random() * 4096)
                 }
 
-                socket.emit('cl_sendData', toBeSent);
+                socket.emit('cl_request_update', toBeSent);
 			}
 		</script>
 	</head>

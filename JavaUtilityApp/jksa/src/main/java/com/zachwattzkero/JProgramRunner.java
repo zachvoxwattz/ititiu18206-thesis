@@ -12,19 +12,20 @@ public class JProgramRunner
             System.exit(1);
         }
 
-        boolean enableDebug = args.length == 4 ? false : true;
-        String brokerAddress = args[0] + ":" + args[1];
-        String socketIOHost = args[2];
-        String socketIOPort = args[3];
+        var enableDebug = args.length == 4 ? false : true;
+        var brokerAddress = args[0] + ":" + args[1];
+        var socketIOHost = args[2];
+        var socketIOPort = args[3];
 
-        KafkaStreamsManager kafkaStreamsManager = new KafkaStreamsManager(brokerAddress, enableDebug);
-        SocketIOBroadcaster sIoBroadcaster = new SocketIOBroadcaster(socketIOHost, socketIOPort, enableDebug);
-            kafkaStreamsManager.bindSocketIOServer(sIoBroadcaster);
+        var kafkaStreamsManager = new KafkaStreamsManager(brokerAddress, enableDebug);
+        var socketIOBroadcaster = new SocketIOBroadcaster(socketIOHost, socketIOPort, enableDebug);
+            kafkaStreamsManager.bindSocketIOServer(socketIOBroadcaster);
+            socketIOBroadcaster.bindKafkaStreamsManager(kafkaStreamsManager);
 
-        Thread shutdownHook = new Thread(new ShutdownHook(kafkaStreamsManager, sIoBroadcaster));
+        var shutdownHook = new Thread(new ShutdownHook(kafkaStreamsManager, socketIOBroadcaster));
         Runtime.getRuntime().addShutdownHook(shutdownHook);
 
-        sIoBroadcaster.startService();
+        socketIOBroadcaster.startService();
         kafkaStreamsManager.createAndStartTopicStreams();
     }
 }

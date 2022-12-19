@@ -2,7 +2,7 @@ import axios from '../../api/axios'
 import TopicMenu from './components/topicmenu/index'
 import StreamControlPane from './components/streamcontrolpane/index'
 import loadingIcon from '../../assets/images/loading.gif'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { autoScrollDown } from './functions'
 import { DataPaneChunk, DataPaneFields, EmptyDataPane } from './components/datapane/index'
 import '../../assets/css/eventcollector/streamtable.css'
@@ -24,9 +24,34 @@ const EventCollector = (props) => {
         let nav = contempData.nav
 
     const [disableTopicButtons, setDisableTopicButtons] = useState(false)
+    const [currentTopicData, setCurrentTopicData] = useState([])
     
+    useEffect(() => {
+        if (!currentTopic) return
+        else {
+            for (let i = 0; i < eventDataLog.length; i++) {
+                if (eventDataLog[i].topic === currentTopic) {
+                    setCurrentTopicData(eventDataLog[i].topicData)
+                    break
+                }
+            }
+        }
+
+    }, [currentTopic, eventDataLog])
+
     const updateLog = (newData) => {
-        setEventDataLog([...eventDataLog, newData])
+        if (!currentTopic) return
+
+        setCurrentTopicData(prevData => prevData.concat(newData))
+
+        let currentDataLog = eventDataLog
+        for (let i = 0; i < currentDataLog.length; i++) {
+            if (currentDataLog[i].topic === currentTopic) {
+                currentDataLog[i].topicData = currentTopicData
+                break
+            }
+        }
+        setEventDataLog(currentDataLog)
     }
 
     const fetchSampleData = async () => {
@@ -54,8 +79,8 @@ const EventCollector = (props) => {
                 <DataPaneFields />
                 <div id = 'streamLogger'>
                     {
-                        eventDataLog.length !== 0 ?
-                            eventDataLog.map((value, index) => (
+                        currentTopicData.length !== 0 ?
+                            currentTopicData.map((value, index) => (
                                 <DataPaneChunk key = {index} data = {value}/>
                             )) 
                             : 

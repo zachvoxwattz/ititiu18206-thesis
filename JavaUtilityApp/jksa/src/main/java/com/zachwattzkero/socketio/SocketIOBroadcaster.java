@@ -1,7 +1,7 @@
 package com.zachwattzkero.socketio;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
@@ -10,16 +10,18 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+import com.zachwattzkero.kafka.KafkaStreamsManager;
 import com.zachwattzkero.models.MessageDatagram;
-import com.zachwattzkero.models.RequestUpdateDatagram;
+import com.zachwattzkero.models.RequestTopicUpdateDatagram;
 
 public class SocketIOBroadcaster {
 
-    private boolean debugEnabled;
+    private boolean debugEnabled, portCheckSuccess = false;
     private String hostName, hostPort;
 
     private Configuration configurations;
     private SocketIOServer serverInstance;
+    private KafkaStreamsManager kStreamsManager;
     
     public SocketIOBroadcaster(String host, String port, boolean enableDebug) {
         this.hostName = host;
@@ -30,7 +32,7 @@ public class SocketIOBroadcaster {
             configurations.setHostname(this.hostName);
             configurations.setPort(Integer.valueOf(this.hostPort));
 
-        this.serverInstance = new SocketIOServer(this.configurations);
+        bootUpServer();
         attachCoreHooks();
     }
 
@@ -43,16 +45,26 @@ public class SocketIOBroadcaster {
             configurations.setHostname(this.hostName);
             configurations.setPort(Integer.valueOf(this.hostPort));
 
-        this.serverInstance = new SocketIOServer(this.configurations);
+        bootUpServer();
         attachCoreHooks();
+    }
+
+    private void bootUpServer() {
+        while (!this.portCheckSuccess) {
+            this.portCheckSuccess = PortChecker.isAvailable(Integer.parseInt(hostPort), this.debugEnabled);
+            
+            try { TimeUnit.MILLISECONDS.sleep(250); }
+            catch (InterruptedException e) {}
+        }
+        this.serverInstance = this.portCheckSuccess ? new SocketIOServer(this.configurations) : null;
     }
 
     private void attachCoreHooks() {
         this.serverInstance.addConnectListener(new ConnectListener() {
             @Override
             public void onConnect(SocketIOClient client) {
-                String address = client.getRemoteAddress().toString();
-                String socketID = client.getSessionId().toString();
+                var address = client.getRemoteAddress().toString();
+                var socketID = client.getSessionId().toString();
 
                 if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Client ID '%s' at '%s' connected!\n", socketID, address);
             }
@@ -61,22 +73,24 @@ public class SocketIOBroadcaster {
         this.serverInstance.addDisconnectListener(new DisconnectListener() {
             @Override
             public void onDisconnect(SocketIOClient client) {
-                String address = client.getRemoteAddress().toString();
-                String socketID = client.getSessionId().toString();
+                var address = client.getRemoteAddress().toString();
+                var socketID = client.getSessionId().toString();
                 
                 if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Client ID '%s' at '%s' exited!\n", socketID, address);
             }
         });
 
         //Experimental
-        this.serverInstance.addEventListener("cl_senddata", RequestUpdateDatagram.class, new DataListener<RequestUpdateDatagram>() {
+        this.serverInstance.addEventListener("cl_request_update", RequestTopicUpdateDatagram.class, new DataListener<RequestTopicUpdateDatagram>() {
 
             @Override
-            public void onData(SocketIOClient client, RequestUpdateDatagram data, AckRequest ackSender) throws Exception {
-                System.out.println(client.getSessionId());
-                System.out.println(data.getRequestUpdateTopics());
-            });
-        }
+            public void onData(SocketIOClient client, RequestTopicUpdateDatagram data, AckRequest ackSender) throws Exception {
+                if (data.getRequestUpdateTopics()) {
+                    if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Received topic update request from client %s, informing KafkaStreamsManager to adapt changes...\n", client.getSessionId());
+                    kStreamsManager.handleTopicChanges();
+                }
+            }
+        });
     }
 
     public void broadcastEvent(String eventName, String key, String value) {
@@ -90,12 +104,13 @@ public class SocketIOBroadcaster {
     }
 
     public void terminateService() {
-        List<SocketIOClient> clients = new ArrayList<>(this.serverInstance.getAllClients());
+        var clients = new ArrayList<>(this.serverInstance.getAllClients());
         if (clients.size() != 0) clients.forEach((client) -> client.disconnect());
         
         this.serverInstance.stop();
         if (this.debugEnabled) System.out.println("[SocketIOBroadcaster] Service reports. TERMINATED");
     }
 
+    public void bindKafkaStreamsManager(KafkaStreamsManager object) { this.kStreamsManager = object; }
     public boolean isDebugEnabled() { return this.debugEnabled; }
 }
