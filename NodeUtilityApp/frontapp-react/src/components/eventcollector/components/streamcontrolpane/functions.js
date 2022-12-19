@@ -36,6 +36,15 @@ const alterButtonsState = (component, updateState) => {
     }
 }
 
+const currentTopicExpired = (currentTopic, eventDataLog) => {
+    let existingTopics = []
+    let returnFlag
+    eventDataLog.forEach((datagram) => existingTopics.push(datagram.topic))
+    
+    existingTopics.indexOf(currentTopic) < 0 ? returnFlag = true : returnFlag = false
+    return returnFlag
+}
+
 const getSelectedTopic = (currentTopic) => {
     if (!currentTopic) return 'None selected'
     else return currentTopic
@@ -52,4 +61,4 @@ const autoScrollDown = () => {
     }, 5)
 }
 
-export { statusLabelStyles, alterButtonsState, getSelectedTopic, autoScrollDown }
+export { statusLabelStyles, alterButtonsState, getSelectedTopic, autoScrollDown, currentTopicExpired }

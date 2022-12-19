@@ -17,8 +17,6 @@ const EventCollector = (props) => {
         let setStreamStatus = contempData.setStreamStatus
         let eventDataLog = contempData.eventDataLog
         let setEventDataLog = contempData.setEventDataLog
-        let centralDataLog = contempData.centralDataLog
-        let setCentralDataLog = contempData.setCentralDataLog
         let socketIOInstance = contempData.socketIOInstance
         let setSocketIOInstance = contempData.setSocketIOInstance
         let broadcastEventName = contempData.broadcastEventName
@@ -47,9 +45,9 @@ const EventCollector = (props) => {
         <div id = 'eventCollector'>
             <button id = 'sampleDataBtn' onClick={() => { fetchSampleData() }}>Sample</button>
             <div id = 'controlPane'>
-                <StreamControlPane appUtils = {{currentTopic, streamStatus, setStreamStatus, setEventDataLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setDisableTopicButtons, nav}}/>
+                <StreamControlPane appUtils = {{currentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setDisableTopicButtons, nav}}/>
 
-                <TopicMenu appUtils = {{currentTopic, setCurrentTopic, eventDataLog, setEventDataLog, centralDataLog, setCentralDataLog, setBroadcastEventName, disableTopicButtons, setDisableTopicButtons}}/>
+                <TopicMenu appUtils = {{currentTopic, setCurrentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, setBroadcastEventName, disableTopicButtons, setDisableTopicButtons}}/>
             </div>
             
             <div id = 'streamTable'>

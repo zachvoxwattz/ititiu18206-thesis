@@ -21,8 +21,6 @@ const toggleTopicListVisibility = () => {
 
 const handleTopicChanges = (centralDataLog, fetchedArr, setCentralDataLog) => {
     let latterCentralDataLog
-    let addCount = 0
-    let removeCount = 0
     let sortedFetchArray = fetchedArr.sort()
     let removeIndexArray = []
 
@@ -40,8 +38,6 @@ const handleTopicChanges = (centralDataLog, fetchedArr, setCentralDataLog) => {
                     topicData: []
                 }
                 auxArray.push(toBeAdded)
-                console.log(`Added '${topic}'`)
-                addCount++
             }
         })
         latterCentralDataLog = centralDataLog.concat(auxArray)
@@ -50,12 +46,10 @@ const handleTopicChanges = (centralDataLog, fetchedArr, setCentralDataLog) => {
 
             if (hasObject < 0) {
                 removeIndexArray.push(latterCentralDataLog.indexOf(datagram))
-                console.log(`Added topic ${datagram.topic} for removal`)
             }
         })
         for (let i = removeIndexArray.length - 1; i >= 0; i--) {
             latterCentralDataLog.splice(removeIndexArray[i], 1)
-            removeCount++
         }
     }
     else if (centralDataLog.length > sortedFetchArray.length) {
@@ -65,12 +59,10 @@ const handleTopicChanges = (centralDataLog, fetchedArr, setCentralDataLog) => {
 
             if (hasObject < 0) {
                 removeIndexArray.push(currentCentralDataLog.indexOf(datagram))
-                console.log(`Added topic ${datagram.topic} for removal`)
             }
         })
         for (let i = removeIndexArray.length - 1; i >= 0; i--) {
             currentCentralDataLog.splice(removeIndexArray[i], 1)
-            removeCount++
         }
         latterCentralDataLog = currentCentralDataLog
 
@@ -87,14 +79,10 @@ const handleTopicChanges = (centralDataLog, fetchedArr, setCentralDataLog) => {
                     topicData: []
                 }
                 auxArray.push(toBeAdded)
-                console.log(`Added '${topic}'`)
-                addCount++
             }
         })
         latterCentralDataLog = latterCentralDataLog.concat(auxArray)
     }
-    console.log(`Added: ${addCount}`)
-    console.log(`Removed: ${removeCount}`)
     setCentralDataLog(latterCentralDataLog)
 }
 

@@ -3,7 +3,6 @@ import express from 'express'
 import { Server } from 'http'
 import cors from 'cors'
 import rootRouter from './express_router.js'
-import { prepareSocketIOServer, handleSocketIOConnections } from './socketio_server.js'
 
 // Loads ENV
 DOTENV.config()

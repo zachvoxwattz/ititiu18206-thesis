@@ -3,12 +3,15 @@ package com.zachwattzkero.socketio;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
+import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import com.zachwattzkero.models.MessageDatagram;
+import com.zachwattzkero.models.RequestUpdateDatagram;
 
 public class SocketIOBroadcaster {
 
@@ -64,6 +67,16 @@ public class SocketIOBroadcaster {
                 if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Client ID '%s' at '%s' exited!\n", socketID, address);
             }
         });
+
+        //Experimental
+        this.serverInstance.addEventListener("cl_senddata", RequestUpdateDatagram.class, new DataListener<RequestUpdateDatagram>() {
+
+            @Override
+            public void onData(SocketIOClient client, RequestUpdateDatagram data, AckRequest ackSender) throws Exception {
+                System.out.println(client.getSessionId());
+                System.out.println(data.getRequestUpdateTopics());
+            });
+        }
     }
 
     public void broadcastEvent(String eventName, String key, String value) {

@@ -84,4 +84,11 @@ public class KafkaStreamInstance implements DataOperation {
         this.kafkaStream.close();
         if (this.debugEnabled) System.out.printf("[KafkaStreamInstance '%s'] Stopped execution\n", this.streamID);
     }
+
+    public void stopStream(String reason) {
+        this.kafkaStream.close();
+        if (this.debugEnabled) System.out.printf("[KafkaStreamInstance '%s'] Stopped execution. Reason: %s\n", this.streamID, reason);
+    }
+
+    public String getAssignedTopic() { return this.assignedTopic; }
 }

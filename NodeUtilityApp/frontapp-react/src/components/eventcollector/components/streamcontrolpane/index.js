@@ -1,6 +1,6 @@
 import { newSocketIOInstance } from '../../../../api/socketio'
 import { useState, useEffect } from 'react'
-import { alterButtonsState, autoScrollDown, getSelectedTopic, statusLabelStyles } from './functions'
+import { alterButtonsState, autoScrollDown, getSelectedTopic, statusLabelStyles, currentTopicExpired } from './functions'
 import '../../../../assets/css/eventcollector/streamcontrolpane.css'
 
 const StreamControlPane = (props) => {
@@ -8,6 +8,7 @@ const StreamControlPane = (props) => {
         let currentTopic = contempData.currentTopic
         let streamStatus = contempData.streamStatus
         let setStreamStatus = contempData.setStreamStatus
+        let eventDataLog = contempData.eventDataLog
         let setEventDataLog = contempData.setEventDataLog
         let socketIOInstance = contempData.socketIOInstance
         let setSocketIOInstance = contempData.setSocketIOInstance
@@ -43,6 +44,7 @@ const StreamControlPane = (props) => {
                 // do sth here rather than logging console
                 alterButtonsState(startBtn, setStatus)
                 setStreamStatus({status: 'active', label: 'Stream is active!'})
+                document.getElementById('topicClearBtn').style.display = 'none'
                 autoScrollDown()
             })
 
@@ -59,6 +61,7 @@ const StreamControlPane = (props) => {
             setSocketIOInstance(socketInstance)
             alterButtonsState(startBtn, setStatus)
             setStreamStatus({status: 'active', label: 'Stream is active!'})
+            document.getElementById('topicClearBtn').style.display = 'none'
             autoScrollDown()
         }
     }, [startBroadcast, socketIOInstance, broadcastEventName, setSocketIOInstance, setStreamStatus, setEventDataLog])
@@ -66,6 +69,11 @@ const StreamControlPane = (props) => {
     const funcStreamStart = async () => {
         if (currentTopic === false) {
             setStreamStatus({status: 'error', label: 'Can not start a stream without selected topic!'})
+            return
+        }
+
+        if (currentTopicExpired(currentTopic, eventDataLog)) {
+            setStreamStatus({status: 'error', label: 'Selected topic does not exist!'})
             return
         }
         
@@ -78,6 +86,7 @@ const StreamControlPane = (props) => {
         alterButtonsState(stopBtn, setStatus)
         setDisableTopicButtons(false)
         setStreamStatus({status: 'suspended', label: 'Stream suspended'})
+        document.getElementById('topicClearBtn').style.display = 'inline-block'
     }
 
     return(

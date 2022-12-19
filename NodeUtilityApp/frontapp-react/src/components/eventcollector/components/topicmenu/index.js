@@ -1,18 +1,17 @@
 import { useState } from 'react'
-import { toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS, handleTopicChanges } from './functions'
+import { toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS, handleTopicChanges, autoScrollDown } from './functions'
 import axios from '../../../../api/axios'
 import loadingIcon from '../../../../assets/images/loading.gif'
 import '../../../../assets/css/eventcollector/topicmenu.css'
-import { autoScrollDown } from './functions'
 
 const TopicMenu = (props) => {
     let passedData = props.appUtils
         let currentTopic = passedData.currentTopic
         let setCurrentTopic = passedData.setCurrentTopic
+        let streamStatus = passedData.streamStatus
+        let setStreamStatus = passedData.setStreamStatus
         let eventDataLog = passedData.eventDataLog
         let setEventDataLog = passedData.setEventDataLog
-        let centralDataLog = passedData.centralDataLog
-        let setCentralDataLog = passedData.setCentralDataLog
         let setBroadcastEventName = passedData.setBroadcastEventName
         let disableTopicButtons = passedData.disableTopicButtons
         let setDisableTopicButtons = passedData.setDisableTopicButtons
@@ -20,6 +19,10 @@ const TopicMenu = (props) => {
     let updateTopic = (topic) => {
         setCurrentTopic(topic)
         setBroadcastEventName('sv_broadcast_' + topic)
+        
+        if (streamStatus.status === 'error') {
+            setStreamStatus({status:'idle', label: 'Idling'})
+        }
     }
 
     let clearLog = () => {
@@ -49,7 +52,7 @@ const TopicMenu = (props) => {
                         topicList: fetchedArr
                     }
 
-                    if (centralDataLog.length === 0) {
+                    if (eventDataLog.length === 0) {
                         constructedData = []
                         fetchedArr.forEach((itorTopic) => {
                             constructedData.push({
@@ -58,8 +61,8 @@ const TopicMenu = (props) => {
                             })
                         })
                     }
-                    else if (centralDataLog.length !== fetchedArr.length) {
-                        handleTopicChanges(centralDataLog, fetchedArr, setCentralDataLog)
+                    else if (eventDataLog.length !== fetchedArr.length) {
+                        handleTopicChanges(eventDataLog, fetchedArr, setEventDataLog)
                     }
                 }
             })
@@ -72,7 +75,7 @@ const TopicMenu = (props) => {
             })
             .finally(() => {
                 setTimeout(() => {
-                    if (constructedData) setCentralDataLog(constructedData)
+                    if (constructedData) setEventDataLog(constructedData)
                     setTopicStatus(returnData)
                     showRefreshButton()
                 }, 1000)
@@ -105,6 +108,7 @@ const TopicMenu = (props) => {
                 code: 'none'
             })
         }
+        setStreamStatus({status: 'idle', label: 'Idling'})
         revertSelectionsCSS()
     }
     
@@ -113,7 +117,7 @@ const TopicMenu = (props) => {
             setFirstFetch(true)
             getTopics()
         }
-        centralDataLog.forEach(databulk => console.log(databulk))
+
         autoScrollDown()
         toggleTopicListVisibility()
     }
