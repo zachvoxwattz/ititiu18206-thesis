@@ -17,10 +17,10 @@
 
 #controlPane {
 	position: relative;
-	margin: 0 auto 2.5vh auto;
+	margin: 0 auto 1.25vh auto;
 	border-style: solid;
 	border-color: white;
-	padding: 2vh 0 2vh 0;
+	padding: 1vh 0 1vh 0;
 	width: 75vw;
 	border-width: 1px;
 	border-radius: 8px;
@@ -36,4 +36,25 @@
 
 #sampleDataBtn {
 	opacity: 0;
+}
+
+#savedEventsSection {
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	margin: 1.25vh auto 0 auto;
+	width: 75vw;
+	height: 10vh;
+}
+
+#savedEventsCountLabel {
+	color: white;
+}
+
+#clearSavedEventsBtn {
+	border-radius: 8px;
+	border-width: 1px;
+	border-color: transparent;
+	background-color: #cea5fb;
+	font-size: 1.5em;
 }

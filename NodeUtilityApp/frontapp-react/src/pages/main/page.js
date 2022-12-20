@@ -22,6 +22,7 @@ const MainPage = () => {
 
     const [currentTopic, setCurrentTopic] = useState(false)
     const [eventDataLog, setEventDataLog] = useState([])
+    const [savedDataLog, setSavedDataLog] = useState([])
     const [streamStatus, setStreamStatus] = useState({status: 'idle', label: 'Idling'})
     const [socketIOInstance, setSocketIOInstance] = useState(null)
     const [broadcastEventName, setBroadcastEventName] = useState(null)
@@ -30,9 +31,9 @@ const MainPage = () => {
         <div id = 'mainApp'>
             <Navigator appUtils = {{setStreamStatus, nav, socketIOInstance, setSocketIOInstance, broadcastEventName, setBroadcastEventName}}/>
 
-            <EventCollector appUtils = {{currentTopic, setCurrentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setBroadcastEventName}}/>
+            <EventCollector appUtils = {{currentTopic, setCurrentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, savedDataLog, setSavedDataLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setBroadcastEventName}}/>
             
-            <EventProcessor />
+            <EventProcessor appUtils = {{savedDataLog, setSavedDataLog}}/>
         </div>
     )
 }

@@ -1,24 +1,26 @@
 #appNavigator {
-    margin: auto auto 2.5vh auto
+    margin: auto auto 1.25vh auto;
+    background-image: linear-gradient(to bottom, rgba(21, 32, 43, 1), rgba(21, 32, 43, 0));
 }
 
 #appNavChoices {
     display: flex;
     justify-content: space-between;
-    background-image: linear-gradient(to bottom, rgba(21, 32, 43, 1), rgba(21, 32, 43, 0));
     margin: auto auto auto auto;
+    padding: auto 5vw auto 5vw;
     text-align: center;
+    width: 75vw;
 }
 
 #appNavBtnHolder {
-    margin: 2.5vh 0 2.5vh 5vw
+    margin: 2.5vh 0 2.5vh 0
 }
 
 #appExitBtnHolder {
     display: flex;
     justify-content: center;
     align-items:center;
-    margin: 2.5vh 5vw 2.5vh 0;
+    margin: 2.5vh 0 2.5vh 0;
 }
 
 .appNavBtn {
@@ -31,17 +33,17 @@
     font-weight: bolder;
     color: white;
     transition: 120ms ease-in-out linear;
-    padding-left: 1.5vw;
-    padding-right: 1.5vw;
+    padding-left: 1.25vw;
+    padding-right: 1.25vw;
     font-size: 2em;
 }
 
 #appNavCollectorBtn {
-    margin: auto 3vw auto auto;
+    margin: auto 0.5vw auto auto;
 }
 
 #appNavProcessorBtn {
-    margin: auto auto auto 3vw;
+    margin: auto auto auto 0.5vw;
 }
 
 #appNavCollectorBtn:disabled, #appNavProcessorBtn:disabled {

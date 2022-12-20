@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import { useEffectOnce } from '../../../../hooks/useEffectOnce'
-import { toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS, handleTopicChanges, autoScrollDown } from './functions'
+import { toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS, handleTopicChanges, autoScrollDown, initSocketIO } from './functions'
 import axios from '../../../../api/axios'
-import { newSocketIOInstance } from '../../../../api/socketio'
 import loadingIcon from '../../../../assets/images/loading.gif'
 import '../../../../assets/css/eventcollector/topicmenu.css'
 
@@ -12,55 +10,38 @@ const TopicMenu = (props) => {
         let setCurrentTopic = passedData.setCurrentTopic
         let streamStatus = passedData.streamStatus
         let setStreamStatus = passedData.setStreamStatus
+        let currentTopicData = passedData.currentTopicData
+        let setCurrentTopicData = passedData.setCurrentTopicData
         let eventDataLog = passedData.eventDataLog
         let setEventDataLog = passedData.setEventDataLog
         let setBroadcastEventName = passedData.setBroadcastEventName
+        let socketIOInstance = passedData.socketIOInstance
+        let setSocketIOInstance = passedData.setSocketIOInstance
         let disableTopicButtons = passedData.disableTopicButtons
         let setDisableTopicButtons = passedData.setDisableTopicButtons
 
-        const [updateInformer, setUpdateInformer] = useState(null)
         const [firstFetch, setFirstFetch] = useState(false)
         const [topicStatus, setTopicStatus] = useState({code: 'none'})
-        const [currentTopicData, setCurrentTopicData] = useState([])
-
-    useEffectOnce(() => {
-        if (!updateInformer) {
-            var updateInformerInstance = newSocketIOInstance(true)
-
-            updateInformerInstance.on('connect_error', () => {
-                setStreamStatus({ status: 'error', label: 'Unable to connect to JavaUtilityApp!'})
-            })
-
-            setUpdateInformer(updateInformerInstance)
-        }
-
-        if (!currentTopic) return
-        else {
-            for (let i = 0; i < eventDataLog.length; i++) {
-                if (eventDataLog[i].topic === currentTopic) {
-                    setCurrentTopicData(eventDataLog[i].topicData)
-                    break
-                }
-            }
-        }
-
-        return () => {
-            if (updateInformer) {
-                updateInformer.disconnect()
-                updateInformer.off('connect_error')
-                setUpdateInformer(null)
-            }
-        }   
-    }, [updateInformer, currentTopic, eventDataLog])
 
     let updateTopic = (topic) => {
         if (!topic) {
             setCurrentTopic(false)
+            setCurrentTopicData([])
             setBroadcastEventName(null)
         }
         else {
             setCurrentTopic(topic)
             setBroadcastEventName('sv_broadcast_' + topic)
+
+            setCurrentTopicData([])
+            setTimeout(() => {
+                for (let i = 0; i < eventDataLog.length; i++) {
+                    if (topic === eventDataLog[i].topic) {
+                        setCurrentTopicData(eventDataLog[i].topicData)
+                        break
+                    }
+                }
+            }, 1)
         }
 
         if (streamStatus.status === 'error') {
@@ -69,15 +50,13 @@ const TopicMenu = (props) => {
     }
 
     let clearLog = () => {
-        let clearedLog = []
         if (!currentTopic) return
-
-        setCurrentTopicData(clearedLog)
+        setCurrentTopicData([])
 
         let currentDataLog = eventDataLog
         for (let i = 0; i < currentDataLog.length; i++) {
             if (currentDataLog[i].topic === currentTopic) {
-                currentDataLog[i].topicData = currentTopicData
+                currentDataLog[i].topicData = []
                 break
             }
         }
@@ -87,6 +66,8 @@ const TopicMenu = (props) => {
     const getTopics = async () => {
         let returnData
         let constructedData
+
+        if (!socketIOInstance) initSocketIO(setSocketIOInstance)
         setTopicStatus({code: "pending"})
     
         axios.get('/topics')
@@ -115,10 +96,8 @@ const TopicMenu = (props) => {
                     }
                     else if (eventDataLog.length !== fetchedArr.length) {
                         handleTopicChanges(eventDataLog, fetchedArr, setEventDataLog)
-                        let toBeSent = {
-                            requestUpdateTopics: true
-                        }
-                        updateInformer.emit('cl_request_update', toBeSent)
+                        if (socketIOInstance.connected) 
+                            socketIOInstance.emit('cl_request_update', { requestUpdateTopics: true })
                     }
                 }
             })
@@ -134,16 +113,16 @@ const TopicMenu = (props) => {
                     if (constructedData) setEventDataLog(constructedData)
                     setTopicStatus(returnData)
                     showRefreshButton()
-                }, 1000)
+                }, 500)
 
                 setTimeout(() => {
                     highlightSelected()
-                }, 1025)
+                }, 505)
             })
     }
 
     const highlightSelected = () => {
-        if (currentTopic !== '' || currentTopic !== false) {
+        if (currentTopic) {
             let fetchedTopics = document.getElementsByClassName('topicBtn')
     
             for (let i = 0; i < fetchedTopics.length; i++) {
@@ -188,7 +167,7 @@ const TopicMenu = (props) => {
                 <button className = 'topicInteractionBtn' id = 'topicClearBtn' onClick={() => { clearSelection(); showTopicClearer(false) }}>Clear selection</button>
                 
                 {
-                    eventDataLog.length !== 0 ?
+                    currentTopicData.length !== 0 ?
                         <button className = 'topicInteractionBtn' id = 'clearLogBtn' onClick={() => { clearLog() }}>Clear Event Log</button>
                         : null
                 }

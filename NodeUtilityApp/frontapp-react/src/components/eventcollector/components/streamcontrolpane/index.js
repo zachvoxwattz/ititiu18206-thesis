@@ -1,4 +1,3 @@
-import { newSocketIOInstance } from '../../../../api/socketio'
 import { useState, useEffect } from 'react'
 import { alterButtonsState, autoScrollDown, getSelectedTopic, statusLabelStyles, currentTopicExpired } from './functions'
 import '../../../../assets/css/eventcollector/streamcontrolpane.css'
@@ -10,6 +9,8 @@ const StreamControlPane = (props) => {
         let setStreamStatus = contempData.setStreamStatus
         let eventDataLog = contempData.eventDataLog
         let setEventDataLog = contempData.setEventDataLog
+        let currentTopicData = contempData.currentTopicData
+        let setCurrentTopicData = contempData.setCurrentTopicData
         let socketIOInstance = contempData.socketIOInstance
         let setSocketIOInstance = contempData.setSocketIOInstance
         let broadcastEventName = contempData.broadcastEventName
@@ -20,27 +21,22 @@ const StreamControlPane = (props) => {
 
     useEffect(() => {
         if (!startBroadcast && socketIOInstance) {
-            socketIOInstance.disconnect()
-                socketIOInstance.off('connect')
-                socketIOInstance.off('disconnect')
-                socketIOInstance.off(broadcastEventName)
-            setSocketIOInstance(null)
+            let contempInstance = socketIOInstance
+                contempInstance.off(broadcastEventName)
+                contempInstance.off('connect')
+                contempInstance.off('connect_error')
+            setSocketIOInstance(contempInstance)
         }
 
         const updateLog = (newData) => {
-            setEventDataLog(prevData => prevData.concat(newData))
+            setCurrentTopicData(prevData => prevData.concat(newData))
         }
 
-        if (startBroadcast && !socketIOInstance) {
-            var socketInstance = newSocketIOInstance(true)
+        if (startBroadcast && socketIOInstance) {
             let startBtn = document.getElementById('streamStartBtn')
             let stopBtn = document.getElementById('streamStopBtn')
-            // Definitely gonna disconnect -> commented out 'disconnect' hooks
-            // socketInstance.on('disconnect', () => {
-            //     // do sth here rather than logging console
-            //     console.log("Client disconnected")
-            // })
-            socketInstance.on('connect', () => {
+            
+            socketIOInstance.on('connect', () => {
                 // do sth here rather than logging console
                 alterButtonsState(startBtn, setStatus)
                 setStreamStatus({status: 'active', label: 'Stream is active!'})
@@ -48,27 +44,27 @@ const StreamControlPane = (props) => {
                 autoScrollDown()
             })
 
-            socketInstance.on('connect_error', () => {
+            socketIOInstance.on('connect_error', () => {
                 alterButtonsState(stopBtn, setStatus)
-                setStreamStatus({ status: 'error', label: 'Unable to connect to JavaUtilityApp!'})
+                setStreamStatus({ status: 'error', label: 'Unable to connect to Java Utility App!'})
             })
 
-            socketInstance.on(broadcastEventName, async (newData) => {
+            socketIOInstance.on(broadcastEventName, async (newData) => {
                 updateLog(newData)
                 autoScrollDown()
             })
 
-            setSocketIOInstance(socketInstance)
+            setSocketIOInstance(socketIOInstance)
             alterButtonsState(startBtn, setStatus)
             setStreamStatus({status: 'active', label: 'Stream is active!'})
             document.getElementById('topicClearBtn').style.display = 'none'
             autoScrollDown()
         }
-    }, [startBroadcast, socketIOInstance, broadcastEventName, setSocketIOInstance, setStreamStatus, setEventDataLog])
+    }, [startBroadcast, socketIOInstance, broadcastEventName, setSocketIOInstance, setStreamStatus, setCurrentTopicData])
 
     const funcStreamStart = async () => {
         if (currentTopic === false) {
-            setStreamStatus({status: 'error', label: 'Can not start a stream without selected topic!'})
+            setStreamStatus({status: 'error', label: 'Can not start a stream without topic!'})
             return
         }
 
@@ -86,6 +82,16 @@ const StreamControlPane = (props) => {
         alterButtonsState(stopBtn, setStatus)
         setDisableTopicButtons(false)
         setStreamStatus({status: 'suspended', label: 'Stream suspended'})
+
+        let contempDataLog = eventDataLog
+
+        for (let i = 0; i < contempDataLog.length; i++) {
+            if (currentTopic === contempDataLog[i].topic) {
+                contempDataLog[i].topicData = currentTopicData
+                break
+            }
+        }
+        setEventDataLog(contempDataLog)
         document.getElementById('topicClearBtn').style.display = 'inline-block'
     }
 

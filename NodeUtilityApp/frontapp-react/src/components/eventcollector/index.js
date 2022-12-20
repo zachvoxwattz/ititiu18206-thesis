@@ -2,9 +2,9 @@ import axios from '../../api/axios'
 import TopicMenu from './components/topicmenu/index'
 import StreamControlPane from './components/streamcontrolpane/index'
 import loadingIcon from '../../assets/images/loading.gif'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { autoScrollDown } from './functions'
-import { DataPaneChunk, DataPaneFields, EmptyDataPane } from './components/datapane/index'
+import { DataPaneChunk, DataPaneFields, EmptyDataPane, IdleDataPane } from './components/datapane/index'
 import '../../assets/css/eventcollector/streamtable.css'
 import '../../assets/css/eventcollector/main.css'
 
@@ -17,6 +17,8 @@ const EventCollector = (props) => {
         let setStreamStatus = contempData.setStreamStatus
         let eventDataLog = contempData.eventDataLog
         let setEventDataLog = contempData.setEventDataLog
+        let savedDataLog = contempData.savedDataLog
+        let setSavedDataLog = contempData.setSavedDataLog
         let socketIOInstance = contempData.socketIOInstance
         let setSocketIOInstance = contempData.setSocketIOInstance
         let broadcastEventName = contempData.broadcastEventName
@@ -25,40 +27,15 @@ const EventCollector = (props) => {
 
     const [disableTopicButtons, setDisableTopicButtons] = useState(false)
     const [currentTopicData, setCurrentTopicData] = useState([])
-    
-    useEffect(() => {
-        if (!currentTopic) return
-        else {
-            for (let i = 0; i < eventDataLog.length; i++) {
-                if (eventDataLog[i].topic === currentTopic) {
-                    setCurrentTopicData(eventDataLog[i].topicData)
-                    break
-                }
-            }
-        }
-
-    }, [currentTopic, eventDataLog])
 
     const updateLog = (newData) => {
-        if (!currentTopic) return
-
         setCurrentTopicData(prevData => prevData.concat(newData))
-
-        let currentDataLog = eventDataLog
-        for (let i = 0; i < currentDataLog.length; i++) {
-            if (currentDataLog[i].topic === currentTopic) {
-                currentDataLog[i].topicData = currentTopicData
-                break
-            }
-        }
-        setEventDataLog(currentDataLog)
     }
 
     const fetchSampleData = async () => {
         axios.get('/getsampledata')
             .then(res => {
-                let appendData = res.data
-                updateLog(appendData)
+                updateLog(res.data)
                 autoScrollDown()
             })
             .catch(err => {
@@ -68,23 +45,26 @@ const EventCollector = (props) => {
 
     return(
         <div id = 'eventCollector'>
+            {/* TODO: REMOVE Line #49 when done!*/}
             <button id = 'sampleDataBtn' onClick={() => { fetchSampleData() }}>Sample</button>
             <div id = 'controlPane'>
-                <StreamControlPane appUtils = {{currentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setDisableTopicButtons, nav}}/>
+                <StreamControlPane appUtils = {{currentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, currentTopicData, setCurrentTopicData, socketIOInstance, setSocketIOInstance, broadcastEventName, setDisableTopicButtons, nav}}/>
 
-                <TopicMenu appUtils = {{currentTopic, setCurrentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, setBroadcastEventName, disableTopicButtons, setDisableTopicButtons}}/>
+                <TopicMenu appUtils = {{currentTopic, setCurrentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, currentTopicData, setCurrentTopicData, socketIOInstance, setSocketIOInstance, setBroadcastEventName, disableTopicButtons, setDisableTopicButtons}}/>
             </div>
             
             <div id = 'streamTable'>
                 <DataPaneFields />
                 <div id = 'streamLogger'>
                     {
-                        currentTopicData.length !== 0 ?
-                            currentTopicData.map((value, index) => (
-                                <DataPaneChunk key = {index} data = {value}/>
-                            )) 
-                            : 
-                            streamStatus.status !== 'active' ? <EmptyDataPane /> : null
+                        currentTopic ?
+                            currentTopicData.length !== 0 ?
+                                currentTopicData.map((value, index) => (
+                                    <DataPaneChunk key = {index} data = {value} appUtils = {{savedDataLog, setSavedDataLog}}/>
+                                )) 
+                                : 
+                                streamStatus.status !== 'active' ? <EmptyDataPane /> : null
+                            : <IdleDataPane />
                     }
                     {
                         streamStatus.status === 'active' ?
@@ -95,6 +75,10 @@ const EventCollector = (props) => {
                             : null
                     }
                 </div>
+            </div>
+            <div id = 'savedEventsSection'>
+                <h1 id = 'savedEventsCountLabel'>Number of saved events: {savedDataLog.length}</h1>
+                <button id = 'clearSavedEventsBtn'>Clear saved events</button>
             </div>
         </div>
     )

@@ -26,10 +26,10 @@ const Navigator = (props) => {
         // UPDATE: 'useEffect' is unreliable. I take the comment above back
         
         if (socketIOInstance && socketIOInstance.connected) {
-            socketIOInstance.disconnect()
             socketIOInstance.off('connect')
-            socketIOInstance.off('disconnect')
+            socketIOInstance.off('connect_error')
             socketIOInstance.off(broadcastEventName)
+            socketIOInstance.disconnect()
         }
 
         setBroadcastEventName(null)
@@ -41,10 +41,10 @@ const Navigator = (props) => {
         // To handle various stuffs post using app, please use 'useEffect' hook!
         // UPDATE: 'useEffect' is unreliable. I take the comment above back
         axios.post('/shutdown', { password: 'goodbye4now' })
-                .then(() => {
-                    setStreamStatus({status: 'error', label: 'Service shut down'})
-                    setTimeout(() => { exitApp() }, 2000)
-                })
+            .then(() => {
+                setStreamStatus({status: 'error', label: 'Service shut down'})
+                setTimeout(() => { exitApp() }, 2000)
+            })
     }
 
     return(
@@ -57,7 +57,7 @@ const Navigator = (props) => {
                 
                 <div id = 'appExitBtnHolder'>
                     <button className = 'appExitBtn' id = 'appExitOnlyBtn' onClick = {() => { exitApp() }}>Exit</button>
-                    <button className = 'appExitBtn' id = 'appExitCloseBtn' onClick={() => { closeService() }}>Close</button>
+                    <button className = 'appExitBtn' id = 'appExitCloseBtn' onClick = {() => { closeService() }}>Close</button>
                 </div>
             </div>
         </div>

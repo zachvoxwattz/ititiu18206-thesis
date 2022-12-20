@@ -53,7 +53,7 @@ public class SocketIOBroadcaster {
         while (!this.portCheckSuccess) {
             this.portCheckSuccess = PortChecker.isAvailable(Integer.parseInt(hostPort), this.debugEnabled);
             
-            try { TimeUnit.MILLISECONDS.sleep(250); }
+            try { TimeUnit.SECONDS.sleep(1); }
             catch (InterruptedException e) {}
         }
         this.serverInstance = this.portCheckSuccess ? new SocketIOServer(this.configurations) : null;

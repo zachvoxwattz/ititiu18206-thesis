@@ -1,8 +1,14 @@
 import '../../assets/css/eventprocessor/main.css'
 
 const EventProcessor = (props) => {
+
+    let appUtils = props.appUtils
+        let savedDataLog = appUtils.savedDataLog
+        // let setSavedDataLog = appUtils.setSavedDataLog
+
     return(
         <div id = 'eventProcessor'>
+            <button onClick={() => { console.log(savedDataLog) }}>Click</button>
             <p id = 'test'>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nisl sapien, auctor nec placerat vitae, feugiat ut ligula. Maecenas pulvinar sapien in massa vehicula mattis sit amet quis nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam accumsan ultrices finibus. Cras tincidunt urna eu magna ultricies, eu blandit ligula porta. Phasellus lobortis orci volutpat ullamcorper volutpat. Proin nec blandit diam. Quisque at sollicitudin tortor. Duis molestie ultrices ipsum. Donec eu pharetra eros. Morbi in laoreet turpis. Donec et imperdiet leo, vitae vestibulum libero. Sed pulvinar nisl felis, eget cursus lorem auctor id.
                 <br/><br/>

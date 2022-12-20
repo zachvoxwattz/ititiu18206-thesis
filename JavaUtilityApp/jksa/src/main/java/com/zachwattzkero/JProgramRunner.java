@@ -3,8 +3,7 @@ package com.zachwattzkero;
 import com.zachwattzkero.kafka.KafkaStreamsManager;
 import com.zachwattzkero.socketio.SocketIOBroadcaster;
 
-public class JProgramRunner 
-{
+public class JProgramRunner {
     public static void main( String[] args ) {
         if (args.length >= 0 && args.length < 4) {
             System.out.printf("\nError: Can not start program. Reason: Not enough arguments!");

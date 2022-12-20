@@ -1,3 +1,5 @@
+import { newSocketIOInstance } from "../../../../api/socketio"
+
 const toggleTopicListVisibility = () => {
     let topicList = document.getElementById('topicList')
     let topicListDisplayStyle = topicList.style.display
@@ -138,4 +140,9 @@ const autoScrollDown = () => {
     }, 5)
 }
 
-export { toggleTopicListVisibility, showRefreshButton, revertSelectionsCSS, changeSelectionCSS, showTopicClearer, forceShowList, autoScrollDown, handleTopicChanges }
+const initSocketIO = (setSocketIOInstance) => {
+    var contempInstance = newSocketIOInstance(true)
+    setSocketIOInstance(contempInstance)
+}
+
+export { toggleTopicListVisibility, showRefreshButton, revertSelectionsCSS, changeSelectionCSS, showTopicClearer, forceShowList, autoScrollDown, handleTopicChanges, initSocketIO }
