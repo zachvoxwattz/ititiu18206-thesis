@@ -8,29 +8,59 @@ const EventProcessor = (props) => {
         let currentTopic = appUtils.currentTopic
         let savedDataLog = appUtils.savedDataLog
     
-    const [displayText, setDisplayText] = useState('')
+    const [codeValue, setCodeValue] = useState('')
+    const [downloadURL, setDownloadURL] = useState(null)
+    
     const inputFile = useRef(null)
+    const fileDownloader = useRef(null)
+
+    let stringifier = (value) => {
+        return JSON.stringify(value, undefined, '\t')
+    }
 
     useEffect(() => {
         if (!currentTopic) {
-            setDisplayText("/*\n\t\t\t\t\tThere is no topic selected!\n/*")
+            setCodeValue("/*\n\t\t\t\t\tThere is no topic selected!\n/*")
             return
         }
 
         if (savedDataLog.length === 0) {
-            setDisplayText("/*\n\t\t\t\t\tUnable to find any saved events!\n/*")
+            setCodeValue("/*\n\t\t\t\t\tUnable to find any saved events!\n/*")
         }
         else {
-            setDisplayText(JSON.stringify(savedDataLog, undefined, "\t"))
+            setCodeValue(stringifier(savedDataLog))
         }
-    }, [currentTopic, savedDataLog, setDisplayText])
 
-    const processImport = () => {
+        if (downloadURL) {
+            fileDownloader.current.click()
+            URL.revokeObjectURL(downloadURL)
+            setDownloadURL(null)
+        }
 
+    }, [currentTopic, savedDataLog, setCodeValue, downloadURL])
+
+    const processFile = (event) => {
+        event.stopPropagation()
+        event.preventDefault()
+        var importedFile = event.target.files[0]
+        fetch(URL.createObjectURL(importedFile))
+            .then(res => res.json())
+                .then(data => {
+                    setCodeValue(stringifier(data))
+                })
+    }
+
+    const saveEventsToFile = async (event) => {
+        event.preventDefault()
+        const blobObject = new Blob([savedDataLog], { type: 'application/json' } )
+        let fileDownloadURL = URL.createObjectURL(blobObject)
+        setDownloadURL(fileDownloadURL)
     }
 
     return(
         <div id = 'eventProcessor'>
+            <input type = 'file' id='file' ref = {inputFile} style={{display: 'none'}} onChange = {(event) => { processFile(event) }} accept = '.json'/>
+            <a style = {{display: 'none'}} href = {downloadURL} ref = {fileDownloader} download = {'saved-events.json'}>Download it</a>
             <div id = 'ioSection'>
                 {
                     currentTopic ? 
@@ -44,11 +74,12 @@ const EventProcessor = (props) => {
                         </div>
                 }
                 <div id = 'eventList'>
-                    <CopyBlock text = {displayText} language = {"JSON"} theme = {dracula}/>
+                    <CopyBlock text = {codeValue} language = {"JSON"} theme = {dracula}/>
                 </div>
                 <div id = 'eventProcessBtns'>
-                    <button className = 'processIOBtn' id = 'processIOImportBtn' onClick={(event) => { processImport() }}>Import</button>
-                    <button className = 'processIOBtn' id = 'processIOExportBtn'>Export</button>
+                    <button className = 'processIOBtn' id = 'processIOImportBtn' onClick = {() => { inputFile.current.click() }}>Import</button>
+                    
+                    <button className = 'processIOBtn' id = 'processIOExportBtn' onClick = {(e) => saveEventsToFile(e) }>Export</button>
                 </div>
             </div>
         </div>
