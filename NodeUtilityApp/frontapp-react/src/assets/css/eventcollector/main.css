@@ -40,21 +40,24 @@
 
 #savedEventsSection {
 	display: flex;
-	justify-content: space-between;
 	position: relative;
 	margin: 1.25vh auto 0 auto;
 	width: 75vw;
-	height: 10vh;
 }
 
-#savedEventsCountLabel {
+#savedEventsCountValue {
+	margin: 0 0.5vw 0 0.5vw;
+}
+
+#savedEventsCountLabel, #savedEventsCountValue {
 	color: white;
 }
 
 #clearSavedEventsBtn {
+	position: relative;
 	border-radius: 8px;
 	border-width: 1px;
 	border-color: transparent;
-	background-color: #cea5fb;
-	font-size: 1.5em;
+	background-color: transparent;
+	font-size: 1.25em;
 }

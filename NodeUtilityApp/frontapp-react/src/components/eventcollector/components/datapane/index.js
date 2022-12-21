@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../../../../assets/css/eventcollector/datapane/chunk.css'
 import '../../../../assets/css/eventcollector/datapane/fields.css'
 import '../../../../assets/css/eventcollector/datapane/empty.css'
 
-const DataPaneFields = () => {
+const DataPaneFields = (props) => {
+    let saveAllEvents = props.appUtils.saveAllEvents
+
     return(
         <div id = 'dataPaneFields'>
-            <h3 className = 'dataPaneField' id = 'DPselectField'>✅</h3>
+            <button className = 'dataPaneField' id = 'DPselectField' onClick={() => { saveAllEvents() }}>✅</button>
             <h3 className = 'dataPaneField' id = 'DPkeyField'>Key</h3>
             <h3 className = 'dataPaneField' id = 'DPvalueField'>Value</h3>
         </div>
@@ -31,39 +33,37 @@ const IdleDataPane = () => {
 
 const DataPaneChunk = (props) => {
     let data = props.data
+    let uniqueID = props.uniqueID
     let appUtils = props.appUtils
-        let savedDataLog = appUtils.savedDataLog
-        let setSavedDataLog = appUtils.setSavedDataLog
-
+        let streamStatus = appUtils.streamStatus
+        let uncheckAllBoxes = appUtils.uncheckAllBoxes
+        let checkAllBoxes = appUtils.checkAllBoxes
+        let saveEvent = appUtils.saveEvent
+        let unsaveEvent = appUtils.unsaveEvent
+    
     const [selected, setSelected] = useState(false)
+
+    useEffect(() => {
+        if (uncheckAllBoxes) setSelected(false)
+        if (checkAllBoxes) setSelected(true)
+    }, [uncheckAllBoxes, checkAllBoxes])
+
     const checkBoxFunction = () => {
-        if (!selected) {
-            updateSavedLog(data)
-            setSelected(true)
-        }
-        else {
-            removeFromSaved(data, savedDataLog, setSavedDataLog)
-            setSelected(false)
-        }
+        selected ? setSelected(false) : setSelected(true)
     }
 
-    const updateSavedLog = (newLog) => {
-        let testExistIndex = savedDataLog.indexOf(newLog)
-
-        if (testExistIndex > 0) {
-            console.log('found datagram in saved list, skipping...')
-            return
-        }
-
-        let contempLog = savedDataLog
-        contempLog.push(newLog)
-        setSavedDataLog(contempLog)
+    const checkBoxBehavior = () => {
+        selected ? unsaveEvent(data) : saveEvent(data)
     }
     
     return(
         <div className = 'dataPane'>
             <div className = 'dpDisplaySlot' id = 'dpSelectBoxDiv'>
-                <input id = 'dpSelectBoxValue' type = 'checkbox' checked = {selected} onChange = {() => { checkBoxFunction(); }}/>
+                {
+                    streamStatus.status !== 'active' ?
+                        <input className = 'dpSelectBoxes' id = {`dpSelectBoxValue${uniqueID}`} checked = {!uncheckAllBoxes && selected} type = 'checkbox' onClick = {() => { checkBoxFunction(); }} onChange = {() => { checkBoxBehavior() }}/>
+                        : null
+                }
             </div>
 
             <div className = 'dpDisplaySlot' id = 'dpKeyDiv'>
@@ -75,20 +75,6 @@ const DataPaneChunk = (props) => {
             </div>
 	    </div>
     )
-}
-
-const removeFromSaved = (toBeRemoved, savedDataLog, setSavedDataLog) => {
-    let contempData = savedDataLog
-    
-    for (let i = 0; i < contempData.length; i++) {
-        let targetIndex = contempData.indexOf(toBeRemoved)
-
-        if (targetIndex > 0) {
-            contempData.splice(targetIndex, 1)
-            break
-        }
-    }
-    setSavedDataLog(contempData)
 }
 
 export { IdleDataPane, EmptyDataPane, DataPaneChunk, DataPaneFields }

@@ -15,8 +15,16 @@
 	100% { opacity: 1 }
 }
 
-#test {
-    margin: 0 15vw 0 15vw;
-    color: white;
-    font-size: 1.25em;
+#ioSection {
+	position: relative;
+	margin: auto;
+	width: 75vw;
+	height: 50vh
+}
+
+#eventList {
+	overflow-y: scroll;
+	position: relative;
+	width: 75%;
+	height: 100%;
 }

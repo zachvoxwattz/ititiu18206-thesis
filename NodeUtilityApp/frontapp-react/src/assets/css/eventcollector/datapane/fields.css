@@ -38,6 +38,7 @@
 }
 
 #DPselectField {
+    background-color: transparent;
     text-decoration: none;
     width: 3%;
 }

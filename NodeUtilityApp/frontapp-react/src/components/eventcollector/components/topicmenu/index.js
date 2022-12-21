@@ -19,6 +19,7 @@ const TopicMenu = (props) => {
         let setSocketIOInstance = passedData.setSocketIOInstance
         let disableTopicButtons = passedData.disableTopicButtons
         let setDisableTopicButtons = passedData.setDisableTopicButtons
+        let clearSavedEvents = passedData.clearSavedEvents
 
         const [firstFetch, setFirstFetch] = useState(false)
         const [topicStatus, setTopicStatus] = useState({code: 'none'})
@@ -30,9 +31,9 @@ const TopicMenu = (props) => {
             setBroadcastEventName(null)
         }
         else {
+            clearSavedEvents()
             setCurrentTopic(topic)
             setBroadcastEventName('sv_broadcast_' + topic)
-
             setCurrentTopicData([])
             setTimeout(() => {
                 for (let i = 0; i < eventDataLog.length; i++) {

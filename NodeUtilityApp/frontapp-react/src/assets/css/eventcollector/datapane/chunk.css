@@ -31,7 +31,7 @@
     width: 3%;
 }
 
-#dpSelectBoxValue {
+.dpSelectBoxes {
     transform: scale(1.5);
 }
 
