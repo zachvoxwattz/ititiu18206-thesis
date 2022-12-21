@@ -1,8 +1,8 @@
 #eventProcessor {
-	animation: fadeIn 1s linear forwards;
-	-webkit-animation: fadeIn 1s linear forwards;
-	-moz-animation: fadeIn 1s linear forwards;
-	-o-animation: fadeIn 1s linear forwards;
+	animation: fadeIn 0.5s linear forwards;
+	-webkit-animation: fadeIn 0.5s linear forwards;
+	-moz-animation: fadeIn 0.5s linear forwards;
+	-o-animation: fadeIn 0.5s linear forwards;
 }
 
 @-webkit-keyframes fadeIn {
@@ -22,9 +22,62 @@
 	height: 50vh
 }
 
+#savedEventsTopicLabels {
+	display: flex;
+	color: white;
+}
+
+#savedEventsTopicBaseLabel {
+	margin: 0 0.375vw 0 0
+}
+
+#savedEventsTopicValueLabel {
+	color: orange
+}
+
 #eventList {
 	overflow-y: scroll;
+	border-radius: 16px;
 	position: relative;
-	width: 75%;
-	height: 100%;
+}
+
+#eventProcessBtns {
+	margin: 1vh 0 0 0
+}
+
+.processIOBtn {
+	position: relative;
+	border-color: #21262d;
+	background-color: transparent;
+	color: #ecf2f8;
+	padding: 0.5%;
+	border-radius: 16px;
+	border-width: 1px;
+	width: 7.5%;
+	font-size: 1.5em;
+	font-weight: 500;
+	transition: 150ms ease-in-out;
+}
+
+#processIOImportBtn {
+	margin: 0 0.5vw 0 0
+}
+
+#processIOImportBtn:hover {
+	background-color: #7ce38b;
+}
+#processIOImportBtn:active {
+	background-color: #549b5e;
+}
+
+#processIOExportBtn {
+	margin: 0 0 0 0.5vw
+}
+
+#processIOExportBtn:hover {
+	background-color: #77bdfb;
+}
+
+#processIOExportBtn:active {
+	background-color: #4f7fa8;
 }

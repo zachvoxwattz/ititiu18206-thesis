@@ -33,7 +33,7 @@ const MainPage = () => {
 
             <EventCollector appUtils = {{currentTopic, setCurrentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, savedDataLog, setSavedDataLog, socketIOInstance, setSocketIOInstance, broadcastEventName, setBroadcastEventName}}/>
             
-            <EventProcessor appUtils = {{savedDataLog, setSavedDataLog}}/>
+            <EventProcessor appUtils = {{currentTopic, savedDataLog, setSavedDataLog}}/>
         </div>
     )
 }
