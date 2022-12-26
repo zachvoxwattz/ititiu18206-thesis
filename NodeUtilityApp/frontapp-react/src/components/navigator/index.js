@@ -26,6 +26,7 @@ const Navigator = (props) => {
         // UPDATE: 'useEffect' is unreliable. I take the comment above back
         
         if (socketIOInstance && socketIOInstance.connected) {
+            socketIOInstance.emit('nua_request_shutdown')
             socketIOInstance.off('connect')
             socketIOInstance.off('connect_error')
             socketIOInstance.off(broadcastEventName)

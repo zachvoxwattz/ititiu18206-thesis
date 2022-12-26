@@ -1,4 +1,4 @@
-import { newSocketIOInstance } from "../../../../api/socketio"
+import axios from '../../../../api/axios'
 
 const toggleTopicListVisibility = () => {
     let topicList = document.getElementById('topicList')
@@ -140,9 +140,11 @@ const autoScrollDown = () => {
     }, 5)
 }
 
-const initSocketIO = (setSocketIOInstance) => {
-    var contempInstance = newSocketIOInstance(true)
-    setSocketIOInstance(contempInstance)
+const requestJavaAppUpdate = async () => {
+    axios.post('/requestsynctopics', { requestUpdateTopics: true })
+        .catch(error => {
+            console.log(error)
+        })
 }
 
-export { toggleTopicListVisibility, showRefreshButton, revertSelectionsCSS, changeSelectionCSS, showTopicClearer, forceShowList, autoScrollDown, handleTopicChanges, initSocketIO }
+export { toggleTopicListVisibility, showRefreshButton, revertSelectionsCSS, changeSelectionCSS, showTopicClearer, forceShowList, autoScrollDown, handleTopicChanges, requestJavaAppUpdate }

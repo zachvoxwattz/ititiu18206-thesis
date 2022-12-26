@@ -2,7 +2,8 @@ import DOTENV from 'dotenv'
 import express from 'express'
 import { Server } from 'http'
 import cors from 'cors'
-import rootRouter from './express_router.js'
+import rootRouter from './router.js'
+import { initSocketIOClient } from '../socketio/client.js'
 
 // Loads ENV
 DOTENV.config()
@@ -23,6 +24,7 @@ const startService = () => {
     // prepareSocketIOServer(expressServer)
     // handleSocketIOConnections()
 
+    initSocketIOClient(true)
     expressVariable = expressServer.listen(APP_PORT, () => {
         console.log(`Server is operating on port ${APP_PORT}`)
     })

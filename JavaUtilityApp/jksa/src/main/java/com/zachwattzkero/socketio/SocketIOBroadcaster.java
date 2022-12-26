@@ -12,7 +12,6 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import com.zachwattzkero.kafka.KafkaStreamsManager;
 import com.zachwattzkero.models.MessageDatagram;
-import com.zachwattzkero.models.RequestTopicUpdateDatagram;
 
 public class SocketIOBroadcaster {
 
@@ -80,14 +79,24 @@ public class SocketIOBroadcaster {
             }
         });
 
-        //Experimental
-        this.serverInstance.addEventListener("cl_request_update", RequestTopicUpdateDatagram.class, new DataListener<RequestTopicUpdateDatagram>() {
+        this.serverInstance.addEventListener("nua_request_update", String.class, new DataListener<String>() {
 
             @Override
-            public void onData(SocketIOClient client, RequestTopicUpdateDatagram data, AckRequest ackSender) throws Exception {
-                if (data.getRequestUpdateTopics()) {
+            public void onData(SocketIOClient client, String data, AckRequest ackSender) throws Exception {
+                if (data.equals("requestUpdate")) {
                     if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Received topic update request from client %s, informing KafkaStreamsManager to adapt changes...\n", client.getSessionId());
                     kStreamsManager.handleTopicChanges();
+                }
+            }
+        });
+
+        this.serverInstance.addEventListener("nua_request_shutdown", String.class, new DataListener<String>() {
+
+            @Override
+            public void onData(SocketIOClient client, String data, AckRequest ackSender) throws Exception {
+                if (data.equals("requestShutdown")) {
+                    if (debugEnabled) System.out.printf("[SocketIOBroadcaster] Received shutdown request from client %s. Approving...\n", client.getSessionId());
+                    System.exit(0);
                 }
             }
         });

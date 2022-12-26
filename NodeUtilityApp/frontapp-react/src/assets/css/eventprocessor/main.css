@@ -81,3 +81,13 @@
 #processIOExportBtn:active {
 	background-color: #4f7fa8;
 }
+
+.reviveclearBtns {
+	position: relative;
+	background-color: transparent;
+	border-color: transparent;
+	border-radius: 8px;
+	border-width: 1px;
+	font-size: 1.75em;
+	margin: 0 1vw 0 0
+}

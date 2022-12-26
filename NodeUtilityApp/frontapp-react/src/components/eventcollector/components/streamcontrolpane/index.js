@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { alterButtonsState, autoScrollDown, getSelectedTopic, statusLabelStyles, currentTopicExpired } from './functions'
 import '../../../../assets/css/eventcollector/streamcontrolpane.css'
+import { newSocketIOInstance } from '../../../../api/socketio'
 
 const StreamControlPane = (props) => {
     let contempData = props.appUtils
@@ -25,18 +26,21 @@ const StreamControlPane = (props) => {
                 contempInstance.off(broadcastEventName)
                 contempInstance.off('connect')
                 contempInstance.off('connect_error')
-            setSocketIOInstance(contempInstance)
+                contempInstance.disconnect()
+            setSocketIOInstance(null)
         }
 
         const updateLog = (newData) => {
             setCurrentTopicData(prevData => prevData.concat(newData))
         }
 
-        if (startBroadcast && socketIOInstance) {
+        if (startBroadcast && !socketIOInstance) {
             let startBtn = document.getElementById('streamStartBtn')
             let stopBtn = document.getElementById('streamStopBtn')
             
-            socketIOInstance.on('connect', () => {
+            var socketInstance = newSocketIOInstance(true)
+
+            socketInstance.on('connect', () => {
                 // do sth here rather than logging console
                 alterButtonsState(startBtn, setStatus)
                 setStreamStatus({status: 'active', label: 'Stream is active!'})
@@ -44,17 +48,17 @@ const StreamControlPane = (props) => {
                 autoScrollDown()
             })
 
-            socketIOInstance.on('connect_error', () => {
+            socketInstance.on('connect_error', () => {
                 alterButtonsState(stopBtn, setStatus)
                 setStreamStatus({ status: 'error', label: 'Unable to connect to Java Utility App!'})
             })
 
-            socketIOInstance.on(broadcastEventName, async (newData) => {
+            socketInstance.on(broadcastEventName, async (newData) => {
                 updateLog(newData)
                 autoScrollDown()
             })
 
-            setSocketIOInstance(socketIOInstance)
+            setSocketIOInstance(socketInstance)
             alterButtonsState(startBtn, setStatus)
             setStreamStatus({status: 'active', label: 'Stream is active!'})
             document.getElementById('topicClearBtn').style.display = 'none'

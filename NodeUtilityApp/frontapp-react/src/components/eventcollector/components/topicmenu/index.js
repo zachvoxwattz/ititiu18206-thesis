@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS, handleTopicChanges, autoScrollDown, initSocketIO } from './functions'
+import { toggleTopicListVisibility, revertSelectionsCSS, showTopicClearer, forceShowList, showRefreshButton, changeSelectionCSS, handleTopicChanges, autoScrollDown, requestJavaAppUpdate } from './functions'
 import axios from '../../../../api/axios'
 import loadingIcon from '../../../../assets/images/loading.gif'
 import '../../../../assets/css/eventcollector/topicmenu.css'
@@ -15,14 +15,12 @@ const TopicMenu = (props) => {
         let eventDataLog = passedData.eventDataLog
         let setEventDataLog = passedData.setEventDataLog
         let setBroadcastEventName = passedData.setBroadcastEventName
-        let socketIOInstance = passedData.socketIOInstance
-        let setSocketIOInstance = passedData.setSocketIOInstance
         let disableTopicButtons = passedData.disableTopicButtons
         let setDisableTopicButtons = passedData.setDisableTopicButtons
         let clearSavedEvents = passedData.clearSavedEvents
 
-        const [firstFetch, setFirstFetch] = useState(false)
-        const [topicStatus, setTopicStatus] = useState({code: 'none'})
+    const [firstFetch, setFirstFetch] = useState(false)
+    const [topicStatus, setTopicStatus] = useState({code: 'none'})
 
     let updateTopic = (topic) => {
         if (!topic) {
@@ -68,7 +66,6 @@ const TopicMenu = (props) => {
         let returnData
         let constructedData
 
-        if (!socketIOInstance) initSocketIO(setSocketIOInstance)
         setTopicStatus({code: "pending"})
     
         axios.get('/topics')
@@ -97,16 +94,23 @@ const TopicMenu = (props) => {
                     }
                     else if (eventDataLog.length !== fetchedArr.length) {
                         handleTopicChanges(eventDataLog, fetchedArr, setEventDataLog)
-                        if (socketIOInstance.connected) 
-                            socketIOInstance.emit('cl_request_update', { requestUpdateTopics: true })
+                        requestJavaAppUpdate()
                     }
                 }
             })
             .catch((err) => {
-                console.log(err)
-                returnData = {
-                    code: 'error',
-                    message: err.response.data.message
+                if (err?.response?.data?.message) {
+                    returnData = {
+                        code: 'error',
+                        message: err.response.data.message
+                    }
+                }
+
+                else {
+                    returnData = {
+                        code: 'error',
+                        message: "An error occurred while trying to connect to the back end services. Most likely it is offline!"
+                    }
                 }
             })
             .finally(() => {
