@@ -7,8 +7,8 @@ const server = express()
 
 // Define middlewares that the server would use
 server.use(cors())
-server.use(express.json())
-server.use(express.urlencoded({extended: false}))
+server.use(express.json({ limit: '50mb'}))
+server.use(express.urlencoded({ limit: '50mb', extended: true}))
 
 // Define the Main Router that the server uses
 server.use('/', serverRouter)

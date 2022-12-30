@@ -7,12 +7,16 @@ const getTopics = async () => {
     try {
         connect(actionClient).catch(() => {})
         returnData = await actionClient.listTopics()
+
+        let internalTopicIndex = returnData.indexOf('__consumer_offsets')
+        if (internalTopicIndex !== -1) returnData.splice(internalTopicIndex, 1)
+
         disconnect(actionClient)
     }
     catch (error) {
         returnData = {
             error: true,
-            message: "Error while trying to get topics from cluster.\nPlease contact the author for information!"
+            message: "Error while trying to get topics from cluster.\nMost likely the target Cluster is offline!"
         }
     }
     return returnData

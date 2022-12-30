@@ -1,0 +1,50 @@
+#eventReplayerConsole {
+    position: relative;
+    border-radius: 8px;
+    width: 73%;
+    height: 90%;
+    margin: auto 0.75% auto 0;
+    background-color: #161b22
+}
+
+.eventReplayerConsoleMsgLabel, .eventReplayerConsoleMsgValue {
+    white-space: pre-wrap;
+    padding: 0.5% 1% 0.5% 1%;
+}
+
+.eventReplayerConsoleMsgLabel {
+    text-decoration: underline;
+    font-weight: bolder;
+    font-size: 1.45em;
+}
+
+.eventReplayerConsoleMsgValue {
+    text-align: center;
+    font-size: 1.25em;
+    font-weight: 500;
+}
+
+.ERCMerrorlabel {
+    color: #b41c12;
+}
+
+.ERCMerrorvalue {
+    color: #ff574b;
+}
+
+.ERCMsuccesslabel {
+    color: #29a03b
+}
+
+.ERCMsuccessvalue {
+    color: #7ce38b
+}
+
+.ERCMoversized {
+    color: rgb(236, 236, 112);
+}
+
+.ERCMpending {
+    color: white;
+    text-decoration: none;
+}

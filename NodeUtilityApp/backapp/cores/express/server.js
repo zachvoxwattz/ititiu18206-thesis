@@ -1,8 +1,8 @@
+import cors from 'cors'
 import DOTENV from 'dotenv'
 import express from 'express'
-import { Server } from 'http'
-import cors from 'cors'
 import rootRouter from './router.js'
+import { Server } from 'http'
 import { initSocketIOClient } from '../socketio/client.js'
 
 // Loads ENV
@@ -15,19 +15,20 @@ const expressServer = Server(expressInstance)
 var expressVariable
 
 // Assign middlewares
-expressInstance.use(express.json())
-expressInstance.use(express.urlencoded({ extended: false }))
+expressInstance.use(express.json({ limit: '256mb' }));
+expressInstance.use(express.urlencoded({ limit: '256mb', extended: true}));
 expressInstance.use(cors())
 expressInstance.use('/', rootRouter)
 
 const startService = () => {
-    // prepareSocketIOServer(expressServer)
-    // handleSocketIOConnections()
-
     initSocketIOClient(true)
     expressVariable = expressServer.listen(APP_PORT, () => {
         console.log(`Server is operating on port ${APP_PORT}`)
     })
 }
 
-export { expressServer, expressVariable, startService }
+const getTimestamp = () => {
+    return (performance.timeOrigin + performance.now()) / 1000
+}
+
+export { expressVariable, startService, getTimestamp }

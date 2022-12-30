@@ -1,6 +1,5 @@
 import json
 from kafka import KafkaConsumer
-from multiprocessing import Pipe
 from src.sorter import BubbleSorter, InsertionSorter, SelectionSorter, ShellSorter
 from src.sort_thread import SortThread
 
@@ -32,6 +31,8 @@ class DataReceiver:
             # This line converts literal bytes to JSON. After that, accessing them normally like many other Python apps
             # -----------------------
             processedData = json.loads(data.value)
+            processedKey = data.key.decode('utf-8')
+            
             if self.debugMode:
                 print('\n\nNew message! Detailed Datagram: \n%s' % (processedData))
 
@@ -40,7 +41,8 @@ class DataReceiver:
             selectedSorter = self.getSorter(processedData['sortAlgo'])
 
             SortThread(
-                processedData, 
+                processedData,
+                processedKey,
                 sorter = selectedSorter, 
                 notifier = self.resultNotifier, 
                 debugMode = self.debugMode

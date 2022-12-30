@@ -13,8 +13,8 @@ import com.zachwattzkero.models.DataOperation;
 
 public class KafkaStreamInstance implements DataOperation {
     
-    private String assignedTopic, streamID, broadcastEventName;
     private boolean debugEnabled;
+    private String assignedTopic, streamID, broadcastEventName;
 
     private Properties props;
     private Serde<String> dataSerde;
@@ -23,20 +23,20 @@ public class KafkaStreamInstance implements DataOperation {
     private KafkaStreamsManager managerParent;
     private KStream<String, String> kStream;
 
-    public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic, String assignedStreamID) {
+    public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic, int streamNumber) {
         this.managerParent = parent;
         this.assignedTopic = givenTopic;
         this.debugEnabled = false;
         this.broadcastEventName = "sv_broadcast_" + this.assignedTopic;
-        this.streamID = "KafkaStreamCL_" + assignedStreamID;
+        this.streamID = "KafkaStreamCL_" + streamNumber;
     }
 
-    public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic, String assignedStreamID, boolean enableDebug) {
+    public KafkaStreamInstance(KafkaStreamsManager parent, String givenTopic, int streamNumber, boolean enableDebug) {
         this.managerParent = parent;
         this.assignedTopic = givenTopic;
         this.debugEnabled = enableDebug;
         this.broadcastEventName = "sv_broadcast_" + this.assignedTopic;
-        this.streamID = "KafkaStreamCL_" + assignedStreamID;
+        this.streamID = "KafkaStreamCL_" + streamNumber;
     }
 
     public void initStream() {
@@ -58,8 +58,8 @@ public class KafkaStreamInstance implements DataOperation {
     @Override
     public void execute(String key, String value) {
         String processedKey = processKey(key);
-        if (this.managerParent.isDebugEnabled()) {
-            System.out.printf("\n\n[%s RESULT DATA]\n - Key: %s\n - Value: %s\n\n", this.streamID, processedKey, value);
+        if (this.debugEnabled) {
+            System.out.printf("\n[%s RESULT DATA]\n - Key: %s\n - Value: %s\n\n", this.streamID, processedKey, value);
         }
 
         this.managerParent.broadcastEvent(this.broadcastEventName, processedKey, value);
@@ -77,17 +77,17 @@ public class KafkaStreamInstance implements DataOperation {
     public void startStream() {
         this.kafkaStream = new KafkaStreams(this.streamsBuilder.build(), this.props);
         this.kafkaStream.start();
-        if (this.debugEnabled) System.out.printf("[KafkaStreamInstance '%s'] Started execution\n", this.streamID);
+        System.out.printf("[KafkaStreamInstance '%s'] Started execution\n", this.streamID);
     }
 
     public void stopStream() {
         this.kafkaStream.close();
-        if (this.debugEnabled) System.out.printf("[KafkaStreamInstance '%s'] Stopped execution\n", this.streamID);
+        System.out.printf("[KafkaStreamInstance '%s'] Stopped execution\n", this.streamID);
     }
 
     public void stopStream(String reason) {
         this.kafkaStream.close();
-        if (this.debugEnabled) System.out.printf("[KafkaStreamInstance '%s'] Stopped execution. Reason: %s\n", this.streamID, reason);
+        System.out.printf("[KafkaStreamInstance '%s'] Stopped execution. Reason: %s\n", this.streamID, reason);
     }
 
     public String getAssignedTopic() { return this.assignedTopic; }

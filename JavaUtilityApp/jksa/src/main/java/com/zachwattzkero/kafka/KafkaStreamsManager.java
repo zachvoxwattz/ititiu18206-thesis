@@ -3,8 +3,7 @@ package com.zachwattzkero.kafka;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.Scanner;
 
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -23,7 +22,6 @@ public class KafkaStreamsManager {
     private Serde<String> dataSerde;
     private KafkaAdminClient kAdminClient;
     private SocketIOBroadcaster socketIOBroadcaster;
-    private ScheduledExecutorService ses;
     private List<KafkaStreamInstance> streamsList;
 
     public KafkaStreamsManager(String brokerAddress, boolean enableDebug) {
@@ -34,17 +32,15 @@ public class KafkaStreamsManager {
         this.brokerAddress = brokerAddress;
         this.dataSerde = Serdes.String();
         this.streamsList = new ArrayList<>();
-        this.ses = Executors.newScheduledThreadPool(1);
-        this.kAdminClient = new KafkaAdminClient(brokerAddress, this.debugEnabled);
+        this.kAdminClient = new KafkaAdminClient(this.brokerAddress, this.debugEnabled);
 
-        if (this.debugEnabled) System.out.printf("[KafkaStreamsManager] Manager initialized\n");
+        System.out.printf("[KafkaStreamsManager] Info: Manager initialized\n");
     }
 
     public KafkaStreamInstance createNewStream(String assignedTopic) {
-        KafkaStreamInstance objectInstance = new KafkaStreamInstance(this, assignedTopic, String.valueOf(STREAM_COUNT), this.debugEnabled);
+        var objectInstance = new KafkaStreamInstance(this, assignedTopic, ++STREAM_COUNT, this.debugEnabled);
+
         objectInstance.initStream();
-        
-        STREAM_COUNT++;
         this.streamsList.add(objectInstance);
         return objectInstance;
     }
@@ -55,10 +51,40 @@ public class KafkaStreamsManager {
 
     public void createAndStartTopicStreams() {
         List<String> topics = this.kAdminClient.getTopicList();
-        
-        if (topics.size() == 0) {
-            System.out.println("[KafkaStreamsManager] No topic found in designated broker. Create some and run the function again!");
-            return;
+        var cmdLoopEnabled = false;
+        Scanner inputScanner = null;
+
+        if (topics.isEmpty()) {
+            System.out.printf("\n\n[KafkaStreamsManager] Error: No topic discovered in target broker!");
+            System.out.printf("\nType 'retry' to make another attempt");
+            System.out.printf("\n> ");
+            cmdLoopEnabled = true;
+            inputScanner = new Scanner(System.in);
+        }
+
+        while (cmdLoopEnabled) {
+            var inputStr = inputScanner.next();
+
+            if (inputStr.equals("retry")) {
+                System.out.printf("\n[KafkaStreamsManager] Info: Retrying to find topics...");
+                topics = this.kAdminClient.getTopicList();
+
+                if (topics.isEmpty()) {
+                    System.out.printf("\n[KafkaStreamsManager] Notice: No topic discovered in target broker!");
+                    System.out.printf("\nType 'retry' to make another attempt");
+                    System.out.printf("\n> ");
+                }
+
+                else {
+                    inputScanner.close();
+                    System.out.printf("\n[KafkaStreamsManager] Info: Found %d topic(s). Progressing services...\n", topics.size());
+                    break;
+                }
+            }
+            else {
+                System.out.printf("\n[KafkaStreamsManager] Error: Wrong request parameter! Please try again");
+                System.out.printf("\n> ");
+            }
         }
 
         topics.forEach((topic) -> createAndStartNewStream(topic));
@@ -82,37 +108,40 @@ public class KafkaStreamsManager {
         // Check whether current topics exist in fetched topics. If not, stop and remove the stream.
         Iterator<String> currentTopicIterator = currentTopics.iterator();
         while (currentTopicIterator.hasNext()) {
-            String currentPointTopic = currentTopicIterator.next();
+            var currentPointTopic = currentTopicIterator.next();
 
             if (!fetchedTopics.contains(currentPointTopic)) {
-                KafkaStreamInstance targetInstance = getInstanceByTopic(currentPointTopic);
+                var targetInstance = getInstanceByTopic(currentPointTopic);
                 
-                targetInstance.stopStream("Topic no longer exists, stopping the stream");
+                targetInstance.stopStream("Current topic no longer exists, stopping the stream");
                 streamsList.remove(targetInstance);
                 shutdownCount++;
             }
         }
         
         // Check wheter fetched topics exist in current topic. If not, create and start the stream.
-        currentTopicIterator = fetchedTopics.iterator();
-        while (currentTopicIterator.hasNext()) {
-            String currentPointTopic = currentTopicIterator.next();
+        if (!fetchedTopics.isEmpty()) {
+            currentTopicIterator = fetchedTopics.iterator();
+            while (currentTopicIterator.hasNext()) {
+                var currentPointTopic = currentTopicIterator.next();
 
-            if (!currentTopics.contains(currentPointTopic)) {
-                createAndStartNewStream(currentPointTopic);
-                createCount++;
+                if (!currentTopics.contains(currentPointTopic)) {
+                    createAndStartNewStream(currentPointTopic);
+                    createCount++;
+                }
             }
         }
 
-        if (this.debugEnabled) System.out.printf("[KafkaStreamsManager] Synced topics with Cluster. Shut down %s expired stream(s) and started %d new stream(s)\n", shutdownCount, createCount);
+        System.out.printf("[KafkaStreamsManager] Info: Synced topics with Cluster. Shut down %s expired stream(s) and started %d new stream(s)\n", shutdownCount, createCount);
+
+        if (fetchedTopics.isEmpty()) createAndStartTopicStreams();
     }
 
     public void terminateService() {
-        this.ses.shutdown();
         this.kAdminClient.closeClient();
         this.streamsList.forEach((stream) -> stream.stopStream());
         this.streamsList.clear();
-        if (this.debugEnabled) System.out.println("[KafkaStreamsManager] Shutdown procedure completed.");
+        System.out.println("[KafkaStreamsManager] Info: Shutdown procedure completed.");
     }
 
     private KafkaStreamInstance getInstanceByTopic(String inputTopic) {
@@ -121,7 +150,6 @@ public class KafkaStreamsManager {
 
         while (iter.hasNext()) {
             KafkaStreamInstance targetInstance = iter.next();
-
             if (targetInstance.getAssignedTopic().equals(inputTopic)) {
                 returnObject = targetInstance;
                 break;

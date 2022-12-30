@@ -1,5 +1,4 @@
 import { sendMessage } from '../cores/kafka_client.js'
-import { v4 as uuidv4 } from 'uuid'
 
 const subbedTopic = process.env.SUBBED_TOPIC
 
@@ -16,23 +15,13 @@ const sortHandler = async (request, response, next) => {
         return
     }
 
-    let eventMessageID = uuidv4()
-
-    let toBeSent = {
-        eventMessageID: eventMessageID,
-        arrayID: uuidv4(),
-        sampleArray: sampleArray,
-        sortAlgo: sortAlgo,
-        startedTime: getTimestamp()
-    }
- 
-    await sendMessage(toBeSent, subbedTopic)
-            .then(() => console.log(`Message sent successfully, message ID: ${eventMessageID}`))
-                .catch(err => console.err(err))
+    let toBeSent = { sampleArray, sortAlgo }
+    await sendMessage(toBeSent, subbedTopic).catch(err => console.log(err))
 
 	response.sendStatus(200)
 }
 
+// Quite useful function, remember this!
 const getTimestamp = () => {
     return (performance.timeOrigin + performance.now()) / 1000
 }

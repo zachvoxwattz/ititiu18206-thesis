@@ -26,12 +26,10 @@ class InfoPrinter
 
     def detailedReport(jsonText)
         sample = JSON.parse(jsonText)
-        puts "\t+ Message ID:\t#{sample['eventMessageID']}"
-        puts "\t+ Array ID:\t#{sample['arrayID']}"
         showAlgoUsed(sample['sortAlgo'])
-        puts "\t+ Start Time (UNIX timestamp):\t#{sample['startedTime']}"
-        puts "\t+ Done Time (UNIX timestamp):\t#{sample['doneTime']}"
-        puts "\t+ Time difference:\t%.3fms" % ((sample['doneTime'].to_f - sample['startedTime'].to_f) * 1000)
+        puts "\t+ Start Time (UNIX timestamp):\t#{sample['startTime']}"
+        puts "\t+ End Time (UNIX timestamp):\t#{sample['endTime']}"
+        puts "\t+ Time delta:\t%.3fms" % ((sample['endTime'].to_f - sample['startTime'].to_f) * 1000)
     end
 
     def showAlgoUsed(par)

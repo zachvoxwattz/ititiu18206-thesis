@@ -6,7 +6,8 @@
     padding: 1.5vh 0 1.5vh 0;
     margin: 1.5vh 0 1.5vh 0;
     width: 100%;
-    animation: appear 2s;
+    animation: appear 1s;
+    -webkit-animation: appear 1s;
 }
 
 @keyframes appear {

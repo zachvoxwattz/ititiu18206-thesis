@@ -22,7 +22,7 @@ public class KafkaAdminClient {
             this.adminProps.putIfAbsent(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerAddress);
 
         this.adminClient = AdminClient.create(this.adminProps);
-        if (this.debugEnabled) System.out.println("\n[KafkaAdminClient] Client initialized");
+        System.out.println("[KafkaAdminClient] Client initialized");
     }
 
     public List<String> getTopicList() {
@@ -32,7 +32,11 @@ public class KafkaAdminClient {
         Set<String> returnSet = null;
 
         try { returnSet = this.adminClient.listTopics(ltops).names().get(); }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception ex) { 
+            if (this.debugEnabled) System.out.printf("[KafkaAdminClient] An exception has been caught, details:\n\n\t%s\n", ex);
+            System.out.printf("\n[KafkaAdminClient] An error has occurred. Please check for the existence of the Cluster and restart the application");
+            System.exit(1);
+        }
 
         List<String> returnTopics = new ArrayList<>(returnSet);
         if (returnTopics.contains("__consumer_offsets")) {
@@ -44,6 +48,8 @@ public class KafkaAdminClient {
 
     public void closeClient() {
         this.adminClient.close();
-        if (this.debugEnabled) System.out.println("[KafkaAdminClient] Client closed!");
+        System.out.println("[KafkaAdminClient] Client closed!");
     }
+
+    public boolean isDebugEnabled() { return this.debugEnabled; }
 }

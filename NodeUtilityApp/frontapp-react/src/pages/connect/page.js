@@ -61,7 +61,7 @@ const ConnectPage = () => {
                         message: "Ping successful!"
                     })
                 })
-                .catch(err => {
+                .catch(() => {
                     setStatusData({
                         code: 'error',
                         message: 'An error occurred while pinging.\nMost likely the service is offline!'

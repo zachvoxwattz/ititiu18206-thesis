@@ -1,3 +1,4 @@
+// Scrapped module
 import { Server } from 'socket.io'
 
 var socketIOServer

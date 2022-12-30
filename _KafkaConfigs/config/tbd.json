@@ -6,18 +6,8 @@
       "offset": -1
     },
     {
-      "topic": "tbSorted",
-      "partition": 1,
-      "offset": -1
-    },
-    {
       "topic": "tbSortedResults",
       "partition": 0,
-      "offset": -1
-    },
-    {
-      "topic": "tbSortedResults",
-      "partition": 1,
       "offset": -1
     }
   ],

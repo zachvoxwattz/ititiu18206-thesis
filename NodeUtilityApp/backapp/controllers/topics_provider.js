@@ -7,15 +7,6 @@ const topicsProvider = async (req, res, next) => {
         res.status(404).send({message: recvData.message})
         return
     }
-
-    if (recvData.includes('__consumer_offsets')) {
-        let targetIndex = recvData.indexOf('__consumer_offsets')
-        
-        if (targetIndex > -1) {
-            recvData.splice(targetIndex, 1)
-        }
-    }
-
     res.send(recvData)
 }
 

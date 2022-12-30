@@ -3,7 +3,7 @@ package com.zachwattzkero.socketio;
 import java.net.ServerSocket;
 
 public class PortChecker {
-    public static boolean isAvailable(int port, boolean debugEnabled) {
+    public static boolean isAvailable(int port) {
         try {
             // ServerSocket try to open a LOCAL port
             new ServerSocket(port).close();
@@ -12,7 +12,7 @@ public class PortChecker {
             return true;
         } catch(Exception e) {
             // if failed, returns false
-            if (debugEnabled) System.out.println("[SocketIOBroadcaster] Service reports. PENDING for available port...");
+            System.out.println("[SocketIOBroadcaster] Info: Service reports. PENDING for available port...");
             return false;
         }
     }

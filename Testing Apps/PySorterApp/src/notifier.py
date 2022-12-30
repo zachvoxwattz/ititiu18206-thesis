@@ -11,12 +11,12 @@ class ResultNotifier:
             value_serializer = lambda value: json.dumps(value).encode('utf-8')
         )
 
-    def emitMessage(self, datagram, sorted_array, done_time):
+    def emitMessage(self, value, key, sorted_array, start_time, end_time):
         # No need to serialize data here as we have defined it on the __init__ method
-        datagram['sortedArray'] = sorted_array
-        datagram['doneTime'] = done_time
-        eventKey = datagram['eventMessageID']
+        value['processedArray'] = sorted_array
+        value['startTime'] = start_time
+        value['endTime'] = end_time
         
-        self.client.send(topic = self.outputTopic, key = eventKey, value = datagram)
+        self.client.send(topic = self.outputTopic, key = key, value = value)
         self.client.flush()
         

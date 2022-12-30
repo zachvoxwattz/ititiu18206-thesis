@@ -1,20 +1,19 @@
 import { expressVariable } from "../cores/express/server.js"
-import { shutdownClient } from "../cores/socketio/client.js"
+import { sendShutdownRequest } from "../cores/socketio/client.js"
 
 const shutdownHandler = async (req, res, next) => {
     let { password } = req.body
 
-    if (!password || password === '' || password !== 'goodbye4now') {
+    if (!password || password !== 'nuaRequestShutdown') {
         res.status(401).send({
             message: "Incorrect shut down password!"
         })
         return
     }
-
-    else if (password === 'goodbye4now') res.sendStatus(200)
+    if (password === 'nuaRequestShutdown') res.sendStatus(200)
 
     try { 
-        shutdownClient()
+        sendShutdownRequest()
         expressVariable.close()
         console.log('Service shut down successfully')
         process.exit(0)

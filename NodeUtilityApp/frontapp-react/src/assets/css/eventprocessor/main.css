@@ -1,8 +1,8 @@
 #eventProcessor {
-	animation: fadeIn 0.5s linear forwards;
-	-webkit-animation: fadeIn 0.5s linear forwards;
-	-moz-animation: fadeIn 0.5s linear forwards;
-	-o-animation: fadeIn 0.5s linear forwards;
+	animation: fadeIn 0.375s linear forwards;
+	-webkit-animation: fadeIn 0.375s linear forwards;
+	-moz-animation: fadeIn 0.375s linear forwards;
+	-o-animation: fadeIn 0.375s linear forwards;
 }
 
 @-webkit-keyframes fadeIn {
@@ -35,14 +35,38 @@
 	color: orange
 }
 
-#eventList {
-	overflow-y: scroll;
-	border-radius: 16px;
+#ioInteractableBtns {
 	position: relative;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1vh;
 }
 
-#eventProcessBtns {
-	margin: 1vh 0 0 0
+#ioLeftBtns {
+	float: left
+}
+
+.eventStorageInteractionBtns {
+	position: relative;
+	background-color: transparent;
+	border-color: transparent;
+	border-radius: 8px;
+	border-width: 1px;
+	font-size: 1.75em;
+	margin: 0 1vw 0 0
+}
+
+#ioRightBtns {
+	float: right
+}
+
+#eventList {
+	overflow-y: scroll;
+	position: relative;
+	border-radius: 8px;
+	width: 100%;
+	max-height:  100%;
+	margin: 0 0 2vh 0;
 }
 
 .processIOBtn {
@@ -50,17 +74,21 @@
 	border-color: #21262d;
 	background-color: transparent;
 	color: #ecf2f8;
-	padding: 0.5%;
-	border-radius: 16px;
+	width: 47.5%;
+	padding: 0.905vh 1.25vw 0.905vh 1.25vw;
+	border-radius: 8px;
 	border-width: 1px;
-	width: 7.5%;
-	font-size: 1.5em;
-	font-weight: 500;
+	font-size: 1em;
+	font-weight: bolder;
 	transition: 150ms ease-in-out;
 }
 
+#processIOExportBtn {
+	margin: 0 0 0 2.5%
+}
+
 #processIOImportBtn {
-	margin: 0 0.5vw 0 0
+	margin: 0 2.5% 0 0
 }
 
 #processIOImportBtn:hover {
@@ -70,24 +98,10 @@
 	background-color: #549b5e;
 }
 
-#processIOExportBtn {
-	margin: 0 0 0 0.5vw
-}
-
 #processIOExportBtn:hover {
 	background-color: #77bdfb;
 }
 
 #processIOExportBtn:active {
 	background-color: #4f7fa8;
-}
-
-.reviveclearBtns {
-	position: relative;
-	background-color: transparent;
-	border-color: transparent;
-	border-radius: 8px;
-	border-width: 1px;
-	font-size: 1.75em;
-	margin: 0 1vw 0 0
 }

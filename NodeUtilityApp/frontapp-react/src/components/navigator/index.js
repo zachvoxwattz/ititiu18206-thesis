@@ -25,12 +25,12 @@ const Navigator = (props) => {
         // To handle various stuffs post using app, please use 'useEffect' hook!
         // UPDATE: 'useEffect' is unreliable. I take the comment above back
         
-        if (socketIOInstance && socketIOInstance.connected) {
-            socketIOInstance.emit('nua_request_shutdown')
+        if (socketIOInstance) {
+            socketIOInstance.disconnect()
             socketIOInstance.off('connect')
             socketIOInstance.off('connect_error')
+            socketIOInstance.off('disconnect')
             socketIOInstance.off(broadcastEventName)
-            socketIOInstance.disconnect()
         }
 
         setBroadcastEventName(null)
@@ -41,7 +41,7 @@ const Navigator = (props) => {
     const closeService = () => {
         // To handle various stuffs post using app, please use 'useEffect' hook!
         // UPDATE: 'useEffect' is unreliable. I take the comment above back
-        axios.post('/shutdown', { password: 'goodbye4now' })
+        axios.post('/shutdown', { password: 'nuaRequestShutdown' })
             .then(() => {
                 setStreamStatus({status: 'error', label: 'Service shut down'})
                 setTimeout(() => { exitApp() }, 2000)

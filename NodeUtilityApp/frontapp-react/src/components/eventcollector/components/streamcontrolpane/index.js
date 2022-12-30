@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { alterButtonsState, autoScrollDown, getSelectedTopic, statusLabelStyles, currentTopicExpired } from './functions'
 import '../../../../assets/css/eventcollector/streamcontrolpane.css'
-import { newSocketIOInstance } from '../../../../api/socketio'
+import { newSocketIOInstance, pingDelay } from '../../../../api/socketio'
 
+var pingInterval
 const StreamControlPane = (props) => {
     let contempData = props.appUtils
         let currentTopic = contempData.currentTopic
@@ -23,10 +24,11 @@ const StreamControlPane = (props) => {
     useEffect(() => {
         if (!startBroadcast && socketIOInstance) {
             let contempInstance = socketIOInstance
+                contempInstance.disconnect()
                 contempInstance.off(broadcastEventName)
                 contempInstance.off('connect')
                 contempInstance.off('connect_error')
-                contempInstance.disconnect()
+                contempInstance.off('disconnect')
             setSocketIOInstance(null)
         }
 
@@ -46,11 +48,24 @@ const StreamControlPane = (props) => {
                 setStreamStatus({status: 'active', label: 'Stream is active!'})
                 document.getElementById('topicClearBtn').style.display = 'none'
                 autoScrollDown()
+
+                // initiates a ping loop to keep connection alive
+                pingInterval = setInterval(() => {
+                    socketInstance.emit('nua_ping', "requestPing")
+                }, pingDelay * 1000)
             })
 
             socketInstance.on('connect_error', () => {
                 alterButtonsState(stopBtn, setStatus)
                 setStreamStatus({ status: 'error', label: 'Unable to connect to Java Utility App!'})
+
+                // Stops the ping loop on error
+                clearInterval(pingInterval)
+            })
+
+            socketInstance.on('disconnect', () => {
+                // Stops the ping loop on disconnect
+                clearInterval(pingInterval)
             })
 
             socketInstance.on(broadcastEventName, async (newData) => {
