@@ -164,6 +164,7 @@ public class KafkaStreamsManager {
     public boolean isDebugEnabled() { return this.debugEnabled; }
     public Serde<String> getDataSerde() { return this.dataSerde; }
     public StreamsBuilder getStreamsBuilder() { return new StreamsBuilder(); }
+    public List<KafkaStreamInstance> getActiveStreams() { return this.streamsList; }
     public KafkaAdminClient getAdminClient() { return this.kAdminClient; }
     public SocketIOBroadcaster getSocketIOBroadcaster() { return this.socketIOBroadcaster; }
 }

@@ -3,7 +3,7 @@ import io from 'socket.io-client'
 var socketIOClient
 var pingInterval
 const pingDelay = 75 // in seconds!
-const localURL = 'ws://127.0.0.1:3004'
+const localURL = `ws://${process.env.SOCKETIO_ADDRESS}:${process.env.SOCKETIO_PORT}`
 const debugEnabled = (process.env.DEBUG_MODE === 'true')
 
 const initSocketIOClient = (endpointPath) => {

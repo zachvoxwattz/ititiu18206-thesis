@@ -1,9 +1,8 @@
-import { v4 as getUUID } from 'uuid'
 import valueArray from '../misc/sampleValues.json' assert { type: 'json' }
 
 const sampleProvider = async (req, res, next) => {
     let sample = {
-        key: getUUID(),
+        key: crypto.randomUUID(),
         value: JSON.stringify(valueArray[Math.floor(Math.random() * valueArray.length)])
     }
 

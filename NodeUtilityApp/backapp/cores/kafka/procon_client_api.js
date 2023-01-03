@@ -1,9 +1,8 @@
 import { Kafka, Partitioners } from 'kafkajs'
-import { v4 as uuidv4 } from 'uuid'
 
 const createNewEntryClient = (topicName) => {
     const kafkaEntryClient = new Kafka({
-        clientId: `${topicName}-PerfTester-Entry`,
+        clientId: `${topicName}-PerfTesterEntry-${crypto.randomUUID()}`,
         brokers: JSON.parse(process.env.BROKER_LIST),
     })
 
@@ -19,7 +18,7 @@ const createNewExitClient = (topicName) => {
         brokers: JSON.parse(process.env.BROKER_LIST),
     })
 
-    return kafkaExitClient.consumer({ groupId: `NUA-PerfTesters-${uuidv4()}` })
+    return kafkaExitClient.consumer({ groupId: `NUA-PerfTesters-${crypto.randomUUID()}` })
 }
 
 const connectSubscribe = async (targetClient, targetTopic) => {

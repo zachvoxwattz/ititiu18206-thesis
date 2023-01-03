@@ -23,7 +23,7 @@ expressInstance.use('/', rootRouter)
 const startService = () => {
     initSocketIOClient(true)
     expressVariable = expressServer.listen(APP_PORT, () => {
-        console.log(`Server is operating on port ${APP_PORT}`)
+        console.log(`\n\nServer is operating on port ${APP_PORT}`)
     })
 }
 
