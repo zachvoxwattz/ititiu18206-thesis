@@ -31,19 +31,26 @@ class DataReceiver:
             # This line converts literal bytes to JSON. After that, accessing them normally like many other Python apps
             # -----------------------
             processedData = json.loads(data.value)
-            processedKey = data.key.decode('utf-8')
-            
-            if self.debugMode:
-                print('\n\nNew message! Detailed Datagram: \n%s' % (processedData))
 
-            # Gives the SortThread data to execute request right away.
+            if type(processedData) != dict:
+                self.resultNotifier.emitErrorMessage()
 
-            selectedSorter = self.getSorter(processedData['sortAlgo'])
+            elif 'sampleArray' not in processedData or 'sortAlgo' not in processedData:
+                self.resultNotifier.emitErrorMessage()
 
-            SortThread(
-                processedData,
-                processedKey,
-                sorter = selectedSorter, 
-                notifier = self.resultNotifier, 
-                debugMode = self.debugMode
-            ).execute()
+            else:
+                processedKey = data.key.decode('utf-8')
+                if self.debugMode:
+                    print('\n\nNew message! Detailed Datagram: \n%s' % (processedData))
+
+                # Gives the SortThread data to execute request right away.
+                selectedSorter = self.getSorter(processedData['sortAlgo'])
+
+                SortThread(
+                    processedData,
+                    processedKey,
+                    sorter = selectedSorter, 
+                    notifier = self.resultNotifier, 
+                    debugMode = self.debugMode
+                ).execute()
+                

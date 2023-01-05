@@ -35,10 +35,18 @@ const ReplayerComponent = (props) => {
         axios.post('/testperformance', toBeSent)
                 .then(response => {
                     let returnData = response.data
-                    setProcessorStatus({
-                        status: 'success_perftest',
-                        message: returnData.message
-                    })
+                    if (returnData.testSuccess) {
+                        setProcessorStatus({
+                            status: 'success_perftest',
+                            resultData: returnData
+                        })
+                    }
+                    else {
+                        setProcessorStatus({
+                            status: 'failed_perftest',
+                            resultData: returnData
+                        })
+                    }
                 })
                 .catch(err => {
                     let returnCode = err.response.status

@@ -58,11 +58,13 @@ public class KafkaStreamInstance implements DataOperation {
     @Override
     public void execute(String key, String value) {
         String processedKey = processKey(key);
-        if (this.debugEnabled) {
-            System.out.printf("\n[%s RESULT DATA]\n - Key: %s\n - Value: %s\n\n", this.streamID, processedKey, value);
-        }
+        if (!processedKey.startsWith(this.assignedTopic)) {
+            if (this.debugEnabled) {
+                System.out.printf("\n[%s RESULT DATA]\n - Key: %s\n - Value: %s\n\n", this.streamID, processedKey, value);
+            }
 
-        this.managerParent.broadcastEvent(this.broadcastEventName, processedKey, value);
+            this.managerParent.broadcastEvent(this.broadcastEventName, processedKey, value);
+        }
     }
 
     private String processKey(String key) {

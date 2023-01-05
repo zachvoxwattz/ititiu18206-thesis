@@ -1,6 +1,5 @@
 import dotenv from 'dotenv'
 import { Kafka, Partitioners } from 'kafkajs'
-import { v4 as uuidv4 } from 'uuid'
 
 dotenv.config()
 const brokers = JSON.parse(process.env.BROKER_LIST)
@@ -18,7 +17,7 @@ const sendMessage = async (datagram, topicName) => {
     topic: topicName,
     messages: [ 
       {
-        key: `NDA-${uuidv4()}`, 
+        key: `NDA-${crypto.randomUUID()}`, 
         value: JSON.stringify(datagram)
       } 
     ]

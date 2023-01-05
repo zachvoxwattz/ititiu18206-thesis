@@ -1,4 +1,5 @@
 import json
+import uuid
 from kafka import KafkaProducer
 
 class ResultNotifier:
@@ -18,5 +19,12 @@ class ResultNotifier:
         value['endTime'] = end_time
         
         self.client.send(topic = self.outputTopic, key = key, value = value)
+        self.client.flush()
+                
+    def emitErrorMessage(self):
+        datagram = {'error': True}
+        errorKey = self.outputTopic + '-[TEST_FAILED-' + str(uuid.uuid4()) + ']'
+
+        self.client.send(topic = self.outputTopic, key = errorKey, value = datagram)
         self.client.flush()
         

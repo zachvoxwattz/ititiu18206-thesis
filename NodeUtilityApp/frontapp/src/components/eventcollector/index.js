@@ -68,14 +68,16 @@ const EventCollector = (props) => {
     }
 
     const saveAllEvents = () => {
-        for (let i = 0; i < eventDataLog.length; i++) {
-            if (currentTopic === eventDataLog[i].topic) {
-                setSavedDataLog(eventDataLog[i].topicData)
-                break
+        if (streamStatus.status !== 'active') {
+            for (let i = 0; i < eventDataLog.length; i++) {
+                if (currentTopic === eventDataLog[i].topic) {
+                    setSavedDataLog(eventDataLog[i].topicData)
+                    break
+                }
             }
+            setCheckAllBoxes(true)
+            setTimeout(() => { setCheckAllBoxes(false) }, 50)
         }
-        setCheckAllBoxes(true)
-        setTimeout(() => { setCheckAllBoxes(false) }, 50)
     }
 
     const clearSavedEvents = () => {

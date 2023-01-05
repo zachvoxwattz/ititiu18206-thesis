@@ -71,7 +71,7 @@ const TopicMenu = (props) => {
         axios.get('/topics')
             .then(response => {
                 let fetchedArr = response.data
-                if (fetchedArr.size === 0) {
+                if (fetchedArr.length === 0) {
                     returnData = {
                         code: 'error',
                         message: 'No topic available. Create one or some for your cluster!'

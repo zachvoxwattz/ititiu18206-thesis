@@ -62,7 +62,7 @@ const EventProcessor = (props) => {
     }
 
     const processImportedContents = (parsedData, importedFile) => {
-        if (typeof parsedData === 'object' && parsedData.length >= 1) setDiscreteList(parsedData)
+        if (Array.isArray(parsedData)) setDiscreteList(parsedData)
         else {
             setProcessorStatus({
                 status: 'error_local',
@@ -70,11 +70,12 @@ const EventProcessor = (props) => {
             })
             return
         }
+
         if (importedFile.size <= 1000000) {
             parsedData.forEach((datagram) => {
                 let keyList = Object.keys(datagram)
                 keyList.forEach((key) => {
-                    if (typeof datagram[key] === 'object') {
+                    if (key === 'value' && typeof datagram[key] === 'object') {
                         let strED = JSON.stringify(datagram[key])
                         datagram[key] = strED
                     }

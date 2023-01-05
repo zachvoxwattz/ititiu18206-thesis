@@ -51,7 +51,13 @@
 }
 
 #dpValueValue {
+    display: -webkit-box;
+    overflow: hidden;
     overflow-wrap: break-word;
+    text-overflow: ellipsis;
     text-align: left;
+    line-clamp: 5;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
     font-size: 1em;
 }

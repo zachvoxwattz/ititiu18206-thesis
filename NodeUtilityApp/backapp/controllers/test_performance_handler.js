@@ -70,12 +70,11 @@ const testPerformanceHandler = async (req, res) => {
     // Stringify all test data and create new array for storing them for processing
     let processedDataSet = []
     testingDataSet.forEach((object, index) => {
-        let contempKey = `${entryTopic}-[Test#${index}]`
-        let contempValue = object.value
-        processedDataSet.push({
-            key: contempKey,
-            value: JSON.stringify(contempValue)
-        })
+        let toBeAdded = {
+            key: `${entryTopic}-[Test#${index}]`,
+            value: object.value
+        }
+        processedDataSet.push(toBeAdded)
     })
 
     // All mandatory tests passed, move on to performance testing...
@@ -101,17 +100,34 @@ const performTest = async (entryTopic, exitTopic, processedDataSet) => {
                 
                 if (testCount === testGoal) {
                     let endTimestamp = getTimestamp()
-                    let duration = (endTimestamp - startTimestamp) * 1000
-                    let errorCount
-
-                    totalErrorCount === 0 ? errorCount = 'N/A' : errorCount = totalErrorCount
                     stopAndDisconnect(exitKafkaClient)
-                    resolve({
+
+                    let duration = (endTimestamp - startTimestamp) * 1000
+                    let resolveDatagram = {
+                        totalDataSet: testGoal,
                         testStartTime: startTimestamp,
                         testEndTime: endTimestamp,
-                        testRuntime: Math.round((duration + Number.EPSILON) * 100) / 100,
-                        errorCount
-                    })
+                        testRuntime: Math.round((duration + Number.EPSILON) * 100) / 100
+                    }
+
+                    if (totalErrorCount === 0) {
+                        resolveDatagram.testSuccess = true
+                    }
+                    else if (totalErrorCount > 0 && totalErrorCount < testGoal) {
+                        resolveDatagram.testSuccess = false
+                        resolveDatagram.failureData = {
+                            failCount: totalErrorCount,
+                            failReason: 'Some data encountered error(s) during the process. Please double check your testing data!'
+                        }
+                    }
+                    else {
+                        resolveDatagram.testSuccess = false
+                        resolveDatagram.failureData = {
+                            failCount: testCount,
+                            failReason: 'All testing data failed every performance test. Please recheck all of your testing data!'
+                        }
+                    }
+                    resolve(resolveDatagram)
                 }
             }
         })
