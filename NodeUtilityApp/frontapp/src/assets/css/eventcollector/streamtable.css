@@ -1,0 +1,28 @@
+#streamTable {
+	margin: 0 auto 0 auto;
+    border-color: white;
+    border-style: solid;
+	position: relative;
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+	overflow-y: scroll;
+    border-radius: 8px;
+    border-width: 1px;
+    width: 75vw;
+    height: 50vh;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#streamTable::-webkit-scrollbar {
+   display: none;
+}
+
+#streamLogger {
+    padding: 0.125% 0 0 0;
+	width: 100%;
+}
+
+#loggerPollDiv {
+    margin: 0 0 1vh 0;
+	text-align: center;
+}

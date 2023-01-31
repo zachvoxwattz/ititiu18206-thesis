@@ -1,0 +1,57 @@
+#actionButtons {
+    margin: 2vh 0 2vh 0;
+    text-align: center;
+}
+
+.actionButton {
+    display: inline-block;
+    background-color: white;
+    transition: 125ms ease-in-out;
+    font-family: 'SF Pro', 'Segoe UI', sans-serif;
+    font-weight: bold;
+    font-size: 1.25em;
+    border-width: 1px;
+    border-radius: 16px;
+    margin: 0 1.5vh 0 1.5vh;
+    width: 120px;
+    height: 60px;
+}
+
+#generateButton:hover {
+    background-color: orange;
+    color: white;
+}
+
+#generateButton:active {
+    background-color: rgb(180, 117, 0);  
+}
+
+#sendButton:hover {
+    background-color: limegreen;
+    color: white
+}
+
+#sendButton:active {
+    background-color: rgb(33, 139, 33);
+    color: white
+}
+
+#sendButton:disabled {
+    
+    background-color: #3a3a3a;
+    color: #9a9a9a;
+}
+
+
+#gensenButton:hover #gensenButton:disabled:not() {
+    background-color: #6F4E37;
+    color: white;
+}
+
+#gensenButton:active {
+    background-color: #493425;
+}
+
+#gensenButton:disabled{
+    background-color: #3a3a3a;
+}
