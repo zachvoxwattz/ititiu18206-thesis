@@ -21,16 +21,22 @@ const EventProcessor = (props) => {
     }
 
     useEffect(() => {
-        if (!currentTopic && savedDataLog.length === 0) {
-            setCodeValue("/*\n\t\tThere is no topic selected!\n/*")
-            setEmptyCode(true)
-            return
-        }
+        if (savedDataLog.length === 0) {
+            if (!currentTopic) {
+                setCodeValue("/*\n\t\tThere is no topic selected!\n/*")
+                setEmptyCode(true)
+                setProcessorStatus({status: 'none'})
+                setDiscreteList([])
+                return
+            }
 
-        if (currentTopic && savedDataLog.length === 0) {
-            setCodeValue("/*\n\t\tUnable to find any saved events!\n/*")
+            else {
+                setCodeValue("/*\n\t\tUnable to find any saved events!\n/*")
+                setProcessorStatus({status: 'none'})
+                setDiscreteList([])
+            }
         }
-        else if (currentTopic && savedDataLog.length !== 0) {
+        else {
             setDiscreteList(savedDataLog)
             setCodeValue(toString(savedDataLog))
             setEmptyCode(false)
@@ -40,7 +46,6 @@ const EventProcessor = (props) => {
                 message: `Loaded ${savedDataLog.length} selected event(s)`
             })
         }
-
     }, [currentTopic, savedDataLog, setCodeValue])
 
     const importEventsFromFile = (event) => {

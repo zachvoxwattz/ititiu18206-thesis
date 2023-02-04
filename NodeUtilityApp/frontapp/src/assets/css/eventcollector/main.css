@@ -34,10 +34,6 @@
 	color: white
 }
 
-#sampleDataBtn {
-	opacity: 0;
-}
-
 #savedEventsSection {
 	display: flex;
 	position: relative;

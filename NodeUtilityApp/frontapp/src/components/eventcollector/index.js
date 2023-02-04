@@ -1,9 +1,7 @@
-import axios from '../../api/axios'
 import TopicMenu from './components/topicmenu/index'
 import StreamControlPane from './components/streamcontrolpane/index'
 import loadingIcon from '../../assets/images/loading.gif'
 import { useState } from 'react'
-import { autoScrollDown } from './functions'
 import { DataPaneChunk, DataPaneFields, EmptyDataPane, IdleDataPane } from './components/datapane/index'
 import '../../assets/css/eventcollector/streamtable.css'
 import '../../assets/css/eventcollector/main.css'
@@ -28,11 +26,7 @@ const EventCollector = (props) => {
     const [checkAllBoxes, setCheckAllBoxes] = useState(false)
     const [disableTopicButtons, setDisableTopicButtons] = useState(false)
     const [currentTopicData, setCurrentTopicData] = useState([])
-
-    const updateLog = (newData) => {
-        setCurrentTopicData(prevData => prevData.concat(newData))
-    }
-
+    
     const saveEvent = (data) => {
         if (savedDataLog.length === 0) {
             setSavedDataLog(prevData => prevData.concat(data))
@@ -86,21 +80,8 @@ const EventCollector = (props) => {
         setTimeout(() => { setUncheckAllBoxes(false) }, 50)
     }
 
-    const fetchSampleData = async () => {
-        axios.get('/getsampledata')
-            .then(res => {
-                updateLog(res.data)
-                autoScrollDown()
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
-
     return(
         <div id = 'eventCollector'>
-            {/* TODO: REMOVE Line #49 when done!*/}
-            <button id = 'sampleDataBtn' onClick={() => { fetchSampleData() }}>Sample</button>
             <div id = 'controlPane'>
                 <StreamControlPane appUtils = {{currentTopic, streamStatus, setStreamStatus, eventDataLog, setEventDataLog, currentTopicData, setCurrentTopicData, socketIOInstance, setSocketIOInstance, broadcastEventName, setDisableTopicButtons, nav}}/>
 
