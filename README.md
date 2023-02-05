@@ -45,7 +45,8 @@ This is a Java application used for receiving data as streams. Follow the steps:
 1. Have Java installed. More specifically, JDK 16 or higher is preferred.
 2. Have Maven installed as this App was built using Maven archetype. Either using command line or Visual Studio Code's extension is OK.
 3. `cd` to `jksa` directory of the App. If command line is preferred, run `mvn package` to build the project. If Visual Studio Code's extension is preferred, simply run the project to build it.
-4. To stop the App, use Ctrl + C or Stop button in Visual Studio Code.
+4. Configure the input command line arguments for the Java application as follow<br/>`<broker address> <broker port> <socketio address> <socketio port> [enable debug]`<br/>Where angle brackets indicate **MANDATORY** argument whereas square brackets indicate **OPTIONAL** argument.
+5. To stop the App, use Ctrl + C or Stop button in Visual Studio Code.
 <hr/>
 
 #### Port numbers list:
