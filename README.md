@@ -1,7 +1,9 @@
 
 
 ## An application for performance measuring / testing and personnel training using Event-Driven Architecture, event replay and Apache Kafka.
+![Oh wow this is a pic of all used tech in the project!](Assets.png)
 <hr/>
+
 
 ### Table of contents
 1. [Introduction](#intro)
