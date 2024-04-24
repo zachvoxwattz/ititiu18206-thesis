@@ -1,0 +1,59 @@
+#eventCollector {
+	animation: fadeIn 0.375s linear forwards;
+	-webkit-animation: fadeIn 0.375s linear forwards;
+	-moz-animation: fadeIn 0.375s linear forwards;
+	-o-animation: fadeIn 0.375s linear forwards;
+}
+
+@-webkit-keyframes fadeIn {
+	0% { opacity: 0 }
+	100% { opacity: 1 }
+}
+
+@keyframes fadeIn {
+	0% { opacity: 0 }
+	100% { opacity: 1 }
+}
+
+#controlPane {
+	position: relative;
+	margin: 0 auto 1.25vh auto;
+	border-style: solid;
+	border-color: white;
+	padding: 1vh 0 1vh 0;
+	width: 75vw;
+	border-width: 1px;
+	border-radius: 8px;
+}
+
+#streamTable, #controlPane {
+	position: relative;
+}
+
+#pollingLabel {
+	color: white
+}
+
+#savedEventsSection {
+	display: flex;
+	position: relative;
+	margin: 1.25vh auto 0 auto;
+	width: 75vw;
+}
+
+#savedEventsCountValue {
+	margin: 0 0.5vw 0 0.5vw;
+}
+
+#savedEventsCountLabel, #savedEventsCountValue {
+	color: white;
+}
+
+#clearSavedEventsBtn {
+	position: relative;
+	border-radius: 8px;
+	border-width: 1px;
+	border-color: transparent;
+	background-color: transparent;
+	font-size: 1.25em;
+}

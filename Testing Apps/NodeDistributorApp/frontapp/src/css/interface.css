@@ -1,0 +1,15 @@
+#valueFields {
+    text-align: center;
+}
+
+.valueField {
+    display: inline-block;
+    background-color: #3a3a3a;
+    color: white;
+    margin: 0 1vh 0 1vh;
+    border-radius: 8px;
+    border-width: 1px;
+    padding: 0 10px 0 10px;
+    width: 90px;
+    height: 40px
+}

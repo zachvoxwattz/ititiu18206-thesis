@@ -1,0 +1,19 @@
+[
+    "tbSorted", 
+    "tbSortedResults", 
+    "consumer_reports",
+    "consumer_complaints",
+    "consumer_feedback",
+    "consumer_usage",
+    "netflix_movie",
+    "netflix_comment",
+    "netflix_report",
+    "netflix_purchase",
+    "netflix_request",
+    "netflix_create",
+    "isac_hostile_report",
+    "isac_new_shepherd",
+    "isac_node_defunc",
+    "isac_agent_down",
+    "isac_division_noti"
+]
