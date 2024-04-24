@@ -1,4 +1,0 @@
-DEBUG_MODE = False
-BROKER_LIST = ["localhost:9091","localhost:9092"]
-SUBBED_INPUT_TOPIC = tbSorted
-SUBBED_OUTPUT_TOPIC = tbSortedResults

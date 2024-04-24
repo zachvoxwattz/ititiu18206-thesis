@@ -1,4 +1,0 @@
-BROKER_LIST = ["localhost:9091", "localhost:9092"]
-CONSUMER_GROUPID = 'Ruby Results Getter'
-SUBBED_TOPIC = tbSortedResults
-DEBUG_MODE = false

@@ -1,4 +1,0 @@
-DEBUG_MODE = false
-APP_PORT = 3003
-BROKER_LIST = ["localhost:9091", "localhost:9092"]
-SUBBED_TOPIC = tbSorted
